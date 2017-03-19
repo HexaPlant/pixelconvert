@@ -51,6 +51,6 @@ def convert(ctx):
             if os.path.exists(georef) and not os.path.exists(gtiff):
                 ctx.run ("cp {points_in} {points_out}".format(points_in=points_in,points_out=points_out))
                 ctx.run ("listgeo {georef} > {gtxt}".format(georef=georef,gtxt=gtxt))
-                ctx.run ("vips --vips-progress  --vips-concurrency=8 im_vips2tiff {georef} {gtiff}:deflate,tile:256x256,pyramid".format(georef=georef,gtiff=gtiff))
+                ctx.run ("vips --vips-progress  --vips-concurrency=16 im_vips2tiff {georef} {gtiff}:deflate,tile:256x256,pyramid".format(georef=georef,gtiff=gtiff))
                 ctx.run ("applygeo {gtxt} {gtiff}".format(gtxt=gtxt,gtiff=gtiff))
                 # ctx.run ("gdalinfo {gtiff}".format(gtiff=gtiff))
