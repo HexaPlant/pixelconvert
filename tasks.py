@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from __future__ import print_function
 from invoke import Collection, task
 import os
@@ -13,6 +15,17 @@ import fnmatch
 #applygeo $INPUT\.txt $RESULT
 #gdalinfo $RESULT
 
+def clean(txt):
+    txt=txt.replace(' ','_')
+    txt=txt.replace('Ä','Ae')
+    txt=txt.replace('Ö','Oe')
+    txt=txt.replace('Ü','Ue')
+    txt=txt.replace('ä','ae')
+    txt=txt.replace('ö','oe')
+    txt=txt.replace('ü','ue')
+    return txt
+
+
 @task(help={'image': "Image name to run."})
 def convert(ctx):
     # print(ctx.input_dir,ctx.tmp_dir,ctx.output_dir)
@@ -23,14 +36,14 @@ def convert(ctx):
         for tif in fnmatch.filter(files, "*.tif"):
             tif =tif.replace(' ','\\ ')
             root=root.replace(' ','\\ ')
-            name, ext = os.path.splitext(tif)
             img = os.path.join(root,tif)
+            name, ext = os.path.splitext(tif)
             points_in = os.path.join(root,name+'.tif.points')
             points_out = os.path.join(ctx.output_dir,name+'.gcp')
             wld = os.path.join(root,name+'.wld')
-            georef = os.path.join(ctx.tmp_dir,tif)
-            gtiff = os.path.join(ctx.output_dir,tif)
-            gtxt = os.path.join(ctx.output_dir,name+'.geo')
+            georef = os.path.join(ctx.tmp_dir,clean(tif))
+            gtiff = os.path.join(ctx.output_dir,clean(tif))
+            gtxt = os.path.join(ctx.output_dir,clean(name)+'.geo')
 
             if os.path.exists(wld) and not os.path.exists(georef) and not os.path.exists(gtiff):
                 ctx.run ("gdal_translate -a_srs EPSG:3857  -co TILED=YES -co COMPRESS=DEFLATE {img} {georef}".format(img=img,georef=georef))
