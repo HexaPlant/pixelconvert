@@ -1,3 +1,31 @@
-input_dir: /data/gdrive/data/woldan/Bearbeitung
-tmp_dir: /tmp/woldan
-output_dir:  /data/woldan/images
+
+
+
+input_dir: /data/gdrive/data/woldan/test/
+vips_dir: /data/gdrive/data/woldan/test/tmp/vips/
+wld_dir: /data/gdrive/data/woldan/test/tmp/wld/
+gcp_dir: /data/gdrive/data/woldan/test/tmp/gcp/
+output_dir: /data/gdrive/data/woldan/test/images/
+
+#aseq_file: /data/gdrive/data/woldan/meta/woldan_record_aseq.xml
+aseq_file: /data/gdrive/data/woldan/meta/woldan-2017.04.12_aseq.xml
+
+
+#input_dir: /data/gdrive/data/woldan/Bearbeitung/
+#vips_dir: /data/tmp/vips/
+#wld_dir: /data/tmp/wld/
+#gcp_dir: /data/tmp/gcp/
+#output_dir: /data/woldan/images/
+
+#aseq_file: /data/gdrive/data/woldan/meta/woldan_record_aseq.xml
+#aseq_file: /data/gdrive/data/woldan/meta/woldan-2017.04.12_aseq.xml
+
+
+#input_dir: /data/gdrive/data/woldan/test/
+#vips_dir: /data/gdrive/data/woldan/images/vips/
+#wld_dir: /data/gdrive/data/woldan/images/wld/
+#gcp_dir: /data/gdrive/data/woldan/images/gcp/
+#output_dir: /data/gdrive/data/woldan/images/gtiff/
+
+#aseq_file: /data/gdrive/data/woldan/meta/woldan_record_aseq.xml
+#aseq_file: /data/gdrive/data/woldan/meta/woldan-2017.04.12_aseq.xml
