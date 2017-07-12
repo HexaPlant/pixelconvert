@@ -52,7 +52,7 @@ def convert(ctx):
                     ctx.run ('cp -fv {tiff_in} {tiff_gcp}'.format(tiff_in=escape_path(tiff_in),tiff_gcp=escape_path(tiff_gcp)))
                     ctx.run ("cp {points_in} {points_out}".format(points_in=escape_path(points_in),points_out=escape_path(points_out)))
 
-            if not os.path.exists(tiff_out) and os.path.exists(tiff_gcp) and os.path.exists(points_in):
+            if not os.path.exists(tiff_out) and not os.path.exists(tiff_wld) and os.path.exists(tiff_gcp) and os.path.exists(points_in):
                 print ("Reading",points_in)
                 with open(points_in) as csvfile:
                     reader = csv.DictReader(csvfile)
@@ -60,14 +60,17 @@ def convert(ctx):
                     for row in reader:
                         gcp+="-gcp {pixelX} {pixelY} {mapX} {mapY} ".format(pixelX=row['pixelX'],pixelY=abs(float(row['pixelY'])),mapX=row['mapX'],mapY=row['mapY'])
 
+                ctx.run('gdal_translate -a_srs EPSG:3857 -mo NODATA_VALUES="255 255 255" {gcp} {tiff_gcp} {tiff_wld}'.format(gcp=gcp,tiff_gcp=tiff_gcp,tiff_wld=tiff_wld))
+                ctx.run("listgeo {tiff_wld} > {gtxt_out}".format(tiff_wld=escape_path(tiff_wld),gtxt_out=escape_path(gtxt_out)))
+
                 #ctx.run('rm -vf {wld_gcp}'.format(wld_gcp=wld_gcp))
                 #ctx.run('gdal_edit.py -unsetgt -unsetmd  {tiff_gcp}'.format(tiff_gcp=tiff_gcp))
-                ctx.run('gdal_edit.py -unsetgt {tiff_gcp}'.format(tiff_gcp=tiff_gcp))
-                ctx.run('gdal_edit.py -a_srs EPSG:3857 -mo NODATA_VALUES="255 255 255" {gcp} {tiff_gcp}'.format(gcp=gcp,tiff_gcp=tiff_gcp))
+                #ctx.run('gdal_edit.py -unsetgt {tiff_gcp}'.format(tiff_gcp=tiff_gcp))
+                #ctx.run('gdal_edit.py -a_srs EPSG:3857 -mo NODATA_VALUES="255 255 255" {gcp} {tiff_gcp}'.format(gcp=gcp,tiff_gcp=tiff_gcp))
 
-            if not os.path.exists(tiff_out) and not os.path.exists(tiff_wld) and os.path.exists(tiff_gcp):
-                ctx.run('gdal_translate -mo NODATA_VALUES="255 255 255" {tiff_gcp} {tiff_wld}'.format(tiff_gcp=tiff_gcp,tiff_wld=tiff_wld))
-                ctx.run("listgeo {tiff_wld} > {gtxt_out}".format(tiff_wld=escape_path(tiff_wld),gtxt_out=escape_path(gtxt_out)))
+            #if not os.path.exists(tiff_out) and not os.path.exists(tiff_wld) and os.path.exists(tiff_gcp):
+            #    ctx.run('gdal_translate -mo NODATA_VALUES="255 255 255" {tiff_gcp} {tiff_wld}'.format(tiff_gcp=tiff_gcp,tiff_wld=tiff_wld))
+            #    ctx.run("listgeo {tiff_wld} > {gtxt_out}".format(tiff_wld=escape_path(tiff_wld),gtxt_out=escape_path(gtxt_out)))
 
 
             if not os.path.exists(tiff_out) and os.path.exists(gtxt_out) and os.path.exists(tiff_wld):
@@ -75,9 +78,9 @@ def convert(ctx):
                 ctx.run("applygeo {gtxt_out} {tiff_vips}".format(gtxt_out=escape_path(gtxt_out),tiff_vips=escape_path(tiff_vips)))
                 ctx.run('gdal_edit.py -a_nodata 255 -mo NODATA_VALUES="255 255 255" {tiff_vips}'.format(tiff_vips=tiff_vips))
                 ctx.run("mv -v {tiff_vips} {tiff_out}".format(tiff_vips=escape_path(tiff_vips),tiff_out=escape_path(tiff_out)))
-                ctx.run("rm -fv {wld_gcp}".format(wld_gcp=wld_gcp))
-                ctx.run("rm -fv {tiff_gcp}".format(tiff_gcp=tiff_gcp))
-                ctx.run("rm -fv {tiff_wld}".format(tiff_wld=tiff_wld))
+                #ctx.run("rm -fv {wld_gcp}".format(wld_gcp=wld_gcp))
+                #ctx.run("rm -fv {tiff_gcp}".format(tiff_gcp=tiff_gcp))
+                #ctx.run("rm -fv {tiff_wld}".format(tiff_wld=tiff_wld))
 
             #if not os.path.exists(wld_out)  and os.path.exists(tiff_out):
             #    ctx.run('gcps2wld.py {tiff_vips} > {wld_out}'.format(tiff_vips=tiff_vips,wld_out=wld_out))
@@ -272,11 +275,42 @@ def convert(ctx):
                 #        abstract = "%s is not an AC number"%ac
                 #        supplemental = abstract
 
-                print (ac,'-',titleValue,'-',abstract,'-',supplemental)
-                #xml_file=codecs.open(xml_out, "w", "utf-8")
-                #xml_file=open(xml_out,'w')
-                #xml_file.write(csw.TEMPLATE.format(id=ac,name=escape(titleValue),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental))
-                #xml_file.close()
+                # print (ac,'-',titleValue,'-',abstract,'-',supplemental)
+                print (ac)
+                xml_file=codecs.open(xml_out, "w", "utf-8")
+                xml_file=open(xml_out,'w')
+                xml_file.write(csw.TEMPLATE.format(id=ac,name=escape(titleValue),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental))
+                xml_file.close()
+
+                dataset = gdal.Open( tiff_out )
+                if dataset is None:
+                    print('Unable to open %s' % filename)
+                    sys.exit(1)
+
+                gcps = dataset.GetGCPs()
+
+                if gcps is None or len(gcps) == 0:
+                    print('No GCPs found on file ' + filename)
+                    sys.exit(1)
+
+                geotransform = gdal.GCPsToGeoTransform( gcps )
+
+                if geotransform is None:
+                    print('Unable to extract a geotransform.')
+                    sys.exit( 1 )
+
+                # ulx, xres, xskew, uly, yskew, yres  = dataset.GetGeoTransform()
+                ulx, xres, xskew, uly, yskew, yres  = gdal.GCPsToGeoTransform( gcps) 
+                lrx = ulx + (dataset.RasterXSize * xres)
+                lry = uly + (dataset.RasterYSize * yres)
+
+                print ( ulx, uly, lrx, lry)
+
+                # gdal_translate -a_ullr 1266541.98515 6275133.47246 1266558.0408 6275116.96915 ac00677476_mayr_salzburg_1880.tif ac00677476_mayr_salzburg_1880u.tif
+
+                # http://www.justkez.com/calculating-latlongs-for-projecting-world-fil/http://www.justkez.com/calculating-latlongs-for-projecting-world-fil/
+
+
 
 
 

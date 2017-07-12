@@ -1,7 +1,7 @@
 
 
 
-input_dir: /data/gdrive/data/woldan/test/
+input_dir: /data/gdrive/data/woldan/test/orig
 vips_dir: /data/gdrive/data/woldan/test/tmp/vips/
 wld_dir: /data/gdrive/data/woldan/test/tmp/wld/
 gcp_dir: /data/gdrive/data/woldan/test/tmp/gcp/
