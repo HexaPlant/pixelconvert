@@ -56,7 +56,8 @@ def convert(ctx):
                     gcp=""
                     for row in reader:
                         gcp+="-gcp {pixelX} {pixelY} {mapX} {mapY} ".format(pixelX=row['pixelX'],pixelY=abs(float(row['pixelY'])),mapX=row['mapX'],mapY=row['mapY'])
-                    ctx.run('gdal_edit.py -unsetgt -unsetmd -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_gcp))
+                    ctx.run('gdal_edit.py -unsetgt -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_gcp))
+                    #ctx.run('gdal_edit.py -unsetgt -unsetmd -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_gcp))
                     #ctx.run('gdal_edit.py -unsetgt -unsetmd -a_srs EPSG:3857 -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_gcp))
 
                     dataset = gdal.Open( tiff_gcp )
@@ -74,7 +75,9 @@ def convert(ctx):
 
                 if not exists(tiff_vips):
                      ctx.run("vips --vips-progress  --vips-concurrency=16 im_vips2tiff {tiff_gcp} {tiff_vips}:deflate,tile:256x256,pyramid".format(tiff_gcp=escape_path(tiff_gcp),tiff_vips=escape_path(tiff_vips)))
-                     ctx.run('gdal_edit.py -unsetgt -unsetmd -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_vips))
+                     #ctx.run('gdal_edit.py -unsetgt -unsetmd -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_vips))
+                     ctx.run('gdal_edit.py -unsetgt -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_vips))
+
 
                 if not exists(tiff_warp):
                     ctx.run('gdalwarp  -dstalpha  -co "COMPRESS=DEFLATE"  -r lanczos  -s_srs EPSG:3857 -t_srs EPSG:3857  -multi -wo NUM_THREADS=ALL_CPU {tiff_gcp} {tiff_warp}'.format(tiff_gcp=tiff_gcp,tiff_warp=tiff_warp))
