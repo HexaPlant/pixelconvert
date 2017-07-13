@@ -85,4 +85,4 @@ def convert(ctx):
                     #ctx.run('gdaladdo  --config COMPRESS_OVERVIEW DEFLATE -r lanczos {tiff_warp} 2 4 8 16 32'.format(tiff_warp=tiff_warp))
 
             if exists(tiff_gcp) and exists(tiff_warp) and exists(tiff_vips):
-                ctx.run("rm -v {tiff}'.format(tiff=tiff_gcp))
+                ctx.run('rm -v {tiff}'.format(tiff=tiff_gcp))
