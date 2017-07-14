@@ -70,7 +70,7 @@ def convert(ctx):
                         ctx.run('gdal_edit.py -unsetgt -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_gcp))
                     #ctx.run('gdal_edit.py -unsetgt -unsetmd -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_gcp))
                     #ctx.run('gdal_edit.py -unsetgt -unsetmd -a_srs EPSG:3857 -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_gcp))
-                    except _csv.Error:
+                    except:
                         print("Failed to read point file")
                         continue
 
@@ -87,7 +87,7 @@ def convert(ctx):
                         proj4326 = Proj(init='epsg:4326')
                         west,north = transform(proj3857,proj4326,ulx,uly)
                         east,south = transform(proj3857,proj4326,lrx,lry)
-                    except AttributeError:
+                    except:
                         print("Failed to read gcp points")
                         continue
 
