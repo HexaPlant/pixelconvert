@@ -70,18 +70,21 @@ def convert(ctx):
                     #ctx.run('gdal_edit.py -unsetgt -unsetmd -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_gcp))
                     #ctx.run('gdal_edit.py -unsetgt -unsetmd -a_srs EPSG:3857 -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_gcp))
 
-                    dataset = gdal.Open(tiff_gcp)
-                    gcps = dataset.GetGCPs()
-                    geotransform = gdal.GCPsToGeoTransform(gcps)
+                    try:
+                        dataset = gdal.Open(tiff_gcp)
+                        gcps = dataset.GetGCPs()
+                        geotransform = gdal.GCPsToGeoTransform(gcps)
 
-                    ulx, xres, xskew, uly, yskew, yres  = gdal.GCPsToGeoTransform( gcps)
-                    lrx = ulx + (dataset.RasterXSize * xres)
-                    lry = uly + (dataset.RasterYSize * yres)
+                        ulx, xres, xskew, uly, yskew, yres  = gdal.GCPsToGeoTransform( gcps)
+                        lrx = ulx + (dataset.RasterXSize * xres)
+                        lry = uly + (dataset.RasterYSize * yres)
 
-                    proj3857 = Proj(init='epsg:3857')
-                    proj4326 = Proj(init='epsg:4326')
-                    west,north = transform(proj3857,proj4326,ulx,uly)
-                    east,south = transform(proj3857,proj4326,lrx,lry)
+                        proj3857 = Proj(init='epsg:3857')
+                        proj4326 = Proj(init='epsg:4326')
+                        west,north = transform(proj3857,proj4326,ulx,uly)
+                        east,south = transform(proj3857,proj4326,lrx,lry)
+                    except AttributeError:
+                        pass
 
                     ctx.run('gcps2wld.py {tiff} > {wld_out}'.format(tiff=tiff_gcp,wld_out=wld_gcp))
                     ctx.run('gdal_translate -a_srs EPSG:3857 -mo NODATA_VALUES="255 255 255" {tiff_in} {tiff_out}'.format(tiff_in=tiff_gcp,tiff_out=tiff_wld))
