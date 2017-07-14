@@ -50,8 +50,9 @@ def convert(ctx):
 
             print ("Processing",img)
 
-            if exists(tiff_warp) and exists(tiff_vips):
+            if exists(tiff_final):
                 print ("Skipping",img)
+                continue
 
             if not exists(tiff_gcp) and exists(points_in):
                 ctx.run ('cp -v {tiff_in} {tiff_gcp}'.format(tiff_in=escape_path(tiff_in),tiff_gcp=escape_path(tiff_gcp)))
