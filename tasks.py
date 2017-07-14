@@ -100,5 +100,5 @@ def convert(ctx):
                     #ctx.run('gdalwarp  -dstalpha  -co "COMPRESS=DEFLATE"  -tps -refine_gcps 10 30 -s_srs EPSG:3857 -t_srs EPSG:3857  -multi -wo NUM_THREADS=ALL_CPU {tiff_gcp} {tiff_warp}'.format(tiff_gcp=tiff_gcp,tiff_warp=tiff_warp))
                     #ctx.run('gdaladdo  --config COMPRESS_OVERVIEW DEFLATE -r lanczos {tiff_warp} 2 4 8 16 32'.format(tiff_warp=tiff_warp))
 
-            if exists(tiff_gcp) and exists(tiff_warp) and exists(tiff_vips):
-                ctx.run('rm -v {tiff}'.format(tiff=tiff_gcp))
+            #if exists(tiff_gcp) and exists(tiff_warp) and exists(tiff_vips):
+            #d    ctx.run('rm -v {tiff}'.format(tiff=tiff_gcp))
