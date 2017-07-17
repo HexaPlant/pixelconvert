@@ -141,9 +141,8 @@ def createxml(ctx):
                 lry = uly + (dataset.RasterYSize * yres)
 
             else:
-                dataset = gdal.Open(tiff_in)
-                ulx=dataset.RasterXSize
-                uly=dataset.RasterYSize
+                ulx=0
+                uly=0
                 lry=0
                 lrx=0
 
