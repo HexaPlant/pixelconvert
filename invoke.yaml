@@ -1,4 +1,5 @@
 input_dir: /data/gdrive/data/woldan/Bearbeitung/
+#input_dir: /data/gdrive/data/woldan/test/in/
 gcp_dir: /data/woldan/gcp/
 vips_dir: /data/woldan/iiif/
 warp_dir: /data/woldan/warp/
