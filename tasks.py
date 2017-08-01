@@ -42,8 +42,7 @@ def convert(ctx):
             wld_gcp = os.path.join(ctx.gcp_dir,filename+'.wld')
             gtxt_out = os.path.join(ctx.output_dir,clean(filename).lower()+'.geo')
 
-
-            print ("Processing",img)
+            #print ("Processing",img)
 
             if exists(tiff_final):
                 print ("Skipping",img)
@@ -51,6 +50,8 @@ def convert(ctx):
 
             if not exists(tiff_gcp) and exists(points_in):
                 ctx.run ('cp -v {tiff_in} {tiff_gcp}'.format(tiff_in=escape_path(tiff_in),tiff_gcp=escape_path(tiff_gcp)))
+            else:
+                print(points_in,"missing for",tiff_in)
 
             if exists(tiff_gcp):
                 if exists(wld_gcp):
