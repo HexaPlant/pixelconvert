@@ -365,17 +365,22 @@ def importlayers(ctx):
             for tif in fnmatch.filter(files, "*.tif"):
                 filename, ext = os.path.splitext(tif)
                 keywords=''
-                if category_dict[filename]['category1']:
-                    keywords+='"'+category_dict[filename]['category1']+'",'
-                if category_dict[filename]['category2']:
-                    keywords+='"'+category_dict[filename]['category3']+'",'
-                if category_dict[filename]['category3']:
-                    keywords+='"'+category_dict[filename]['category3']+'",'
-                if category_dict[filename]['category4']:
-                    keywords+='"'+category_dict[filename]['category4']+'",'
-                if category_dict[filename]['category5']:
-                    keywords+='"'+category_dict[filename]['category5']+'",'
+                try:
+                    if category_dict[filename]['category1']:
+                        keywords+='"'+category_dict[filename]['category1']+'",'
+                    if category_dict[filename]['category2']:
+                        keywords+='"'+category_dict[filename]['category3']+'",'
+                    if category_dict[filename]['category3']:
+                        keywords+='"'+category_dict[filename]['category3']+'",'
+                    if category_dict[filename]['category4']:
+                        keywords+='"'+category_dict[filename]['category4']+'",'
+                    if category_dict[filename]['category5']:
+                        keywords+='"'+category_dict[filename]['category5']+'",'
+                except KeyError:
+                    pass
+                if keywords:
+                    keywords=keywords[:-1]
                 print(tif,keywords)
                 tiff_final = os.path.join(ctx.output_dir,clean(tif).lower())
-                importlayer='cd {geonode_dir};./manage.py importlayers -o -k {keywords} {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=tiff_final,keywords=keywords[:-1])
+                importlayer='cd {geonode_dir};./manage.py importlayers -o -k {keywords} {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=tiff_final,keywords=keywords)
                 ctx.run(importlayer)
