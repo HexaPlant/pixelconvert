@@ -32,7 +32,7 @@ def convert(ctx):
             img = os.path.join(root,tif).replace(' ','\ ').replace('&','\&').replace("'","\'")
 
             filename, ext = os.path.splitext(tif)
-            points_in = escape_path(os.path.join(root,filename+'.tif.points'))
+            points_in = os.path.join(root,filename+'.tif.points')
             tiff_in = os.path.join(root,tif)
             tiff_gcp = os.path.join(ctx.gcp_dir,clean(tif))
             tiff_warp = os.path.join(ctx.warp_dir,clean(tif).lower())
@@ -51,7 +51,7 @@ def convert(ctx):
             if not exists(tiff_gcp) and exists(points_in):
                 ctx.run ('cp -v {tiff_in} {tiff_gcp}'.format(tiff_in=escape_path(tiff_in),tiff_gcp=escape_path(tiff_gcp)))
             else:
-                print(points_in,"missing for",tiff_in)
+                print("Missing",points_in," for",tiff_in)
 
             if exists(tiff_gcp):
                 if exists(wld_gcp):
