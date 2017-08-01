@@ -378,9 +378,9 @@ def importlayers(ctx):
                         keywords+='"'+category_dict[filename]['category5']+'",'
                 except KeyError:
                     pass
+                #print(tif,keywords)
                 if keywords:
                     keywords='-k '+keywords[:-1]
-                print(tif,keywords)
                 tiff_final = os.path.join(ctx.output_dir,clean(tif).lower())
-                importlayer='cd {geonode_dir};./manage.py importlayers -o -k {keywords} {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=tiff_final,keywords=keywords)
+                importlayer='cd {geonode_dir};./manage.py importlayers -o {keywords} {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=tiff_final,keywords=keywords)
                 ctx.run(importlayer)
