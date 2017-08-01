@@ -1,4 +1,4 @@
-input_dir: /data/gdrive/data/woldan/Bearbeitung/
+input_dir: /data/woldan/Bearbeitung/
 #input_dir: /data/gdrive/data/woldan/test/in/
 gcp_dir: /data/woldan/gcp/
 vips_dir: /data/woldan/iiif/
@@ -7,7 +7,7 @@ wld_dir: /data/woldan/wld
 output_dir: /data/woldan/image/
 
 
-aseq_file: /data/gdrive/data/woldan/meta/woldan-2017.04.12_aseq.xml
+aseq_file: /data/woldan/meta/woldan-2017.04.12_aseq.xml
 
 #input_dir: /data/gdrive/data/woldan/test/in/
 #gcp_dir: /data/gdrive/data/woldan/test/tmp/gcp/
