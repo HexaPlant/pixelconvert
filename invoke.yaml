@@ -7,6 +7,8 @@ wld_dir: /data/woldan/wld
 output_dir: /data/woldan/image/
 aseq_file: /data/woldan/meta/woldan-2017.04.12_aseq.xml
 geonode_dir: /data/code/woldan
+category: /data/woldan/meta/woldan_category.csv
+
 
 #input_dir: /data/gdrive/data/woldan/test/in/
 #gcp_dir: /data/gdrive/data/woldan/test/tmp/gcp/

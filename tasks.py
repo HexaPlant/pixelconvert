@@ -351,9 +351,32 @@ def createxml(ctx):
 
 @task()
 def importlayers(ctx):
-
-    for root, dir, files in os.walk(ctx.output_dir):
-        for tif in fnmatch.filter(files, "*.tif"):
-            tiff_final = os.path.join(ctx.output_dir,clean(tif).lower())
-            importlayer='cd {geonode_dir};./manage.py importlayers -o -k keyword2 -r AUT  {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=tiff_final)
-            ctx.run(importlayer)
+    category_dict={}
+    with open(ctx.category, 'r') as category_file:
+        category_csv = csv.DictReader(category_file)
+        for row in category_csv:
+            category_dict[row['\xef\xbb\xbftitle'].lower()]={
+                'category1':row['category1'],
+                'category2':row['category2'],
+                'category3':row['category3'],
+                'category4':row['category4'],
+                'category5':row['category5'],
+            }
+        for root, dir, files in os.walk(ctx.output_dir):
+            for tif in fnmatch.filter(files, "*.tif"):
+                filename, ext = os.path.splitext(tif)
+                keywords=''
+                if category_dict[filename]['category1']:
+                    keywords+='"'+category_dict[filename]['category1']+'",'
+                if category_dict[filename]['category2']:
+                    keywords+='"'+category_dict[filename]['category3']+'",'
+                if category_dict[filename]['category3']:
+                    keywords+='"'+category_dict[filename]['category3']+'",'
+                if category_dict[filename]['category4']:
+                    keywords+='"'+category_dict[filename]['category4']+'",'
+                if category_dict[filename]['category5']:
+                    keywords+='"'+category_dict[filename]['category5']+'",'
+                print(tif,keywords)
+                tiff_final = os.path.join(ctx.output_dir,clean(tif).lower())
+                importlayer='cd {geonode_dir};./manage.py importlayers -o -k {keywords} {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=tiff_final,keywords=keywords[:-1])
+                ctx.run(importlayer)
