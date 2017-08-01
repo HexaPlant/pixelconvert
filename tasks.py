@@ -112,9 +112,9 @@ def createxml(ctx):
 
     print ("Importing Metadata")
     records=aseq.load(ctx)
-    csv_abstract=open("woldan_abstract.csv","w")
+    csv_abstract=open("out/woldan_abstract.csv","w")
     csv_abstract.write("title,abstract\n")
-    csv_category=open("woldan_category.csv","w")
+    csv_category=open("out/woldan_category.csv","w")
     csv_category.write("title,category1,category2,category3,category4\n")
 
     for root, dir, files in os.walk(ctx.input_dir):
@@ -311,7 +311,7 @@ def createxml(ctx):
             supplemental+=joinlineif("\nAnmerkungen: ",note)
 
             if os.path.exists(abstract_in):
-                abstract=open(abstract_in).read()
+                abstract=escape(open(abstract_in).read().decode('iso-8859-1').encode('utf8'))
 
             else:
                 abstract=""
@@ -334,8 +334,10 @@ def createxml(ctx):
 
             title=filename.replace('_',' ').replace('[','').replace(']','')
             supplemental=supplemental.replace('_',' ').replace('[','').replace(']','')
-            print (title,abstract,supplemental)
-            xml_file.write(csw.TEMPLATE.format(id=ac,name=escape(title),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental))
+            title_short=' '.join(title.split(' ')[1:])
+            # print (title,abstract,supplemental)
+            print (title_short)
+            xml_file.write(csw.TEMPLATE.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental))
             xml_file.close()
 
             if abstract:
@@ -345,3 +347,12 @@ def createxml(ctx):
 
             csv_abstract.write(filename+","+abst+"\n")
             csv_category.write(filename+",,,,\n")
+
+@task()
+def importlayers(ctx):
+
+    for root, dir, files in os.walk(ctx.output_dir):
+        for tif in fnmatch.filter(files, "*.tif"):
+            tiff_final = os.path.join(ctx.output_dir,clean(tif).lower())
+            importlayer='cd {geonode_dir};./manage.py importlayers -o -k keyword2 -r AUT  {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=tiff_final)
+            ctx.run(importlayer)
