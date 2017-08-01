@@ -30,10 +30,9 @@ def convert(ctx):
     for root, dir, files in os.walk(ctx.input_dir):
         for tif in fnmatch.filter(files, "*.tif"):
             img = os.path.join(root,tif).replace(' ','\ ').replace('&','\&').replace("'","\'")
-
             filename, ext = os.path.splitext(tif)
             points_in = os.path.join(root,filename+'.tif.points')
-            tiff_in = os.path.join(root,tif)
+            tiff_in = os.path.join(root,tif).replace("'","\\'")
             tiff_gcp = os.path.join(ctx.gcp_dir,clean(tif))
             tiff_warp = os.path.join(ctx.warp_dir,clean(tif).lower())
             tiff_vips = os.path.join(ctx.vips_dir,clean(tif).lower())
