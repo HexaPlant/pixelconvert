@@ -379,7 +379,7 @@ def importlayers(ctx):
                 except KeyError:
                     pass
                 if keywords:
-                    keywords=keywords[:-1]
+                    keywords='-k '+keywords[:-1]
                 print(tif,keywords)
                 tiff_final = os.path.join(ctx.output_dir,clean(tif).lower())
                 importlayer='cd {geonode_dir};./manage.py importlayers -o -k {keywords} {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=tiff_final,keywords=keywords)
