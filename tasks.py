@@ -130,7 +130,7 @@ def createxml(ctx):
             tiff_vips = os.path.join(ctx.vips_dir,clean(tif).lower())
             tiff_wld = os.path.join(ctx.wld_dir,clean(tif))
             tiff_final = os.path.join(ctx.output_dir,clean(tif).lower())
-            wld_gcp = os.path.join(ctx.gcp_dir,filename+'.wld')
+            wld_gcp = os.path.join(ctx.gcp_dir,clean(filename)+'.wld')
             gtxt_out = os.path.join(ctx.output_dir,clean(filename).lower()+'.geo')
             xml_out = os.path.join(ctx.output_dir,clean(filename).lower()+'.xml')
             abstract_in= escape_path(os.path.join(root,filename+'_Abstract.txt'))
