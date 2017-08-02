@@ -13,10 +13,10 @@ def country2kontinent():
 def pos2region(countries,north,south,west,east):
     region=[]
 
-    g_ul = geocoder.google([north,west], method='reverse',language='de')
-    g_ur = geocoder.google([north,east], method='reverse',language='de')
-    g_ll = geocoder.google([south,west], method='reverse',language='de')
-    g_lr = geocoder.google([south,east], method='reverse',language='de')
+    g_ul = geocoder.google([north,west], method='reverse',language='de',verify=False)
+    g_ur = geocoder.google([north,east], method='reverse',language='de',verify=False)
+    g_ll = geocoder.google([south,west], method='reverse',language='de',verify=False)
+    g_lr = geocoder.google([south,east], method='reverse',language='de',verify=False)
 
     g_ul_continent=''
     g_ur_continent=''
@@ -32,10 +32,10 @@ def pos2region(countries,north,south,west,east):
     if g_lr.country:
             g_lr_continent=countries[g_lr.country]['continent']
 
-    if g_ul.country_long == g_ur.country_long == g_ll.country_long ==  g_lr.country_long and g_ul.country_long  != 'None':
+    if g_ul.country_long == g_ur.country_long == g_ll.country_long ==  g_lr.country_long and g_ul.country_long:
         region.append(g_ul.country_long)
 
-    if g_ul_continent == g_ur_continent == g_ll_continent == g_lr_continent and g_ul_continent != 'None':
+    if g_ul_continent == g_ur_continent == g_ll_continent == g_lr_continent and g_ul_continent:
         region.append(g_ul_continent)
 
     print(north,west,g_ul.country_long,g_ul_continent)
