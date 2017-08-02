@@ -18,6 +18,8 @@ import xml.sax.saxutils
 
 import csw
 import aseq
+import geocoder
+import regions
 
 @task()
 def convert(ctx):
@@ -130,6 +132,8 @@ def createxml(ctx):
     csv_category=open("out/woldan_category.csv","w")
     csv_category.write("title,category1,category2,category3,category4\n")
 
+    countries=regions.country2kontinent()
+
     for root, dir, files in os.walk(ctx.input_dir):
         for tif in fnmatch.filter(files, "*.tif"):
             img = os.path.join(root,tif).replace(' ','\ ').replace('&','\&').replace("'","\'")
@@ -169,6 +173,9 @@ def createxml(ctx):
             outProj = Proj(init='epsg:4326')
             west,north = transform(inProj,outProj,ulx,uly)
             east,south = transform(inProj,outProj,lrx,lry)
+
+
+
             fs=filename.split('_')
             ac,author,imgname,year = fs[0],fs[1],' '.join(fs[2:-1]).strip(),fs[-1]
             name=' '.join(fs[1:])
@@ -371,7 +378,15 @@ def createxml(ctx):
             except KeyError:
                 pass
             # print(category)
-            xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental,keywords=keywords,category=category))
+
+            region=""
+            region_list=regions.pos2region(countries,north,south,west,east)
+            for r in region_list:
+                region+=csw.REGION.format(region=r.encode('utf8'))
+
+            #print(region)
+
+            xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental,keywords=keywords,category=category,region=region))
             xml_file.close()
 
             if abstract:
@@ -386,37 +401,12 @@ def createxml(ctx):
 def importlayers(ctx):
     importlayer='cd {geonode_dir};./manage.py importlayers -v3 -o {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=ctx.output_dir)
     ctx.run(importlayer)
-    # category_dict={}
-    # with open(ctx.category, 'r') as category_file:
-    #     category_csv = csv.DictReader(category_file)
-    #     for row in category_csv:
-    #         category_dict[row['\xef\xbb\xbftitle'].lower()]={
-    #             'category1':row['category1'],
-    #             'category2':row['category2'],
-    #             'category3':row['category3'],
-    #             'category4':row['category4'],
-    #             'category5':row['category5'],
-    #         }
-    #     for root, dir, files in os.walk(ctx.output_dir):
-    #         for tif in fnmatch.filter(files, "*.tif"):
-    #             filename, ext = os.path.splitext(tif)
-    #             keywords=''
-    #             try:
-    #                 if category_dict[filename]['category1']:
-    #                     keywords+='"'+category_dict[filename]['category1']+'",'
-    #                 if category_dict[filename]['category2']:
-    #                     keywords+='"'+category_dict[filename]['category3']+'",'
-    #                 if category_dict[filename]['category3']:
-    #                     keywords+='"'+category_dict[filename]['category3']+'",'
-    #                 if category_dict[filename]['category4']:
-    #                     keywords+='"'+category_dict[filename]['category4']+'",'
-    #                 if category_dict[filename]['category5']:
-    #                     keywords+='"'+category_dict[filename]['category5']+'",'
-    #             except KeyError:
-    #                 pass
-    #             #print(tif,keywords)
-    #             if keywords:
-    #                 keywords='-k '+keywords[:-1]
-    #             tiff_final = os.path.join(ctx.output_dir,clean(tif).lower())
-    #             importlayer='cd {geonode_dir};./manage.py importlayers -o {keywords} {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=tiff_final,keywords=keywords)
-    #             ctx.run(importlayer)
+
+@task()
+def test_geocoder(ctx):
+
+    countries=regions.country2kontinent()
+
+    #regions.pos2region(countries,36.0654206327,2.27685164945,25.5277830434,71.2462763724)
+    regions.pos2region(countries,47.1319451633,46.9127043394,12.8330743987,13.1941276942)
+    #regions.pos2region(countries,5.56634191981,74.035496039,32.775356264,70.8293161903)
