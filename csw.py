@@ -1,6 +1,21 @@
 # -*- coding: utf-8 -*-
 
-TEMPLATE="""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+KEYWORD="""<gmd:MD_Keywords>
+    <gmd:keyword>
+        <gco:CharacterString>{keyword}</gco:CharacterString>
+        </gmd:keyword>
+        <gmd:type>
+        <gmd:MD_KeywordTypeCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="temporal">temporal</gmd:MD_KeywordTypeCode>
+        </gmd:type>
+</gmd:MD_Keywords>"""
+
+CATEGORY="""
+       <gmd:topicCategory>
+                   <gmd:MD_TopicCategoryCode>{category}</gmd:MD_TopicCategoryCode>
+      </gmd:topicCategory>"""
+
+
+CSW="""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <csw:GetRecordByIdResponse xmlns:csw="http://www.opengis.net/cat/csw/2.0.2" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:dct="http://purl.org/dc/terms/" xmlns:gco="http://www.isotc211.org/2005/gco" xmlns:gmd="http://www.isotc211.org/2005/gmd" xmlns:gml="http://www.opengis.net/gml" xmlns:ows="http://www.opengis.net/ows" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/cat/csw/2.0.2 http://schemas.opengis.net/csw/2.0.2/CSW-discovery.xsd"><gmd:MD_Metadata xsi:schemaLocation="http://www.isotc211.org/2005/gmd http://www.isotc211.org/2005/gmd/gmd.xsd">
    <gmd:fileIdentifier>
      <gco:CharacterString>{id}</gco:CharacterString>
@@ -154,10 +169,17 @@ TEMPLATE="""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
            </gmd:version>
          </gmd:MD_Format>
        </gmd:resourceFormat>
-
-
-
-
+        <gmd:descriptiveKeywords>
+            <gmd:MD_Keywords>
+                <gmd:keyword>
+                <gco:CharacterString>Austria</gco:CharacterString>
+                </gmd:keyword>
+                <gmd:type>
+                <gmd:MD_KeywordTypeCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_KeywordTypeCode" codeListValue="place">place</gmd:MD_KeywordTypeCode>
+                </gmd:type>
+            </gmd:MD_Keywords>
+            {keywords}
+        </gmd:descriptiveKeywords>
        <gmd:resourceConstraints>
          <gmd:MD_LegalConstraints>
            <gmd:useConstraints>
@@ -177,9 +199,7 @@ TEMPLATE="""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
        <gmd:characterSet>
          <gmd:MD_CharacterSetCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_CharacterSetCode" codeListValue="utf8">utf8</gmd:MD_CharacterSetCode>
        </gmd:characterSet>
-       <gmd:topicCategory gco:nilReason="missing">
-
-       </gmd:topicCategory>
+       {category}
        <gmd:extent>
          <gmd:EX_Extent>
            <gmd:geographicElement>

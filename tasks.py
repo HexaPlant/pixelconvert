@@ -110,6 +110,19 @@ def convert(ctx):
 @task()
 def createxml(ctx):
 
+    print ("Importing Categories")
+    category_dict={}
+    with open(ctx.category, 'r') as category_file:
+        category_csv = csv.DictReader(category_file)
+        for row in category_csv:
+            category_dict[row['\xef\xbb\xbftitle']]={
+                'category1':row['category1'],
+                'category2':row['category2'],
+                'category3':row['category3'],
+                'category4':row['category4'],
+                'category5':row['category5'],
+            }
+
     print ("Importing Metadata")
     records=aseq.load(ctx)
     csv_abstract=open("out/woldan_abstract.csv","w")
@@ -122,8 +135,10 @@ def createxml(ctx):
             img = os.path.join(root,tif).replace(' ','\ ').replace('&','\&').replace("'","\'")
 
             filename, ext = os.path.splitext(tif)
-            points_in = escape_path(os.path.join(root,filename+'.tif.points'))
+
             tiff_in = os.path.join(root,tif)
+            points_in = escape_path(os.path.join(root,filename+'.tif.points'))
+            abstract_in= escape_path(os.path.join(root,filename+'_Abstract.txt'))
             tiff_gcp = os.path.join(ctx.gcp_dir,clean(tif))
             tiff_warp = os.path.join(ctx.warp_dir,clean(tif).lower())
             tiff_vips = os.path.join(ctx.vips_dir,clean(tif).lower())
@@ -132,7 +147,7 @@ def createxml(ctx):
             wld_gcp = os.path.join(ctx.gcp_dir,clean(filename)+'.wld')
             gtxt_out = os.path.join(ctx.output_dir,clean(filename).lower()+'.geo')
             xml_out = os.path.join(ctx.output_dir,clean(filename).lower()+'.xml')
-            abstract_in= escape_path(os.path.join(root,filename+'_Abstract.txt'))
+
 
             if exists(tiff_final):
                 dataset = gdal.Open(tiff_final)
@@ -335,9 +350,28 @@ def createxml(ctx):
             title=filename.replace('_',' ').replace('[','').replace(']','')
             supplemental=supplemental.replace('_',' ').replace('[','').replace(']','')
             title_short=' '.join(title.split(' ')[1:])
+
             # print (title,abstract,supplemental)
-            print (title_short)
-            xml_file.write(csw.TEMPLATE.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental))
+            print (title_short,filename,category_dict[filename])
+
+            keywords=''
+            category=''
+            try:
+                if category_dict[filename]['category1']:
+                    keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category1'])
+                if category_dict[filename]['category2']:
+                    keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category2'])
+                if category_dict[filename]['category3']:
+                    keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category3'])
+                if category_dict[filename]['category4']:
+                    category=csw.CATEGORY.format(category=category_dict[filename]['category4'].lower())
+                if category_dict[filename]['category5']:
+                    keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category5'])
+
+            except KeyError:
+                pass
+            # print(category)
+            xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental,keywords=keywords,category=category))
             xml_file.close()
 
             if abstract:
@@ -350,37 +384,39 @@ def createxml(ctx):
 
 @task()
 def importlayers(ctx):
-    category_dict={}
-    with open(ctx.category, 'r') as category_file:
-        category_csv = csv.DictReader(category_file)
-        for row in category_csv:
-            category_dict[row['\xef\xbb\xbftitle'].lower()]={
-                'category1':row['category1'],
-                'category2':row['category2'],
-                'category3':row['category3'],
-                'category4':row['category4'],
-                'category5':row['category5'],
-            }
-        for root, dir, files in os.walk(ctx.output_dir):
-            for tif in fnmatch.filter(files, "*.tif"):
-                filename, ext = os.path.splitext(tif)
-                keywords=''
-                try:
-                    if category_dict[filename]['category1']:
-                        keywords+='"'+category_dict[filename]['category1']+'",'
-                    if category_dict[filename]['category2']:
-                        keywords+='"'+category_dict[filename]['category3']+'",'
-                    if category_dict[filename]['category3']:
-                        keywords+='"'+category_dict[filename]['category3']+'",'
-                    if category_dict[filename]['category4']:
-                        keywords+='"'+category_dict[filename]['category4']+'",'
-                    if category_dict[filename]['category5']:
-                        keywords+='"'+category_dict[filename]['category5']+'",'
-                except KeyError:
-                    pass
-                #print(tif,keywords)
-                if keywords:
-                    keywords='-k '+keywords[:-1]
-                tiff_final = os.path.join(ctx.output_dir,clean(tif).lower())
-                importlayer='cd {geonode_dir};./manage.py importlayers -o {keywords} {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=tiff_final,keywords=keywords)
-                ctx.run(importlayer)
+    importlayer='cd {geonode_dir};./manage.py importlayers -v3 -o {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=ctx.output_dir)
+    ctx.run(importlayer)
+    # category_dict={}
+    # with open(ctx.category, 'r') as category_file:
+    #     category_csv = csv.DictReader(category_file)
+    #     for row in category_csv:
+    #         category_dict[row['\xef\xbb\xbftitle'].lower()]={
+    #             'category1':row['category1'],
+    #             'category2':row['category2'],
+    #             'category3':row['category3'],
+    #             'category4':row['category4'],
+    #             'category5':row['category5'],
+    #         }
+    #     for root, dir, files in os.walk(ctx.output_dir):
+    #         for tif in fnmatch.filter(files, "*.tif"):
+    #             filename, ext = os.path.splitext(tif)
+    #             keywords=''
+    #             try:
+    #                 if category_dict[filename]['category1']:
+    #                     keywords+='"'+category_dict[filename]['category1']+'",'
+    #                 if category_dict[filename]['category2']:
+    #                     keywords+='"'+category_dict[filename]['category3']+'",'
+    #                 if category_dict[filename]['category3']:
+    #                     keywords+='"'+category_dict[filename]['category3']+'",'
+    #                 if category_dict[filename]['category4']:
+    #                     keywords+='"'+category_dict[filename]['category4']+'",'
+    #                 if category_dict[filename]['category5']:
+    #                     keywords+='"'+category_dict[filename]['category5']+'",'
+    #             except KeyError:
+    #                 pass
+    #             #print(tif,keywords)
+    #             if keywords:
+    #                 keywords='-k '+keywords[:-1]
+    #             tiff_final = os.path.join(ctx.output_dir,clean(tif).lower())
+    #             importlayer='cd {geonode_dir};./manage.py importlayers -o {keywords} {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=tiff_final,keywords=keywords)
+    #             ctx.run(importlayer)
