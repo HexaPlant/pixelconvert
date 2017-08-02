@@ -32,16 +32,16 @@ def pos2region(countries,north,south,west,east):
     if g_lr.country:
             g_lr_continent=countries[g_lr.country]['continent']
 
-    if g_ul.country_long == g_ur.country_long == g_ll.country_long ==  g_lr.country_long:
+    if g_ul.country_long == g_ur.country_long == g_ll.country_long ==  g_lr.country_long and g_ul_country != 'None':
         region.append(g_ul.country_long)
 
-    if g_ul_continent == g_ur_continent == g_ll_continent == g_lr_continent:
+    if g_ul_continent == g_ur_continent == g_ll_continent == g_lr_continent and g_ul_continent != 'None':
         region.append(g_ul_continent)
 
-    #print(north,west,g_ul.country_long,g_ul_continent)
-    #print(north,east,g_ur.country_long,g_ur_continent)
-    #print(south,west,g_ll.country_long,g_ll_continent)
-    #print(south,east,g_lr.country_long,g_lr_continent)
+    print(north,west,g_ul.country_long,g_ul_continent)
+    print(north,east,g_ur.country_long,g_ur_continent)
+    print(south,west,g_ll.country_long,g_ll_continent)
+    print(south,east,g_lr.country_long,g_lr_continent)
 
 
     return region
