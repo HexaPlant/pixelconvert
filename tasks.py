@@ -359,7 +359,7 @@ def createxml(ctx):
             title_short=' '.join(title.split(' ')[1:])
 
             # print (title,abstract,supplemental)
-            print (title_short,filename,category_dict[filename])
+
 
             keywords=''
             category=''
@@ -385,7 +385,7 @@ def createxml(ctx):
                 if r:
                     region+=csw.REGION.format(region=r.encode('utf8'))
 
-            #print(region)
+            print (title_short,filename,region_list,category_dict[filename])
 
             xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental,keywords=keywords,category=category,region=region))
             xml_file.close()
