@@ -13,6 +13,16 @@ def country2kontinent():
 def pos2region(countries,north,south,west,east):
     region=[]
 
+    width=east-west
+    hight=north-south
+
+    north=north-hight/2.3
+    south=south+hight/2.3
+    west=west+width/2.3
+    east=east-width/2.3
+
+    print(width,hight)
+    print(north,south,west,east)
     g_ul = geocoder.google([north,west], method='reverse',language='de',verify=False)
     g_ur = geocoder.google([north,east], method='reverse',language='de',verify=False)
     g_ll = geocoder.google([south,west], method='reverse',language='de',verify=False)
