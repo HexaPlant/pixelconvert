@@ -16,7 +16,7 @@ def join(s1,s2='',j=''):
 def joinline(s1,s2='',j=''):
     line=join(s1,s2,j)
     if line:
-        return (line.strip()+'\n')
+        return (line.strip()+'\n\n')
     else:
         return ''
 

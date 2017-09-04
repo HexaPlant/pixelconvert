@@ -5,6 +5,7 @@ from invoke import Collection, task
 from util import join,joinline,joinlineif,clean,escape,escape_path
 import csv
 import codecs
+import magic
 
 import MARC21relaxed
 import pyxb
@@ -25,7 +26,7 @@ import regions
 def convert(ctx):
     ctx.run('mkdir -p {path}'.format(path=ctx.gcp_dir))
     ctx.run('mkdir -p {path}'.format(path=ctx.vips_dir))
-    ctx.run('mkdir -p {path}'.format(path=ctx.warp_dir))
+    #ctx.run('mkdir -p {path}'.format(path=ctx.warp_dir))
     ctx.run('mkdir -p {path}'.format(path=ctx.wld_dir))
     ctx.run('mkdir -p {path}'.format(path=ctx.output_dir))
 
@@ -97,6 +98,11 @@ def convert(ctx):
                     ctx.run("applygeo {gtxt_in} {tiff_out}".format(gtxt_in=escape_path(gtxt_out),tiff_out=escape_path(tiff_final)))
                     ctx.run('gdal_edit.py -a_nodata 255 -mo NODATA_VALUES="255 255 255" {tiff_out}'.format(tiff_out=tiff_final))
 
+                    #if exists(tiff_final):
+                    #    ctx.run('rm -v {tiff}'.format(tiff=tiff_gcp))
+                    #    ctx.run('rm -v {tiff}'.format(tiff=tiff_wld))
+                    #    ctx.run('rm -v {wld}'.format(wld=wld_gcp))
+
                      #ctx.run('gdal_edit.py -unsetgt -unsetmd -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_vips))
                      #ctx.run('gdal_edit.py -unsetgt -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_vips))
 
@@ -106,8 +112,7 @@ def convert(ctx):
                     #ctx.run('gdalwarp  -dstalpha  -co "COMPRESS=DEFLATE"  -tps -refine_gcps 10 30 -s_srs EPSG:3857 -t_srs EPSG:3857  -multi -wo NUM_THREADS=ALL_CPU {tiff_gcp} {tiff_warp}'.format(tiff_gcp=tiff_gcp,tiff_warp=tiff_warp))
                     #ctx.run('gdaladdo  --config COMPRESS_OVERVIEW DEFLATE -r lanczos {tiff_warp} 2 4 8 16 32'.format(tiff_warp=tiff_warp))
 
-                #if exists(tiff_gcp) and exists(tiff_warp) and exists(tiff_vips):
-                #d    ctx.run('rm -v {tiff}'.format(tiff=tiff_gcp))
+
 
 @task()
 def createxml(ctx):
@@ -142,7 +147,8 @@ def createxml(ctx):
 
             tiff_in = os.path.join(root,tif)
             points_in = escape_path(os.path.join(root,filename+'.tif.points'))
-            abstract_in= escape_path(os.path.join(root,filename+'_Abstract.txt'))
+            abstract_in= os.path.join(root,filename+'_Abstract.txt')
+            biblio_in= os.path.join(root,filename+'_Biblio.txt')
             tiff_gcp = os.path.join(ctx.gcp_dir,clean(tif))
             tiff_warp = os.path.join(ctx.warp_dir,clean(tif).lower())
             tiff_vips = os.path.join(ctx.vips_dir,clean(tif).lower())
@@ -192,12 +198,12 @@ def createxml(ctx):
             partOf=joinline(a010_a)
             partOf+=joinline(a451_a)
             partOf+=joinline(a590_a)
-            supplemental+=joinlineif("\nGesamttitel: ",partOf)
+            supplemental+=joinlineif("**Gesamttitel:** ",partOf)
 
             a331_a=aseq.get_key(records,ac,"331"," "," ","a")
             a335_a=aseq.get_key(records,ac,"335"," "," ","a")
             titleValue=join(a331_a,a335_a,' : ')
-            supplemental+=joinlineif("\nTitel: ",titleValue)
+            supplemental+=joinlineif("**Titel:** ",titleValue)
 
             a089_p=aseq.get_key(records,ac,"089"," "," ","p")
             a089_n=aseq.get_key(records,ac,"089"," "," ","n")
@@ -206,7 +212,7 @@ def createxml(ctx):
             partNumber=joinline(a089_p,a089_n,' / ')
             partNumber=joinline(a455_a)
             partNumber=joinline(a596_a)
-            supplemental+=joinlineif("\nZählung: ",partNumber)
+            supplemental+=joinlineif("**Zählung:** ",partNumber)
 
             a341_a=aseq.get_key(records,ac,"341"," "," ","a")
             a343_a=aseq.get_key(records,ac,"343"," "," ","a")
@@ -216,7 +222,7 @@ def createxml(ctx):
             titleVariant=joinline(a341_a,a343_a,' : ')
             titleVariant+=joinline(a345_a,a347_a,' : ')
             titleVariant+=joinline(a370aa)
-            supplemental+=joinlineif("\nWeitere Titel: ",titleVariant)
+            supplemental+=joinlineif("**Weitere Titel:** ",titleVariant)
 
             a100_p=aseq.get_key(records,ac,"100"," "," ","p")
             a100_d=aseq.get_key(records,ac,"100"," "," ","d")
@@ -288,55 +294,82 @@ def createxml(ctx):
             relatorRole+=joinline(a208b4)
             relatorRole+=joinline(a677_4)
 
-            supplemental+=joinlineif("\nPersonen/Institution: ",relator)
-            supplemental+=joinlineif("\nPersonen/Institution: ",relatorRole)
+            supplemental+=joinlineif("**Personen/Institution:** ",relator)
+            supplemental+=joinlineif("**Personen/Institution:** ",relatorRole)
 
             a359_a=aseq.get_key(records,ac,"359"," "," ","a")
             responsibilityStatement=joinline(a359_a)
-            supplemental+=joinlineif("\nVerantwortlichkeitsangabe: ",responsibilityStatement)
+            supplemental+=joinlineif("**Verantwortlichkeitsangabe:** ",responsibilityStatement)
 
             a403_a=aseq.get_key(records,ac,"403"," "," ","a")
             edition=joinline(a403_a)
-            supplemental+=joinlineif("\nAusgabe: ",edition)
+            supplemental+=joinlineif("**Ausgabe:** ",edition)
 
             a419_a=aseq.get_key(records,ac,"419"," "," ","a")
             providerPlace=joinline(a419_a)
-            supplemental+=joinlineif("\nOrt: ",providerPlace)
+            supplemental+=joinlineif("**Ort:** ",providerPlace)
 
             a419_b=aseq.get_key(records,ac,"419"," "," ","b")
             providerName=joinline(a419_b)
-            supplemental+=joinlineif("\nVerlag/Druck: ",providerName)
+            supplemental+=joinlineif("**Verlag/Druck:** ",providerName)
 
             a419_c=aseq.get_key(records,ac,"419"," "," ","c")
             providerDate=joinline(a419_c)
-            supplemental+=joinlineif("\nDatierung ",providerDate)
+            supplemental+=joinlineif("**Datierung:** ",providerDate)
 
             a407_a=aseq.get_key(records,ac,"407"," "," ","a")
             cartographicScale=joinline(a407_a)
-            supplemental+=joinlineif("\nMaßstab: ",cartographicScale)
+            supplemental+=joinlineif("**Maßstab:** ",cartographicScale)
 
             a433_a=aseq.get_key(records,ac,"433"," "," ","a")
             a437_a=aseq.get_key(records,ac,"437"," "," ","a")
             extend=join(a433_a,a437_a,' + ')
-            supplemental+=joinlineif("\nUmfang:\n",extend)
+            supplemental+=joinlineif("**Umfang:**",extend)
 
             a435_a=aseq.get_key(records,ac,"435"," "," ","a")
             dimension=join(a435_a)
-            supplemental+=joinlineif("\nFormat: ",dimension)
+            supplemental+=joinlineif("**Format:** ",dimension)
 
             a439_a=aseq.get_key(records,ac,"439"," "," ","d")
             baseMaterial=join(a439_a)
-            supplemental+=joinlineif("\nReproduktionsverfahren: ",baseMaterial)
+            supplemental+=joinlineif("**Reproduktionsverfahren:** ",baseMaterial)
 
             a501_a=aseq.get_key(records,ac,"501"," "," ","a")
             note=join(a501_a)
-            supplemental+=joinlineif("\nAnmerkungen: ",note)
+            supplemental+=joinlineif("**Anmerkungen:** ",note)
 
             if os.path.exists(abstract_in):
-                abstract=escape(open(abstract_in).read().decode('iso-8859-1').encode('utf8'))
+
+                blob = open(abstract_in).read()
+                m = magic.Magic(mime_encoding=True)
+                encoding = m.from_buffer(blob)
+                print (abstract_in,'uses',encoding)
+
+                if encoding=='unknown-8bit':
+                    encoding='iso-8859-1'
+
+                abstract=escape(open(abstract_in).read().decode(encoding).encode('utf8')).replace('Abstract:','')
 
             else:
+                print ('Abstract',abstract_in,'missing')
                 abstract=""
+
+            if os.path.exists(biblio_in):
+
+                blob = open(biblio_in).read()
+                m = magic.Magic(mime_encoding=True)
+                encoding = m.from_buffer(blob)
+                print (biblio_in,'uses',encoding)
+
+                if encoding=='unknown-8bit':
+                    encoding='iso-8859-1'
+
+                biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8')).replace('Quellen und weiterführende Literatur:','**Quellen und weiterführende Literatur:**')
+                supplemental+=biblio
+
+            else:
+                print ('Biblio',biblio_in,'missing')
+                biblio=""
 
             #try:
             #    abstract = escape(records[ac]["331"][" "][" "]["a"]).encode('utf-8')
@@ -408,7 +441,9 @@ def createxml(ctx):
 @task()
 def importlayers(ctx):
     importlayer='cd {geonode_dir};./manage.py importlayers -v3 -o {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=ctx.output_dir)
+    rebuild_index='cd {geonode_dir};./manage.py rebuild_index --noinput'.format(geonode_dir=ctx.geonode_dir)
     ctx.run(importlayer)
+    ctx.run(rebuild_index)
 
 @task()
 def test_geocoder(ctx):
