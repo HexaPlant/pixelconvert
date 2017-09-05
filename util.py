@@ -13,16 +13,18 @@ def join(s1,s2='',j=''):
             return s2
         return ""
 
-def joinline(s1,s2='',j=''):
+def joinline(s1,s2='',s3='',j=''):
     line=join(s1,s2,j)
+    if s3:
+        line+=' ['+s3+']'
     if line:
-        return (line.strip()+'\n\n')
+        return (line.strip()+'\n')
     else:
         return ''
 
-def joinlineif(s1,s2='',j=''):
+def joinlineif(s1,s2='',s3='',j=''):
     if s2:
-        return  joinline(s1,s2,j)
+        return  joinline(s1,s2,s3,j)+'\n'
     else:
         return ''
 
@@ -76,6 +78,21 @@ def ctx2options(ctx,image):
             hostname=image
         options+=" --network={network} --hostname {hostname} --network-alias={hostname}".format(network=ctx.network,hostname=hostname)
     return options
+
+def code2name(code):
+    code=code.replace('edt','HerausgeberIn')
+    code=code.replace('aut','VerfasserIn')
+    code=code.replace('ctg','KartografIn')
+    code=code.replace('pbl','VerlegerIn')
+    code=code.replace('prt','DruckerIn')
+    code=code.replace('dst','Vertrieb')
+    code=code.replace('mfr','HerstellerIn')
+    code=code.replace('ltg','LithographIn')
+    code=code.replace('etr','RadiererIn')
+    code=code.replace('egr','StecherIn')
+    code=code.replace('isb','herausgebendes Organ')
+    code=code.replace('oth','Sonstige')
+    return code
 
 #def name2options(ctx,image):
 #    network = ctx.network
