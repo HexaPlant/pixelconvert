@@ -299,7 +299,7 @@ def createxml(ctx):
 
                 a419_a=aseq.get_key(records,ac,"419"," "," ","a")
                 providerPlace=joinline(a419_a)
-                supplemental+=joinlineif("**Ort:** ",providerPlace)
+                supplemental+=joinlineif("**Ort:** ",providerPlace).replace('[','').replace(']','')
 
                 a419_b=aseq.get_key(records,ac,"419"," "," ","b")
                 providerName=joinline(a419_b).replace('_',' ').replace('[','').replace(']','')
