@@ -189,244 +189,248 @@ def createxml(ctx):
             #name = ' '.join([year,imgname,author]).strip()
             name_url = clean(escape(name))
 
-            print ("Writing",xml_out)
-            supplemental=""
+            if exists(xml_out):
+                print ("Passing",xml_out)
+            else:
+                print ("Writing",xml_out)
+                supplemental=""
 
-            a010_a=aseq.get_key(records,ac,"010"," "," ","a")
-            a451_a=aseq.get_key(records,ac,"451"," "," ","a")
-            a590_a=aseq.get_key(records,ac,"590"," "," ","a")
-            partOf=joinline(a010_a)
-            partOf+=joinline(a451_a)
-            partOf+=joinline(a590_a)
-            supplemental+=joinlineif("**Gesamttitel:** ",partOf)
+                a010_a=aseq.get_key(records,ac,"010"," "," ","a")
+                a451_a=aseq.get_key(records,ac,"451"," "," ","a")
+                a590_a=aseq.get_key(records,ac,"590"," "," ","a")
+                partOf=joinline(a010_a)
+                partOf+=joinline(a451_a)
+                partOf+=joinline(a590_a)
+                supplemental+=joinlineif("**Gesamttitel:** ",partOf)
 
-            a331_a=aseq.get_key(records,ac,"331"," "," ","a")
-            a335_a=aseq.get_key(records,ac,"335"," "," ","a")
-            titleValue=join(a331_a,a335_a,' : ')
-            supplemental+=joinlineif("**Titel:** ",titleValue)
+                a331_a=aseq.get_key(records,ac,"331"," "," ","a")
+                a335_a=aseq.get_key(records,ac,"335"," "," ","a")
+                titleValue=join(a331_a,a335_a,' : ')
+                supplemental+=joinlineif("**Titel:** ",titleValue)
 
-            a089_p=aseq.get_key(records,ac,"089"," "," ","p")
-            a089_n=aseq.get_key(records,ac,"089"," "," ","n")
-            a455_a=aseq.get_key(records,ac,"455"," "," ","a")
-            a596_a=aseq.get_key(records,ac,"596"," "," ","a")
-            partNumber=joinline(a089_p,a089_n,' / ')
-            partNumber=joinline(a455_a)
-            partNumber=joinline(a596_a)
-            supplemental+=joinlineif("**Zählung:** ",partNumber)
+                a089_p=aseq.get_key(records,ac,"089"," "," ","p")
+                a089_n=aseq.get_key(records,ac,"089"," "," ","n")
+                a455_a=aseq.get_key(records,ac,"455"," "," ","a")
+                a596_a=aseq.get_key(records,ac,"596"," "," ","a")
+                partNumber=joinline(a089_p,a089_n,' / ')
+                partNumber=joinline(a455_a)
+                partNumber=joinline(a596_a)
+                supplemental+=joinlineif("**Zählung:** ",partNumber)
 
-            a341_a=aseq.get_key(records,ac,"341"," "," ","a")
-            a343_a=aseq.get_key(records,ac,"343"," "," ","a")
-            a345_a=aseq.get_key(records,ac,"345"," "," ","a")
-            a347_a=aseq.get_key(records,ac,"347"," "," ","a")
-            a370aa=aseq.get_key(records,ac,"370","a"," ","a")
-            titleVariant=joinline(a341_a,a343_a,j=' : ')
-            titleVariant+=joinline(a345_a,a347_a,j=' : ')
-            titleVariant+=joinline(a370aa)
-            supplemental+=joinlineif("**Weitere Titel:** ",titleVariant)
+                a341_a=aseq.get_key(records,ac,"341"," "," ","a")
+                a343_a=aseq.get_key(records,ac,"343"," "," ","a")
+                a345_a=aseq.get_key(records,ac,"345"," "," ","a")
+                a347_a=aseq.get_key(records,ac,"347"," "," ","a")
+                a370aa=aseq.get_key(records,ac,"370","a"," ","a")
+                titleVariant=joinline(a341_a,a343_a,j=' : ')
+                titleVariant+=joinline(a345_a,a347_a,j=' : ')
+                titleVariant+=joinline(a370aa)
+                supplemental+=joinlineif("**Weitere Titel:** ",titleVariant)
 
-            a100_p=aseq.get_key(records,ac,"100"," "," ","p")
-            a100_d=aseq.get_key(records,ac,"100"," "," ","d")
-            a100_4=code2name(aseq.get_key(records,ac,"100"," "," ","4"))
-            a104ap=aseq.get_key(records,ac,"104","a"," ","p")
-            a104ad=aseq.get_key(records,ac,"104","a"," ","d")
-            a104a4=code2name(aseq.get_key(records,ac,"104","a"," ","4"))
-            a108ap=aseq.get_key(records,ac,"108"," ","a","p")
-            a108ad=aseq.get_key(records,ac,"108"," ","a","d")
-            a108a4=code2name(aseq.get_key(records,ac,"108","a"," ","4"))
-            a112ap=aseq.get_key(records,ac,"112","a"," ","p")
-            a112a4=code2name(aseq.get_key(records,ac,"112","a"," ","4"))
-            a100bp=aseq.get_key(records,ac,"100","b"," ","p")
-            a100bd=aseq.get_key(records,ac,"100","b"," ","d")
-            a100b4=code2name(aseq.get_key(records,ac,"100","b"," ","4"))
-            a104bp=aseq.get_key(records,ac,"104","b"," ","p")
-            a104bd=aseq.get_key(records,ac,"104","b"," ","d")
-            a104b4=code2name(aseq.get_key(records,ac,"104","b"," ","4"))
-            a108bp=aseq.get_key(records,ac,"108","b"," ","p")
-            a108bd=aseq.get_key(records,ac,"108","b"," ","d")
-            a108b4=code2name(aseq.get_key(records,ac,"108","b"," ","4"))
-            a112ad=aseq.get_key(records,ac,"112","a"," ","d")
-            a112bp=aseq.get_key(records,ac,"112","b"," ","p")
-            a112bd=aseq.get_key(records,ac,"112","b"," ","d")
-            a112b4=code2name(aseq.get_key(records,ac,"112","b"," ","4"))
-            a200_k=aseq.get_key(records,ac,"200"," "," ","k")
-            a200bh=aseq.get_key(records,ac,"200","b"," ","h")
-            a200_h=aseq.get_key(records,ac,"200"," "," ","h")
-            a200_4=code2name(aseq.get_key(records,ac,"200"," "," ","4"))
-            a204ak=aseq.get_key(records,ac,"204","a"," ","k")
-            a204ah=aseq.get_key(records,ac,"204","a"," ","h")
-            a204a4=code2name(aseq.get_key(records,ac,"204","a"," ","4"))
-            a208ak=aseq.get_key(records,ac,"208","a"," ","k")
-            a208ah=aseq.get_key(records,ac,"208","a"," ","h")
-            a208a4=code2name(aseq.get_key(records,ac,"208","a"," ","4"))
-            a200bk=aseq.get_key(records,ac,"200","b"," ","k")
-            a200b4=code2name(aseq.get_key(records,ac,"200","b"," ","4"))
-            a204bk=aseq.get_key(records,ac,"204","b"," ","k")
-            a204b4=code2name(aseq.get_key(records,ac,"204","b"," ","4"))
-            a208bk=aseq.get_key(records,ac,"208","b"," ","k")
-            a208bh=aseq.get_key(records,ac,"208","b"," ","h")
-            a208b4=code2name(aseq.get_key(records,ac,"208","b"," ","4"))
-            a677_p=aseq.get_key(records,ac,"677"," "," ","p")
-            a677_d=aseq.get_key(records,ac,"677"," "," ","d")
-            a677_4=code2name(aseq.get_key(records,ac,"677"," "," ","4"))
+                a100_p=aseq.get_key(records,ac,"100"," "," ","p")
+                a100_d=aseq.get_key(records,ac,"100"," "," ","d")
+                a100_4=code2name(aseq.get_key(records,ac,"100"," "," ","4"))
+                a104ap=aseq.get_key(records,ac,"104","a"," ","p")
+                a104ad=aseq.get_key(records,ac,"104","a"," ","d")
+                a104a4=code2name(aseq.get_key(records,ac,"104","a"," ","4"))
+                a108ap=aseq.get_key(records,ac,"108"," ","a","p")
+                a108ad=aseq.get_key(records,ac,"108"," ","a","d")
+                a108a4=code2name(aseq.get_key(records,ac,"108","a"," ","4"))
+                a112ap=aseq.get_key(records,ac,"112","a"," ","p")
+                a112a4=code2name(aseq.get_key(records,ac,"112","a"," ","4"))
+                a100bp=aseq.get_key(records,ac,"100","b"," ","p")
+                a100bd=aseq.get_key(records,ac,"100","b"," ","d")
+                a100b4=code2name(aseq.get_key(records,ac,"100","b"," ","4"))
+                a104bp=aseq.get_key(records,ac,"104","b"," ","p")
+                a104bd=aseq.get_key(records,ac,"104","b"," ","d")
+                a104b4=code2name(aseq.get_key(records,ac,"104","b"," ","4"))
+                a108bp=aseq.get_key(records,ac,"108","b"," ","p")
+                a108bd=aseq.get_key(records,ac,"108","b"," ","d")
+                a108b4=code2name(aseq.get_key(records,ac,"108","b"," ","4"))
+                a112ad=aseq.get_key(records,ac,"112","a"," ","d")
+                a112bp=aseq.get_key(records,ac,"112","b"," ","p")
+                a112bd=aseq.get_key(records,ac,"112","b"," ","d")
+                a112b4=code2name(aseq.get_key(records,ac,"112","b"," ","4"))
+                a200_k=aseq.get_key(records,ac,"200"," "," ","k")
+                a200bh=aseq.get_key(records,ac,"200","b"," ","h")
+                a200_h=aseq.get_key(records,ac,"200"," "," ","h")
+                a200_4=code2name(aseq.get_key(records,ac,"200"," "," ","4"))
+                a204ak=aseq.get_key(records,ac,"204","a"," ","k")
+                a204ah=aseq.get_key(records,ac,"204","a"," ","h")
+                a204a4=code2name(aseq.get_key(records,ac,"204","a"," ","4"))
+                a208ak=aseq.get_key(records,ac,"208","a"," ","k")
+                a208ah=aseq.get_key(records,ac,"208","a"," ","h")
+                a208a4=code2name(aseq.get_key(records,ac,"208","a"," ","4"))
+                a200bk=aseq.get_key(records,ac,"200","b"," ","k")
+                a200b4=code2name(aseq.get_key(records,ac,"200","b"," ","4"))
+                a204bk=aseq.get_key(records,ac,"204","b"," ","k")
+                a204b4=code2name(aseq.get_key(records,ac,"204","b"," ","4"))
+                a208bk=aseq.get_key(records,ac,"208","b"," ","k")
+                a208bh=aseq.get_key(records,ac,"208","b"," ","h")
+                a208b4=code2name(aseq.get_key(records,ac,"208","b"," ","4"))
+                a677_p=aseq.get_key(records,ac,"677"," "," ","p")
+                a677_d=aseq.get_key(records,ac,"677"," "," ","d")
+                a677_4=code2name(aseq.get_key(records,ac,"677"," "," ","4"))
 
-            relator=joinline(a100_p,a100_d,a100_4,'; ')
-            relator+=joinline(a104ap,a104ad,a104a4,'; ')
-            relator+=joinline(a108ap,a108ad,a108a4,'; ')
-            relator+=joinline(a112ap,a112ad,a112a4,'; ')
-            relator+=joinline(a100bp,a100bd,a100b4,'; ')
-            relator+=joinline(a104bp,a104bd,a104b4,'; ')
-            relator+=joinline(a108bp,a108bd,a108b4,'; ')
-            relator+=joinline(a112bp,a112bd,a112b4,'; ')
-            relator+=joinline(a200_k,a200_h,a200_4,'; ')
-            relator+=joinline(a204ak,a204ah,a204a4,'; ')
-            relator+=joinline(a208ak,a208ah,a208b4,'; ')
-            relator+=joinline(a200bk,a200bh,a200b4,'; ')
-            relator+=joinline(a208bk,a208bh,a208b4,'; ')
-            relator+=joinline(a677_p,a677_d,a677_4,'; ')
+                relator=joinline(a100_p,a100_d,a100_4,'; ')
+                relator+=joinline(a104ap,a104ad,a104a4,'; ')
+                relator+=joinline(a108ap,a108ad,a108a4,'; ')
+                relator+=joinline(a112ap,a112ad,a112a4,'; ')
+                relator+=joinline(a100bp,a100bd,a100b4,'; ')
+                relator+=joinline(a104bp,a104bd,a104b4,'; ')
+                relator+=joinline(a108bp,a108bd,a108b4,'; ')
+                relator+=joinline(a112bp,a112bd,a112b4,'; ')
+                relator+=joinline(a200_k,a200_h,a200_4,'; ')
+                relator+=joinline(a204ak,a204ah,a204a4,'; ')
+                relator+=joinline(a208ak,a208ah,a208b4,'; ')
+                relator+=joinline(a200bk,a200bh,a200b4,'; ')
+                relator+=joinline(a208bk,a208bh,a208b4,'; ')
+                relator+=joinline(a677_p,a677_d,a677_4,'; ')
 
-            supplemental+=joinlineif("**Personen/Institution:** ",relator)
+                supplemental+=joinlineif("**Personen/Institution:** ",relator)
 
-            a359_a=aseq.get_key(records,ac,"359"," "," ","a")
-            responsibilityStatement=joinline(a359_a)
-            supplemental+=joinlineif("**Verantwortlichkeitsangabe:** ",responsibilityStatement)
+                a359_a=aseq.get_key(records,ac,"359"," "," ","a")
+                responsibilityStatement=joinline(a359_a)
+                supplemental+=joinlineif("**Verantwortlichkeitsangabe:** ",responsibilityStatement)
 
-            a403_a=aseq.get_key(records,ac,"403"," "," ","a")
-            edition=joinline(a403_a).replace('_',' ').replace('[','').replace(']','')
-            supplemental+=joinlineif("**Ausgabe:** ",edition)
+                a403_a=aseq.get_key(records,ac,"403"," "," ","a")
+                edition=joinline(a403_a).replace('_',' ').replace('[','').replace(']','')
+                supplemental+=joinlineif("**Ausgabe:** ",edition)
 
-            a419_a=aseq.get_key(records,ac,"419"," "," ","a")
-            providerPlace=joinline(a419_a)
-            supplemental+=joinlineif("**Ort:** ",providerPlace)
+                a419_a=aseq.get_key(records,ac,"419"," "," ","a")
+                providerPlace=joinline(a419_a)
+                supplemental+=joinlineif("**Ort:** ",providerPlace)
 
-            a419_b=aseq.get_key(records,ac,"419"," "," ","b")
-            providerName=joinline(a419_b).replace('_',' ').replace('[','').replace(']','')
-            supplemental+=joinlineif("**Verlag/Druck:** ",providerName)
+                a419_b=aseq.get_key(records,ac,"419"," "," ","b")
+                providerName=joinline(a419_b).replace('_',' ').replace('[','').replace(']','')
+                supplemental+=joinlineif("**Verlag/Druck:** ",providerName)
 
-            a419_c=aseq.get_key(records,ac,"419"," "," ","c")
-            providerDate=joinline(a419_c).replace('_',' ').replace('[','').replace(']','')
-            supplemental+=joinlineif("**Datierung:** ",providerDate)
+                a419_c=aseq.get_key(records,ac,"419"," "," ","c")
+                providerDate=joinline(a419_c).replace('_',' ').replace('[','').replace(']','')
+                supplemental+=joinlineif("**Datierung:** ",providerDate)
 
-            a407_a=aseq.get_key(records,ac,"407"," "," ","a")
-            cartographicScale=joinline(a407_a)
-            supplemental+=joinlineif("**Maßstab:** ",cartographicScale)
+                a407_a=aseq.get_key(records,ac,"407"," "," ","a")
+                cartographicScale=joinline(a407_a)
+                supplemental+=joinlineif("**Maßstab:** ",cartographicScale)
 
-            a433_a=aseq.get_key(records,ac,"433"," "," ","a")
-            a437_a=aseq.get_key(records,ac,"437"," "," ","a")
-            extend=join(a433_a,a437_a,' + ')
-            supplemental+=joinlineif("**Umfang:** ",extend)
+                a433_a=aseq.get_key(records,ac,"433"," "," ","a")
+                a437_a=aseq.get_key(records,ac,"437"," "," ","a")
+                extend=join(a433_a,a437_a,' + ')
+                supplemental+=joinlineif("**Umfang:** ",extend)
 
-            a435_a=aseq.get_key(records,ac,"435"," "," ","a")
-            dimension=join(a435_a)
-            supplemental+=joinlineif("**Format:** ",dimension)
+                a435_a=aseq.get_key(records,ac,"435"," "," ","a")
+                dimension=join(a435_a)
+                supplemental+=joinlineif("**Format:** ",dimension)
 
-            a439_a=aseq.get_key(records,ac,"439"," "," ","d")
-            baseMaterial=join(a439_a)
-            supplemental+=joinlineif("**Reproduktionsverfahren:** ",baseMaterial)
+                a439_a=aseq.get_key(records,ac,"439"," "," ","d")
+                baseMaterial=join(a439_a)
+                supplemental+=joinlineif("**Reproduktionsverfahren:** ",baseMaterial)
 
-            a501_a=aseq.get_key(records,ac,"501"," "," ","a")
-            note=join(a501_a)
-            supplemental+=joinlineif("**Anmerkungen:** ",note)
+                a501_a=aseq.get_key(records,ac,"501"," "," ","a")
+                note=join(a501_a)
+                supplemental+=joinlineif("**Anmerkungen:** ",note)
 
-            if os.path.exists(abstract_in):
+                if os.path.exists(abstract_in):
 
-                blob = open(abstract_in).read()
-                m = magic.Magic(mime_encoding=True)
-                encoding = m.from_buffer(blob)
-                print (abstract_in,'uses',encoding)
+                    blob = open(abstract_in).read()
+                    m = magic.Magic(mime_encoding=True)
+                    encoding = m.from_buffer(blob)
+                    print (abstract_in,'uses',encoding)
 
-                if encoding=='unknown-8bit':
-                    abstract=open(abstract_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'')
-                    abstract=escape(abstract.decode('iso-8859-1').encode('utf8')).replace('Abstract:','')
+                    try:
+                        abstract=escape(open(abstract_in).read().decode(encoding).encode('utf8')).replace('Abstract:','')
+                    except LookupError:
+                        abstract=open(abstract_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'')
+                        abstract=escape(abstract.decode('iso-8859-1').encode('utf8')).replace('Abstract:','')
+
+
                 else:
-                    abstract=escape(open(abstract_in).read().decode(encoding).encode('utf8')).replace('Abstract:','')
+                    print ('Abstract',abstract_in,'missing')
+                    abstract=""
 
-            else:
-                print ('Abstract',abstract_in,'missing')
-                abstract=""
+                if os.path.exists(biblio_in):
 
-            if os.path.exists(biblio_in):
+                    blob = open(biblio_in).read()
+                    m = magic.Magic(mime_encoding=True)
+                    encoding = m.from_buffer(blob)
+                    print (biblio_in,'uses',encoding)
 
-                blob = open(biblio_in).read()
-                m = magic.Magic(mime_encoding=True)
-                encoding = m.from_buffer(blob)
-                print (biblio_in,'uses',encoding)
+                    if encoding=='unknown-8bit':
+                        encoding='iso-8859-1'
 
-                if encoding=='unknown-8bit':
-                    encoding='iso-8859-1'
+                    biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8')).replace('Quellen und weiterführende Literatur:','**Quellen und weiterführende Literatur:**')
+                    supplemental+=biblio
 
-                biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8')).replace('Quellen und weiterführende Literatur:','**Quellen und weiterführende Literatur:**')
-                supplemental+=biblio
+                else:
+                    print ('Biblio',biblio_in,'missing')
+                    biblio=""
 
-            else:
-                print ('Biblio',biblio_in,'missing')
-                biblio=""
+                #try:
+                #    abstract = escape(records[ac]["331"][" "][" "]["a"]).encode('utf-8')
+                #    supplemental = escape(records[ac]["359"][" "][" "]["a"]).encode('utf-8')
 
-            #try:
-            #    abstract = escape(records[ac]["331"][" "][" "]["a"]).encode('utf-8')
-            #    supplemental = escape(records[ac]["359"][" "][" "]["a"]).encode('utf-8')
+                #except KeyError:
+                #    if 'AC' in ac:
+                #        abstract = "No metadata found for %s"%ac
+                #    else:
+                #        abstract = "%s is not an AC number"%ac
+                #        supplemental = abstract
 
-            #except KeyError:
-            #    if 'AC' in ac:
-            #        abstract = "No metadata found for %s"%ac
-            #    else:
-            #        abstract = "%s is not an AC number"%ac
-            #        supplemental = abstract
+                # print (ac,'-',titleValue,'-',abstract,'-',supplemental)
 
-            # print (ac,'-',titleValue,'-',abstract,'-',supplemental)
+                xml_file=codecs.open(xml_out, "w", "utf-8")
+                xml_file=open(xml_out,'w')
 
-            xml_file=codecs.open(xml_out, "w", "utf-8")
-            xml_file=open(xml_out,'w')
+                title=filename.replace('_',' ').replace('[','').replace(']','')
+                #supplemental=supplemental.replace('_',' ').replace('[','').replace(']','')
+                title_short=' '.join(title.split(' ')[1:])
 
-            title=filename.replace('_',' ').replace('[','').replace(']','')
-            #supplemental=supplemental.replace('_',' ').replace('[','').replace(']','')
-            title_short=' '.join(title.split(' ')[1:])
-
-            # print (title,abstract,supplemental)
+                # print (title,abstract,supplemental)
 
 
-            keywords=''
-            category=''
-            try:
-                if category_dict[filename]['category1']:
-                    keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category1'])
-                if category_dict[filename]['category2']:
-                    keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category2'])
-                if category_dict[filename]['category3']:
-                    keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category3'])
-                if category_dict[filename]['category4']:
-                    category=csw.CATEGORY.format(category=category_dict[filename]['category4'].lower())
-                if category_dict[filename]['category5']:
-                    keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category5'])
+                keywords=''
+                category=''
+                try:
+                    if category_dict[filename]['category1']:
+                        keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category1'])
+                    if category_dict[filename]['category2']:
+                        keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category2'])
+                    if category_dict[filename]['category3']:
+                        keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category3'])
+                    if category_dict[filename]['category4']:
+                        category=csw.CATEGORY.format(category=category_dict[filename]['category4'].lower())
+                    if category_dict[filename]['category5']:
+                        keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category5'])
 
-            except KeyError:
-                pass
-            # print(category)
+                except KeyError:
+                    pass
+                # print(category)
 
-            region=""
-            region_list=regions.pos2region(countries,north,south,west,east)
-            for r in region_list:
-                if r:
-                    region+=csw.REGION.format(region=r.encode('utf8'))
+                region=""
+                region_list=regions.pos2region(countries,north,south,west,east)
+                for r in region_list:
+                    if r:
+                        region+=csw.REGION.format(region=r.encode('utf8'))
 
 
 
-            try:
-                year=int(providerDate.replace('[','').replace(']','').replace('?',''))
-            except:
-                year=0
+                try:
+                    year=int(providerDate.replace('[','').replace(']','').replace('?',''))
+                except:
+                    year=0
 
-            print (title_short,filename,providerDate,year)
+                print (title_short,filename,providerDate,year)
 
-            xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental,keywords=keywords,category=category,region=region,year=year))
-            xml_file.close()
+                xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental,keywords=keywords,category=category,region=region,year=year))
+                xml_file.close()
 
-            if abstract:
-                abst='yes'
-            else:
-                abst='no'
+                if abstract:
+                    abst='yes'
+                else:
+                    abst='no'
 
-            csv_abstract.write(filename+","+abst+"\n")
-            csv_category.write(filename+",,,,\n")
+                csv_abstract.write(filename+","+abst+"\n")
+                csv_category.write(filename+",,,,\n")
 
 @task()
 def importlayers(ctx):
