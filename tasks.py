@@ -356,8 +356,11 @@ def createxml(ctx):
 
                     blob = open(biblio_in).read()
                     m = magic.Magic(mime_encoding=True)
-                    encoding = m.from_buffer(blob)
-                    print (biblio_in,'uses',encoding)
+                    try:
+                        encoding = m.from_buffer(blob)
+                        print (biblio_in,'uses',encoding)
+                    except magic.MagicException:
+                        encoding='iso-8859-1'
 
                     if encoding=='unknown-8bit' or encoding=='binary':
                         encoding='iso-8859-1'
