@@ -6,7 +6,7 @@ warp_dir: /data/woldan/warp/
 wld_dir: /data/woldan/wld
 output_dir: /data/woldan/image/
 geonode_dir: /data/code/woldan
-aseq_file: /data/woldan_20170911/meta/woldan-2017.04.12_aseq.xml
+aseq_file: /data/woldan_20170911/Metadata_export/woldan-2017.04.12_aseq.xml
 category: /data/woldan_20170911/Metadata_export/woldan_category.csv
 
 
