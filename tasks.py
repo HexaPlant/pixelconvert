@@ -183,11 +183,15 @@ def createxml(ctx):
 
 
             fs=filename.split('_')
-            ac,author,imgname,year = fs[0],fs[1],' '.join(fs[2:-1]).strip(),fs[-1]
-            name=' '.join(fs[1:])
-            ac = ac.strip()
-            #name = ' '.join([year,imgname,author]).strip()
-            name_url = clean(escape(name))
+            try:
+                ac,author,imgname,year = fs[0],fs[1],' '.join(fs[2:-1]).strip(),fs[-1]
+                name=' '.join(fs[1:])
+                ac = ac.strip()
+                #name = ' '.join([year,imgname,author]).strip()
+                name_url = clean(escape(name))
+            except IndexError:
+                print("Can't parse", filename)
+                continue
 
             if exists(xml_out):
                 print ("Passing",xml_out)
@@ -355,7 +359,7 @@ def createxml(ctx):
                     encoding = m.from_buffer(blob)
                     print (biblio_in,'uses',encoding)
 
-                    if encoding=='unknown-8bit':
+                    if encoding=='unknown-8bit' or encoding=='binary':
                         encoding='iso-8859-1'
 
                     biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8')).replace('Quellen und weiterführende Literatur:','**Quellen und weiterführende Literatur:**')
