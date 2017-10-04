@@ -41,6 +41,8 @@ def clean(txt):
     txt=txt.replace("__","_")
     txt=txt.replace("<","")
     txt=txt.replace(">","")
+    txt=txt.replace("-","_")
+    txt=txt.replace("__","_")
     return txt
 
 def escape(s):
