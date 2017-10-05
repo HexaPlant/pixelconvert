@@ -428,7 +428,7 @@ def createxml(ctx):
 
                 print (title_short,filename,providerDate,year)
 
-                xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=abstract,supplemental=supplemental,keywords=keywords,category=category,region=region,year=year))
+                xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=supplemental,supplemental=abstract,keywords=keywords,category=category,region=region,year=year))
                 xml_file.close()
 
                 if abstract:
