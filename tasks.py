@@ -132,10 +132,10 @@ def createxml(ctx):
 
     print ("Importing Metadata")
     records=aseq.load(ctx)
-    csv_abstract=open("out/woldan_abstract.csv","w")
-    csv_abstract.write("title,abstract\n")
-    csv_category=open("out/woldan_category.csv","w")
-    csv_category.write("title,category1,category2,category3,category4\n")
+    #csv_abstract=open("out/woldan_abstract.csv","w")
+    #csv_abstract.write("title,abstract\n")
+    csv_import=open("out/woldan_import.csv","w")
+    csv_import.write("filename,west,north,east,south,abstract,biblio,category1,category2,category3,category4,category5\n")
 
     countries=regions.country2kontinent()
 
@@ -396,17 +396,22 @@ def createxml(ctx):
 
 
                 keywords=''
-                category=''
+                category=category1=category2=category3=category4=category5=''
                 try:
                     if category_dict[filename]['category1']:
+                        category1=category_dict[filename]['category1']
                         keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category1'])
                     if category_dict[filename]['category2']:
+                        category2=category_dict[filename]['category2']
                         keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category2'])
                     if category_dict[filename]['category3']:
+                        category3=category_dict[filename]['category3']
                         keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category3'])
                     if category_dict[filename]['category4']:
+                        category4=category_dict[filename]['category4']
                         category=csw.CATEGORY.format(category=category_dict[filename]['category4'].lower())
                     if category_dict[filename]['category5']:
+                        category5=category_dict[filename]['category5']
                         keywords+=csw.KEYWORD.format(keyword=category_dict[filename]['category5'])
 
                 except KeyError:
@@ -436,8 +441,13 @@ def createxml(ctx):
                 else:
                     abst='no'
 
-                csv_abstract.write(filename+","+abst+"\n")
-                csv_category.write(filename+",,,,\n")
+                if biblio:
+                    bib='yes'
+                else:
+                    bib='no'
+
+                #csv_abstract.write(filename+","+abst+"\n")
+                csv_import.write(filename+','+str(west)+','+str(north)+','+str(east)+','+str(south)+','+abst+','+bib+','+category1+','+category2+','+category3+','+category4+','+category5+'\n')
 
 @task()
 def importlayers(ctx):
