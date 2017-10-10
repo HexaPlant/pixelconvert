@@ -135,7 +135,7 @@ def createxml(ctx):
     #csv_abstract=open("out/woldan_abstract.csv","w")
     #csv_abstract.write("title,abstract\n")
     csv_import=open("out/woldan_import.csv","w")
-    csv_import.write("filename,west,north,east,south,abstract,biblio,category1,category2,category3,category4,category5\n")
+    csv_import.write("filename,geo,abstract,biblio,category1,category2,category3,category4,category5\n")
 
     countries=regions.country2kontinent()
 
@@ -446,8 +446,13 @@ def createxml(ctx):
                 else:
                     bib='no'
 
+                if west!=0.0 and north!=0.0 and east!=0.0 and south!=0.0:
+                    geo='yes'
+                else:
+                    geo='no'
+
                 #csv_abstract.write(filename+","+abst+"\n")
-                csv_import.write(filename+','+str(west)+','+str(north)+','+str(east)+','+str(south)+','+abst+','+bib+','+category1+','+category2+','+category3+','+category4+','+category5+'\n')
+                csv_import.write(filename+','+str(west)+','+geo+','+abst+','+bib+','+category1+','+category2+','+category3+','+category4+','+category5+'\n')
 
 @task()
 def importlayers(ctx):
