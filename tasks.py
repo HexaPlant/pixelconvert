@@ -452,7 +452,7 @@ def createxml(ctx):
                     geo='no'
 
                 #csv_abstract.write(filename+","+abst+"\n")
-                csv_import.write(filename+','+str(west)+','+geo+','+abst+','+bib+','+category1+','+category2+','+category3+','+category4+','+category5+'\n')
+                csv_import.write(filename+','+geo+','+abst+','+bib+','+category1+','+category2+','+category3+','+category4+','+category5+'\n')
 
 @task()
 def importlayers(ctx):
