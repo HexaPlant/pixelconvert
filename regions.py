@@ -1,5 +1,6 @@
 import csv
 import geocoder
+import  requests.exceptions
 
 def country2kontinent():
     print ("Importing Kontinents")
@@ -21,12 +22,17 @@ def pos2region(countries,north,south,west,east):
     west=west+width/2.3
     east=east-width/2.3
 
-    print(width,hight)
-    print(north,south,west,east)
-    g_ul = geocoder.google([north,west], method='reverse',language='de',verify=False)
-    g_ur = geocoder.google([north,east], method='reverse',language='de',verify=False)
-    g_ll = geocoder.google([south,west], method='reverse',language='de',verify=False)
-    g_lr = geocoder.google([south,east], method='reverse',language='de',verify=False)
+    # print(width,hight)
+    # print(north,south,west,east)
+    try:
+        g_ul = geocoder.google([north,west], method='reverse',language='de',verify=False)
+        g_ur = geocoder.google([north,east], method='reverse',language='de',verify=False)
+        g_ll = geocoder.google([south,west], method='reverse',language='de',verify=False)
+        g_lr = geocoder.google([south,east], method='reverse',language='de',verify=False)
+    except requests.exceptions.ConnectionError:
+        print ('Geocoding Connection Error')
+        return ""
+
 
     g_ul_continent=''
     g_ur_continent=''
@@ -50,10 +56,10 @@ def pos2region(countries,north,south,west,east):
     if g_ul_continent == g_ur_continent == g_ll_continent == g_lr_continent and g_ul_continent:
         region.append(g_ul_continent)
 
-    print(north,west,g_ul.country_long,g_ul_continent)
-    print(north,east,g_ur.country_long,g_ur_continent)
-    print(south,west,g_ll.country_long,g_ll_continent)
-    print(south,east,g_lr.country_long,g_lr_continent)
+    # print(north,west,g_ul.country_long,g_ul_continent)
+    # print(north,east,g_ur.country_long,g_ur_continent)
+    # print(south,west,g_ll.country_long,g_ll_continent)
+    # print(south,east,g_lr.country_long,g_lr_continent)
 
 
     return region

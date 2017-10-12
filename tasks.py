@@ -122,7 +122,8 @@ def createxml(ctx):
     with open(ctx.category, 'r') as category_file:
         category_csv = csv.DictReader(category_file)
         for row in category_csv:
-            category_dict[row['\xef\xbb\xbftitle']]={
+            #print (row)
+            category_dict[row['filename']]={
                 'category1':row['category1'],
                 'category2':row['category2'],
                 'category3':row['category3'],
@@ -199,12 +200,20 @@ def createxml(ctx):
                 print ("Writing",xml_out)
                 supplemental=""
 
-                a010_a=aseq.get_key(records,ac,"010"," "," ","a")
+                a010_a=aseq.get_key(records,ac,"010"," "," ","a")  # AC Nummer -> 331_a
+                parent_a331_a=aseq.get_key(records,a010_a,"331"," "," ","a")
                 a451_a=aseq.get_key(records,ac,"451"," "," ","a")
+                a453ma=aseq.get_key(records,ac,"453","m"," ","a")
+                a453ra=aseq.get_key(records,ac,"453","r"," ","a")
+                parent_a453ma=aseq.get_key(records,a453ma,"331"," "," ","a")
+                parent_a453ra=aseq.get_key(records,a453ra,"331"," "," ","a")
                 a590_a=aseq.get_key(records,ac,"590"," "," ","a")
-                partOf=joinline(a010_a)
-                partOf+=joinline(a451_a)
-                partOf+=joinline(a590_a)
+                a599_a=aseq.get_key(records,ac,"599"," "," ","a")
+                parent_a599_a=aseq.get_key(records,a599_a,"331"," "," ","a")
+                partOf=joinline(parent_a331_a)
+                partOf=joinline(parent_a453ma)
+                partOf=joinline(parent_a453ra)
+                partOf=joinline(parent_a599_a)
                 supplemental+=joinlineif("**Gesamttitel:** ",partOf)
 
                 a331_a=aseq.get_key(records,ac,"331"," "," ","a")
@@ -431,7 +440,7 @@ def createxml(ctx):
                 except:
                     year=0
 
-                print (title_short,filename,providerDate,year)
+                print (title_short,partOf,filename,providerDate,year)
 
                 xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',abstract=supplemental,supplemental=abstract,keywords=keywords,category=category,region=region,year=year))
                 xml_file.close()

@@ -44,7 +44,15 @@ def load(ctx):
                     datafields[tag][ind1]={}
                 if not ind2 in datafields[tag][ind1]:
                     datafields[tag][ind1][ind2]={}
-                datafields[tag][ind1][ind2][code]=value
+                try:
+                    value_orig=datafields[tag][ind1][ind2][code]
+                    datafields[tag][ind1][ind2][code]=value_orig+'\n'+value
+                    #print(tag,ind1,ind2,code,datafields[tag][ind1][ind2][code])
+
+                except KeyError:
+                    datafields[tag][ind1][ind2][code]=value
+
+
 
 
         ac = (datafields["001"][" "][" "]["a"])

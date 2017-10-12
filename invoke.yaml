@@ -1,4 +1,4 @@
-input_dir: /data/woldan_20170911
+input_dir: /data/woldan_20170911/501
 #input_dir: /data/gdrive/data/woldan/test/in/
 gcp_dir: /data/woldan/gcp/
 vips_dir: /data/woldan/iiif/
@@ -6,8 +6,8 @@ warp_dir: /data/woldan/warp/
 wld_dir: /data/woldan/wld
 output_dir: /data/woldan/image/
 geonode_dir: /data/code/woldan
-aseq_file: /data/woldan_20170911/Metadata_export/woldan-2017.04.12_aseq.xml
-category: /data/woldan_20170911/Metadata_export/woldan_category.csv
+aseq_file: /data/woldan_20170911/Metadata_export/WD-Export 2017.10.04.xml
+category: /data/woldan_20170911/Metadata_export/woldan_categories_20171010.csv
 
 
 #input_dir: /data/gdrive/data/woldan/test/in/
