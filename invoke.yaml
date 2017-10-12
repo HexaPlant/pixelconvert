@@ -1,4 +1,4 @@
-input_dir: /data/woldan_20170911/501
+input_dir: /data/woldan_20170911
 #input_dir: /data/gdrive/data/woldan/test/in/
 gcp_dir: /data/woldan/gcp/
 vips_dir: /data/woldan/iiif/
