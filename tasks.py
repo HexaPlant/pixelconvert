@@ -413,7 +413,8 @@ def createxml(ctx):
                 region_list=regions.pos2region(countries,north,south,west,east)
                 for r in region_list:
                     if r:
-                        region+=csw.REGION.format(region=r.encode('utf8'))
+                        #print (r)
+                        region+=csw.REGION.format(region=r)
                         print ("Region",r)
 
 
