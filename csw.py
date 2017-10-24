@@ -143,8 +143,8 @@ CSW="""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
        <gmd:abstract>
          <gco:CharacterString>{abstract}</gco:CharacterString>
        </gmd:abstract>
-       <gmd:purpose gco:nilReason="missing">
-
+       <gmd:purpose>
+        <gco:CharacterString>{purpose}</gco:CharacterString>
        </gmd:purpose>
        <gmd:status>
          <gmd:MD_ProgressCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_ProgressCode" codeListValue="completed">completed</gmd:MD_ProgressCode>
