@@ -25,10 +25,10 @@ def pos2region(countries,north,south,west,east):
     # print(width,hight)
     # print(north,south,west,east)
     try:
-        g_ul = geocoder.google([north,west], method='reverse',language='de',verify=False)
-        g_ur = geocoder.google([north,east], method='reverse',language='de',verify=False)
-        g_ll = geocoder.google([south,west], method='reverse',language='de',verify=False)
-        g_lr = geocoder.google([south,east], method='reverse',language='de',verify=False)
+        g_ul = geocoder.google([north,west], method='reverse',language='de',verify=True)
+        g_ur = geocoder.google([north,east], method='reverse',language='de',verify=True)
+        g_ll = geocoder.google([south,west], method='reverse',language='de',verify=True)
+        g_lr = geocoder.google([south,east], method='reverse',language='de',verify=True)
         #print(g_ul.country,g_ur.country,g_ll.country,g_lr.country)
     except requests.exceptions.ConnectionError:
         print ('Geocoding Connection Error')
