@@ -46,7 +46,7 @@ def load(ctx):
                     datafields[tag][ind1][ind2]={}
                 try:
                     value_orig=datafields[tag][ind1][ind2][code]
-                    datafields[tag][ind1][ind2][code]=value_orig+'\n'+value
+                    datafields[tag][ind1][ind2][code]=value_orig.strip()+'\n'+value+'\n'
                     #print(tag,ind1,ind2,code,datafields[tag][ind1][ind2][code])
 
                 except KeyError:
