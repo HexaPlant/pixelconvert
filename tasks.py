@@ -415,7 +415,7 @@ def createxml(ctx):
                     if r:
                         #print (r)
                         region+=csw.REGION.format(region=r)
-                        print ("Region",r)
+
 
 
                 try:

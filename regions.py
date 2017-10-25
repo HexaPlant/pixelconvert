@@ -35,7 +35,8 @@ def pos2region(countries,north,south,west,east):
         return ""
 
 
-    g_continent=None
+    g_continent = g_ul_continent = g_ur_continent = g_ll_continent = g_lr_continent=None
+
     if g_ul.country:
         g_ul_continent=countries[g_ul.country]['continent']
         g_continent=g_ul_continent
@@ -60,6 +61,8 @@ def pos2region(countries,north,south,west,east):
             else:
                 if g_continent <> g_lr_continent:
                     g_continent = None
+
+    print "Region",g_continent,g_ul_continent,g_ur_continent,g_ll_continent,g_lr_continent
 
     if g_continent:
         region.append(g_continent)
