@@ -23,7 +23,7 @@ def pos2region(countries,north,south,west,east):
     east=east-width/2.3
 
     # print(width,hight)
-    # print(north,south,west,east)
+    print "Koordinaten",north,south,west,east
     try:
         g_ul = geocoder.google([north,west], method='reverse',language='de',verify=True)
     except requests.exceptions.ConnectionError:
@@ -45,7 +45,7 @@ def pos2region(countries,north,south,west,east):
         print ('Geocoding Connection Error')
 
     g_continent = g_ul_continent = g_ur_continent = g_ll_continent = g_lr_continent=None
-    
+
     if g_ul.country:
         g_ul_continent=countries[g_ul.country]['continent']
         g_continent=g_ul_continent
