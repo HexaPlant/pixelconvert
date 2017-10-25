@@ -90,7 +90,7 @@ CSW="""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
      </gmd:CI_ResponsibleParty>
    </gmd:contact>
    <gmd:dateStamp>
-     <gco:DateTime>{year}-01-91T12:00:00Z</gco:DateTime>
+     <gco:DateTime>{year}-01-01</gco:DateTime>
    </gmd:dateStamp>
    <gmd:metadataStandardName>
      <gco:CharacterString>ISO 19115:2003 - Geographic information - Metadata</gco:CharacterString>
@@ -125,7 +125,7 @@ CSW="""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
            </gmd:title>
            <gmd:CI_Date>
                 <gmd:date>
-                    <gco:DateTime>{year}-01-01T12:00:00Z</gco:DateTime>
+                    <gco:DateTime>{year}-01-01</gco:DateTime>
                 </gmd:date>
                 <gmd:dateType>
                     <gmd:CI_DateTypeCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#CI_DateTypeCode" codeListValue="publication">publication</gmd:CI_DateTypeCode>
