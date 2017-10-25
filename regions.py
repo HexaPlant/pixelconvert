@@ -11,6 +11,15 @@ def country2kontinent():
                 countries[row['\xef\xbb\xbfcountry']]={'continent':row['continent']}
     return countries
 
+def pos2country(x,y):
+    g = geocoder.google([x,y], method='reverse',language='de',verify=True)
+    country=g.country
+    if country:
+        return country
+    else:
+        return pos2country(x,y)
+
+
 def pos2region(countries,north,south,west,east):
     region=[]
 
@@ -23,58 +32,62 @@ def pos2region(countries,north,south,west,east):
     east=east-width/2.3
 
     # print(width,hight)
+
     print "Koordinaten",north,south,west,east
-    try:
-        g_ul = geocoder.google([north,west], method='reverse',language='de',verify=True)
-    except requests.exceptions.ConnectionError:
-        print ('Geocoding Connection Error')
+    if north <> 0.0 and south <> 0.0 and west <> 0.0 and east  <> 0.0 :
 
-    try:
-        g_ur = geocoder.google([north,east], method='reverse',language='de',verify=True)
-    except requests.exceptions.ConnectionError:
-        print ('Geocoding Connection Error')
 
-    try:
-        g_ll = geocoder.google([south,west], method='reverse',language='de',verify=True)
-    except requests.exceptions.ConnectionError:
-        print ('Geocoding Connection Error')
+        try:
+            g_ul = geocoder.google([north,west], method='reverse',language='de',verify=True)
+        except requests.exceptions.ConnectionError:
+            print ('Geocoding Connection Error')
 
-    try:
-        g_lr = geocoder.google([south,east], method='reverse',language='de',verify=True)
-    except requests.exceptions.ConnectionError:
-        print ('Geocoding Connection Error')
+        try:
+            g_ur = geocoder.google([north,east], method='reverse',language='de',verify=True)
+        except requests.exceptions.ConnectionError:
+            print ('Geocoding Connection Error')
 
-    g_continent = g_ul_continent = g_ur_continent = g_ll_continent = g_lr_continent=None
+        try:
+            g_ll = geocoder.google([south,west], method='reverse',language='de',verify=True)
+        except requests.exceptions.ConnectionError:
+            print ('Geocoding Connection Error')
 
-    if g_ul.country:
-        g_ul_continent=countries[g_ul.country]['continent']
-        g_continent=g_ul_continent
-    if g_ur.country:
-            g_ur_continent=countries[g_ur.country]['continent']
-            if not g_continent:
-                g_continent=g_ur_continent
-            else:
-                if g_continent <> g_ur_continent:
-                    g_continent = None
-    if g_ll.country:
-            g_ll_continent=countries[g_ll.country]['continent']
-            if not g_continent:
-                g_continent=g_ll_continent
-            else:
-                if g_continent <> g_ll_continent:
-                    g_continent = None
-    if g_lr.country:
-            g_lr_continent=countries[g_lr.country]['continent']
-            if not g_continent:
-                g_continent=g_lr_continent
-            else:
-                if g_continent <> g_lr_continent:
-                    g_continent = None
-    print "Country",g_ul.country,g_ur.country,g_ll.country,g_lr.country
-    print "Region",g_continent,g_ul_continent,g_ur_continent,g_ll_continent,g_lr_continent
+        try:
+            g_lr = geocoder.google([south,east], method='reverse',language='de',verify=True)
+        except requests.exceptions.ConnectionError:
+            print ('Geocoding Connection Error')
 
-    if g_continent:
-        region.append(g_continent)
+        g_continent = g_ul_continent = g_ur_continent = g_ll_continent = g_lr_continent=None
+
+        if g_ul.country:
+            g_ul_continent=countries[g_ul.country]['continent']
+            g_continent=g_ul_continent
+        if g_ur.country:
+                g_ur_continent=countries[g_ur.country]['continent']
+                if not g_continent:
+                    g_continent=g_ur_continent
+                else:
+                    if g_continent <> g_ur_continent:
+                        g_continent = None
+        if g_ll.country:
+                g_ll_continent=countries[g_ll.country]['continent']
+                if not g_continent:
+                    g_continent=g_ll_continent
+                else:
+                    if g_continent <> g_ll_continent:
+                        g_continent = None
+        if g_lr.country:
+                g_lr_continent=countries[g_lr.country]['continent']
+                if not g_continent:
+                    g_continent=g_lr_continent
+                else:
+                    if g_continent <> g_lr_continent:
+                        g_continent = None
+        print "Country",g_ul.country,g_ur.country,g_ll.country,g_lr.country
+        print "Region",g_continent,g_ul_continent,g_ur_continent,g_ll_continent,g_lr_continent
+
+        if g_continent:
+            region.append(g_continent)
 
     #Enable
     #if g_ul.country_long == g_ur.country_long == g_ll.country_long ==  g_lr.country_long and g_ul.country_long:
