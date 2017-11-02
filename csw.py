@@ -221,11 +221,22 @@ CSW="""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
            </gmd:geographicElement>
          </gmd:EX_Extent>
        </gmd:extent>
-
+     <gmd:spatialResolution>
+         <gmd:MD_Resolution>
+             <gmd:equivalentScale>
+                 <gmd:MD_RepresentativeFraction>
+                     <gmd:denominator>
+                         <gco:Integer>{denominator}</gco:Integer>
+                     </gmd:denominator>
+                 </gmd:MD_RepresentativeFraction>
+             </gmd:equivalentScale>
+         </gmd:MD_Resolution>
+     </gmd:spatialResolution>
        <gmd:supplementalInformation>
          <gco:CharacterString>{supplemental}</gco:CharacterString>
        </gmd:supplementalInformation>
      </gmd:MD_DataIdentification>
+
    </gmd:identificationInfo>
    <gmd:contentInfo>
 

@@ -160,6 +160,8 @@ def createxml(ctx):
             xml_out = os.path.join(ctx.output_dir,clean(filename).lower()+'.xml')
 
 
+            denominator=0
+
             if exists(tiff_final):
                 dataset = gdal.Open(tiff_final)
                 cols = dataset.RasterXSize
@@ -169,6 +171,8 @@ def createxml(ctx):
                 ulx, xres, xskew, uly, yskew, yres  = dataset.GetGeoTransform()
                 lrx = ulx + (dataset.RasterXSize * xres)
                 lry = uly + (dataset.RasterYSize * yres)
+
+                denominator=int(round(xres))
 
             else:
                 ulx=0
@@ -180,6 +184,10 @@ def createxml(ctx):
             outProj = Proj(init='epsg:4326')
             west,north = transform(inProj,outProj,ulx,uly)
             east,south = transform(inProj,outProj,lrx,lry)
+
+
+
+
 
 
 
@@ -211,10 +219,20 @@ def createxml(ctx):
                 a590_a=aseq.get_key(records,ac,"590"," "," ","a")
                 a599_a=aseq.get_key(records,ac,"599"," "," ","a")
                 parent_a599_a=aseq.get_key(records,a599_a,"331"," "," ","a")
-                partOf=joinline(parent_a331_a)
-                partOf=joinline(parent_a453ma)
-                partOf=joinline(parent_a453ra)
-                partOf=joinline(parent_a599_a)
+                print ("a331_a",a010_a,parent_a331_a)
+                print ("a453ma",a453ma,parent_a453ma)
+                print ("a453ra",a453ra,parent_a453ra)
+                print ("a599_a",a599_a,parent_a599_a)
+                partOf=""
+                if parent_a331_a:
+                    partOf+=parent_a331_a +'\n'
+                if parent_a453ma:
+                    partOf+=parent_a453ma +'\n'
+                if parent_a453ra:
+                    partOf+=parent_a453ra +'\n'
+                if parent_a599_a:
+                    partOf+=parent_a599_a +'\n'
+                print("partOf",partOf)
                 abstract+=joinlineif("**Gesamttitel:** ",partOf)
 
                 a331_a=aseq.get_key(records,ac,"331"," "," ","a")
@@ -319,7 +337,7 @@ def createxml(ctx):
                 providerName=joinline(a419_b).replace('_',' ').replace('[','').replace(']','')
                 abstract+=joinlineif("**Verlag/Druck:** ",providerName)
 
-                a419_c=aseq.get_key(records,ac,"419"," "," ","c")
+                a419_c=aseq.get_key(records,ac,"425"," "," ","c")
                 providerDate=joinline(a419_c).replace('_',' ').replace('[','').replace(']','')
                 abstract+=joinlineif("**Datierung:** ",providerDate)
 
@@ -415,17 +433,34 @@ def createxml(ctx):
                     if r:
                         #print (r)
                         region+=csw.REGION.format(region=r)
-
-
-
                 try:
                     year=int(providerDate.replace('[','').replace(']','').replace('?',''))
                 except:
                     year=0
 
+                a425aa=aseq.get_key(records,ac,"425","a"," ","a")
+                a425ab=aseq.get_key(records,ac,"425","a"," ","b")
+                a425ac=aseq.get_key(records,ac,"425","a"," ","c")
+                if a425aa:
+                    year=a425aa
+                if a425ab:
+                    year=a425ab
+                if a425ac:
+                    date=a425ac
+
                 print (title_short,partOf,titleValue)
 
-                xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',supplemental=supplemental,abstract=abstract,purpose=titleValue,keywords=keywords,category=category,region=region,year=year))
+
+                #purpose='<![CDATA[<p>'+relator+'</p>\n'+'<p>'+str(year)+'</p>\n'+'<p>'+titleValue+'</p>]]>'
+                purpose=''
+                if relator:
+                    purpose+=relator+' '
+                    if year:
+                        purpose+='['+year+'] '
+                if titleValue:
+                    purpose+=titleValue
+
+                xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',supplemental=supplemental,abstract=abstract,purpose=purpose,keywords=keywords,category=category,region=region,year=year,denominator=denominator))
                 xml_file.close()
 
                 if abstract:

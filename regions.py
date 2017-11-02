@@ -41,21 +41,25 @@ def pos2region(countries,north,south,west,east):
             g_ul = geocoder.google([north,west], method='reverse',language='de',verify=True)
         except requests.exceptions.ConnectionError:
             print ('Geocoding Connection Error')
+            g_ul = None
 
         try:
             g_ur = geocoder.google([north,east], method='reverse',language='de',verify=True)
         except requests.exceptions.ConnectionError:
             print ('Geocoding Connection Error')
+            g_ur = None
 
         try:
             g_ll = geocoder.google([south,west], method='reverse',language='de',verify=True)
         except requests.exceptions.ConnectionError:
             print ('Geocoding Connection Error')
+            g_ll = None
 
         try:
             g_lr = geocoder.google([south,east], method='reverse',language='de',verify=True)
         except requests.exceptions.ConnectionError:
             print ('Geocoding Connection Error')
+            g_lr = None
 
         g_continent = g_ul_continent = g_ur_continent = g_ll_continent = g_lr_continent=None
 
