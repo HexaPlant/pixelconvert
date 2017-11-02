@@ -376,11 +376,33 @@ def createxml(ctx):
                         encoding='iso-8859-1'
 
                     biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8')).replace('Quellen und weiterführende Literatur:','**Quellen und weiterführende Literatur:**')
-                    abstract+=biblio
+                    #abstract+=biblio
 
                 else:
                     print ('Biblio',biblio_in,'missing')
                     biblio=""
+
+
+                if os.path.exists(biblio_in):
+
+                    blob = open(biblio_in).read()
+                    m = magic.Magic(mime_encoding=True)
+                    encoding = m.from_buffer(blob)
+                    print (biblio_in,'uses',encoding)
+
+                    try:
+                        biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8')).replace('Quellen und weiterführende Literatur:','**Quellen und weiterführende Literatur:**')
+                    except LookupError:
+                        biblio=open(biblio_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'').replace(chr(int('0x96',16)),'')
+                        biblio=escape(biblio.decode('iso-8859-1').encode('utf8')).replace('Quellen und weiterführende Literatur:','**Quellen und weiterführende Literatur:**')
+                else:
+                    print ('Biblio',abstract_in,'missing')
+                    biblio=""
+
+                abstract+=biblio
+
+
+
 
                 if os.path.exists(abstract_in):
 
@@ -392,7 +414,7 @@ def createxml(ctx):
                     try:
                         supplemental=escape(open(abstract_in).read().decode(encoding).encode('utf8')).replace('Abstract:','')
                     except LookupError:
-                        supplemental=open(abstract_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'')
+                        supplemental=open(abstract_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'').replace(chr(int('0x96',16)),'')
                         supplemental=escape(supplemental.decode('iso-8859-1').encode('utf8')).replace('Abstract:','')
 
                 else:
