@@ -371,23 +371,6 @@ def createxml(ctx):
                         print (biblio_in,'uses',encoding)
                     except magic.MagicException:
                         encoding='iso-8859-1'
-
-                    if encoding=='unknown-8bit' or encoding=='binary':
-                        encoding='iso-8859-1'
-
-                    biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8')).replace('Quellen und weiterführende Literatur:','**Quellen und weiterführende Literatur:**')
-                    #abstract+=biblio
-
-                else:
-                    print ('Biblio',biblio_in,'missing')
-                    biblio=""
-
-
-                if os.path.exists(biblio_in):
-
-                    blob = open(biblio_in).read()
-                    m = magic.Magic(mime_encoding=True)
-                    encoding = m.from_buffer(blob)
                     print (biblio_in,'uses',encoding)
 
                     try:
