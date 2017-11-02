@@ -172,7 +172,7 @@ def createxml(ctx):
                 lrx = ulx + (dataset.RasterXSize * xres)
                 lry = uly + (dataset.RasterYSize * yres)
 
-                denominator=int(round(xres))
+                denominator=int(round(xres*dataset.RasterXSize))
 
             else:
                 ulx=0
@@ -453,7 +453,7 @@ def createxml(ctx):
                 if a425ac:
                     date=a425ac
 
-                print (title_short,partOf,titleValue)
+                print (denominator,title_short,partOf,titleValue)
 
 
                 #purpose='<![CDATA[<p>'+relator+'</p>\n'+'<p>'+str(year)+'</p>\n'+'<p>'+titleValue+'</p>]]>'
