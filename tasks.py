@@ -163,10 +163,13 @@ def createxml(ctx):
             denominator=0
 
             if exists(tiff_final):
-                dataset = gdal.Open(tiff_final)
-                cols = dataset.RasterXSize
-                rows = dataset.RasterYSize
-                bands = dataset.RasterCount
+                try:
+                    dataset = gdal.Open(tiff_final)
+                    cols = dataset.RasterXSize
+                    rows = dataset.RasterYSize
+                    bands = dataset.RasterCount
+                except AttributeError:
+                    continue
 
                 ulx, xres, xskew, uly, yskew, yres  = dataset.GetGeoTransform()
                 lrx = ulx + (dataset.RasterXSize * xres)
