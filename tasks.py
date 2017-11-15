@@ -491,8 +491,8 @@ def createxml(ctx):
 
 @task()
 def importlayers(ctx):
-    importlayer='cd {geonode_dir};./manage.py importlayers -v3 -o {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=ctx.output_dir)
-    rebuild_index='cd {geonode_dir};./manage.py rebuild_index --noinput'.format(geonode_dir=ctx.geonode_dir)
+    importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -o {tiff} '.format(geonode_dir=ctx.geonode_dir, tiff=ctx.output_dir)
+    rebuild_index='cd {geonode_dir};python ./manage.py rebuild_index --noinput'.format(geonode_dir=ctx.geonode_dir)
     ctx.run(importlayer)
     ctx.run(rebuild_index)
 
