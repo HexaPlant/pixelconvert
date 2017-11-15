@@ -1,9 +1,9 @@
-input_dir: /data/woldan_datascan
+input_dir: /data/woldan_datascan/6_freigabe
 #input_dir: /data/gdrive/data/woldan/test/in/
-gcp_dir: /data/woldan/gcp/
-vips_dir: /data/woldan/iiif/
-warp_dir: /data/woldan/warp/
-wld_dir: /data/woldan/wld
+gcp_dir: /data/woldan/tmp/gcp/
+vips_dir: /data/woldan/tmp/iiif/
+warp_dir: /data/woldan/tmp/warp/
+wld_dir: /data/woldan/tmp/wld
 output_dir: /data/woldan/image/
 geonode_dir: /data/code/woldan
 aseq_file: /data/woldan_datascan/Metadata_export/wd-export_20171109.xml
