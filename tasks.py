@@ -240,6 +240,7 @@ def createxml(ctx):
 
                 a331_a=aseq.get_key(records,ac,"331"," "," ","a")
                 a335_a=aseq.get_key(records,ac,"335"," "," ","a")
+                title=a331_a.replace('[','').replace(']','')
                 titleValue=join(a331_a,a335_a,' : ').replace('[','').replace(']','')
                 abstract+=joinlineif("**Titel:** ",titleValue)
 
@@ -322,48 +323,68 @@ def createxml(ctx):
                 relator+=joinline(a208bk,a208bh,a208b4,'; ')
                 relator+=joinline(a677_p,a677_d,a677_4,'; ')
 
-                abstract+=joinlineif("**Personen/Institution:** ",relator)
+                person=joinline(a100_p,a100_d,a100_4,'; ')
+                person+=joinline(a200_k,a200_h,a200_4,'; ')
+
+                supplemental+=joinlineif("**Personen/Institution:** ",relator)
 
                 a359_a=aseq.get_key(records,ac,"359"," "," ","a")
                 responsibilityStatement=joinline(a359_a)
-                abstract+=joinlineif("**Verantwortlichkeitsangabe:** ",responsibilityStatement)
+                supplemental+=joinlineif("**Verantwortlichkeitsangabe:** ",responsibilityStatement)
 
                 a403_a=aseq.get_key(records,ac,"403"," "," ","a")
                 edition=joinline(a403_a).replace('_',' ').replace('[','').replace(']','')
-                abstract+=joinlineif("**Ausgabe:** ",edition)
+                supplemental+=joinlineif("**Ausgabe:** ",edition)
 
                 a419_a=aseq.get_key(records,ac,"419"," "," ","a")
                 providerPlace=joinline(a419_a)
-                abstract+=joinlineif("**Ort:** ",providerPlace).replace('[','').replace(']','')
+                supplemental+=joinlineif("**Ort:** ",providerPlace).replace('[','').replace(']','')
 
                 a419_b=aseq.get_key(records,ac,"419"," "," ","b")
                 providerName=joinline(a419_b).replace('_',' ').replace('[','').replace(']','')
-                abstract+=joinlineif("**Verlag/Druck:** ",providerName)
+                supplemental+=joinlineif("**Verlag/Druck:** ",providerName)
 
                 a419_c=aseq.get_key(records,ac,"425"," "," ","c")
                 providerDate=joinline(a419_c).replace('_',' ').replace('[','').replace(']','')
-                abstract+=joinlineif("**Datierung:** ",providerDate)
+                supplemental+=joinlineif("**Datierung:** ",providerDate)
 
                 a407_a=aseq.get_key(records,ac,"407"," "," ","a")
                 cartographicScale=joinline(a407_a)
-                abstract+=joinlineif("**Maßstab:** ",cartographicScale)
+                supplemental+=joinlineif("**Maßstab:** ",cartographicScale)
 
                 a433_a=aseq.get_key(records,ac,"433"," "," ","a")
                 a437_a=aseq.get_key(records,ac,"437"," "," ","a")
                 extend=join(a433_a,a437_a,' + ')
-                abstract+=joinlineif("**Umfang:** ",extend)
+                supplemental+=joinlineif("**Umfang:** ",extend)
 
                 a435_a=aseq.get_key(records,ac,"435"," "," ","a")
                 dimension=join(a435_a)
-                abstract+=joinlineif("**Format:** ",dimension)
+                supplemental+=joinlineif("**Format:** ",dimension)
 
                 a439_a=aseq.get_key(records,ac,"439"," "," ","d")
                 baseMaterial=join(a439_a)
-                abstract+=joinlineif("**Reproduktionsverfahren:** ",baseMaterial)
+                supplemental+=joinlineif("**Reproduktionsverfahren:** ",baseMaterial)
 
                 a501_a=aseq.get_key(records,ac,"501"," "," ","a")
                 note=join(a501_a)
-                abstract+=joinlineif("**Anmerkungen:** ",note)
+                supplemental+=joinlineif("**Anmerkungen:** ",note)
+
+                if os.path.exists(abstract_in):
+
+                    blob = open(abstract_in).read()
+                    m = magic.Magic(mime_encoding=True)
+                    encoding = m.from_buffer(blob)
+                    print (abstract_in,'uses',encoding)
+
+                    try:
+                        abstract=escape(open(abstract_in).read().decode(encoding).encode('utf8')).replace('Abstract:','')
+                    except LookupError:
+                        abstract=open(abstract_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'').replace(chr(int('0x96',16)),'')
+                        abstract=escape(abstract.decode('iso-8859-1').encode('utf8')).replace('Abstract:','')
+
+                else:
+                    print ('Abstract',abstract_in,'missing')
+
 
                 if os.path.exists(biblio_in):
 
@@ -377,34 +398,15 @@ def createxml(ctx):
                     print (biblio_in,'uses',encoding)
 
                     try:
-                        biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8')).replace('Quellen und weiterführende Literatur:','**Quellen und weiterführende Literatur:**')
+                        biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8')).replace('Quellen und weiterführende Literatur:','\n\n**Quellen und weiterführende Literatur:**')
                     except LookupError:
                         biblio=open(biblio_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'').replace(chr(int('0x96',16)),'')
-                        biblio=escape(biblio.decode('iso-8859-1').encode('utf8')).replace('Quellen und weiterführende Literatur:','**Quellen und weiterführende Literatur:**')
+                        biblio=escape(biblio.decode('iso-8859-1').encode('utf8')).replace('Quellen und weiterführende Literatur:','\n\n**Quellen und weiterführende Literatur:**')
                 else:
                     print ('Biblio',abstract_in,'missing')
                     biblio=""
 
                 abstract+=biblio
-
-
-
-
-                if os.path.exists(abstract_in):
-
-                    blob = open(abstract_in).read()
-                    m = magic.Magic(mime_encoding=True)
-                    encoding = m.from_buffer(blob)
-                    print (abstract_in,'uses',encoding)
-
-                    try:
-                        supplemental=escape(open(abstract_in).read().decode(encoding).encode('utf8')).replace('Abstract:','')
-                    except LookupError:
-                        supplemental=open(abstract_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'').replace(chr(int('0x96',16)),'')
-                        supplemental=escape(supplemental.decode('iso-8859-1').encode('utf8')).replace('Abstract:','')
-
-                else:
-                    print ('Abstract',abstract_in,'missing')
 
                 xml_file=codecs.open(xml_out, "w", "utf-8")
                 xml_file=open(xml_out,'w')
@@ -462,11 +464,11 @@ def createxml(ctx):
                 #purpose='<![CDATA[<p>'+relator+'</p>\n'+'<p>'+str(year)+'</p>\n'+'<p>'+titleValue+'</p>]]>'
                 purpose=''
                 if relator:
-                    purpose+=relator+' '
+                    purpose+=person+' '
                     if year:
                         purpose+='['+year+'] '
-                if titleValue:
-                    purpose+=titleValue
+                if title:
+                    purpose+=title
 
                 xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',supplemental=supplemental,abstract=abstract,purpose=purpose,keywords=keywords,category=category,region=region,year=year,denominator=denominator))
                 xml_file.close()
