@@ -326,11 +326,11 @@ def createxml(ctx):
                 person=joinline(a100_p,a100_d,a100_4,'; ')
                 person+=joinline(a200_k,a200_h,a200_4,'; ')
 
-                supplemental+=joinlineif("**Personen/Institution:** ",relator)
+                supplemental+=joinlineif("**Personen/Institution:**  \n",relator.replace('\n\n','  \n'))
 
                 a359_a=aseq.get_key(records,ac,"359"," "," ","a")
                 responsibilityStatement=joinline(a359_a)
-                supplemental+=joinlineif("**Verantwortlichkeitsangabe:** ",responsibilityStatement)
+                supplemental+=joinlineif("**Verantwortlichkeitsangabe:**  \n",responsibilityStatement)
 
                 a403_a=aseq.get_key(records,ac,"403"," "," ","a")
                 edition=joinline(a403_a).replace('_',' ').replace('[','').replace(']','')
@@ -366,8 +366,8 @@ def createxml(ctx):
                 supplemental+=joinlineif("**Reproduktionsverfahren:** ",baseMaterial)
 
                 a501_a=aseq.get_key(records,ac,"501"," "," ","a")
-                note=join(a501_a)
-                supplemental+=joinlineif("**Anmerkungen:** ",note)
+                note=joinline(a501_a)
+                supplemental+=joinlineif("**Anmerkungen:**  \n",note.replace('\n  \n','  \n').replace('\n\n','  \n'))
 
                 if os.path.exists(abstract_in):
 
@@ -407,6 +407,7 @@ def createxml(ctx):
                     biblio=""
 
                 abstract+=biblio
+                abstract.replace('\n','  \n')
 
                 xml_file=codecs.open(xml_out, "w", "utf-8")
                 xml_file=open(xml_out,'w')
@@ -470,7 +471,7 @@ def createxml(ctx):
                 if title:
                     purpose+=title
 
-                xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',supplemental=supplemental,abstract=abstract,purpose=purpose,keywords=keywords,category=category,region=region,year=year,denominator=denominator))
+                xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',supplemental=supplemental,abstract=abstract,purpose=purpose,keywords=keywords,category=category,region=region,year=year,denominator=denominator).replace('\n\n\n\n','\n\n'))
                 xml_file.close()
 
                 if abstract:

@@ -18,13 +18,13 @@ def joinline(s1,s2='',s3='',j=''):
     if s3:
         line+=' ['+s3+']'
     if line:
-        return (line.strip()+'\n')
+        return (line.strip()+'\n\n')
     else:
         return ''
 
 def joinlineif(s1,s2='',s3='',j=''):
     if s2:
-        return  joinline(s1,s2,s3,j)+'\n'
+        return  joinline(s1,s2,s3,j)+'\n\n'
     else:
         return ''
 
