@@ -94,6 +94,7 @@ def code2name(code):
     code=code.replace('egr','StecherIn')
     code=code.replace('isb','herausgebendes Organ')
     code=code.replace('oth','Sonstige')
+    code=code.replace('dte','WidmugsempfängerIn')
     return code
 
 #def name2options(ctx,image):

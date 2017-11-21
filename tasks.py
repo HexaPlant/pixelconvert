@@ -344,7 +344,7 @@ def createxml(ctx):
                 providerName=joinline(a419_b).replace('_',' ').replace('[','').replace(']','')
                 supplemental+=joinlineif("**Verlag/Druck:** ",providerName)
 
-                a419_c=aseq.get_key(records,ac,"425"," "," ","c")
+                a419_c=aseq.get_key(records,ac,"419"," "," ","c")
                 providerDate=joinline(a419_c).replace('_',' ').replace('[','').replace(']','')
                 supplemental+=joinlineif("**Datierung:** ",providerDate)
 
@@ -364,6 +364,10 @@ def createxml(ctx):
                 a439_a=aseq.get_key(records,ac,"439"," "," ","d")
                 baseMaterial=join(a439_a)
                 supplemental+=joinlineif("**Reproduktionsverfahren:** ",baseMaterial)
+
+                #
+                # Bis Doppelpunkt fett und doppelter Zeilenumbruch
+                #
 
                 a501_a=aseq.get_key(records,ac,"501"," "," ","a")
                 note=joinline(a501_a)
