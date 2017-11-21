@@ -371,7 +371,13 @@ def createxml(ctx):
 
                 a501_a=aseq.get_key(records,ac,"501"," "," ","a")
                 note=joinline(a501_a)
-                supplemental+=joinlineif("**Anmerkungen:**  \n",note.replace('\n  \n','  \n').replace('\n\n','  \n'))
+                note_mk=""
+                for line in note.split('\n'):
+                    ls= line.split(':')
+                    if len(ls)==2:
+                            note_mk+='\n**'+ls[0].strip()+':** '+ls[1].strip()+'\n'
+                #supplemental+=joinlineif("**Anmerkungen:**  \n",note_mk)
+                supplemental+=joinlineif("",note_mk)
 
                 if os.path.exists(abstract_in):
 
@@ -466,14 +472,15 @@ def createxml(ctx):
                 print (denominator,title_short,partOf,titleValue)
 
 
+                purpose=titleValue
                 #purpose='<![CDATA[<p>'+relator+'</p>\n'+'<p>'+str(year)+'</p>\n'+'<p>'+titleValue+'</p>]]>'
-                purpose=''
-                if relator:
-                    purpose+=person+' '
-                    if year:
-                        purpose+='['+year+'] '
-                if title:
-                    purpose+=title
+                #purpose=''
+                #if relator:
+                #    purpose+=person+' '
+                #    if year:
+                #        purpose+='['+str(year)+'] '
+                #if title:
+                #    purpose+=title
 
                 xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',supplemental=supplemental,abstract=abstract,purpose=purpose,keywords=keywords,category=category,region=region,year=year,denominator=denominator).replace('\n\n\n\n','\n\n'))
                 xml_file.close()
