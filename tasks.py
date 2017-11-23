@@ -236,12 +236,12 @@ def createxml(ctx):
                 if parent_a599_a:
                     partOf+=parent_a599_a +'\n'
 
-                abstract+=joinlineif("**Gesamttitel:** ",partOf)
+                supplemental+=joinlineif("**Gesamttitel:** ",partOf)
                 a331_a=aseq.get_key(records,ac,"331"," "," ","a")
                 a335_a=aseq.get_key(records,ac,"335"," "," ","a")
                 title=a331_a.replace('[','').replace(']','')
                 titleValue=join(a331_a,a335_a,' : ').replace('[','').replace(']','')
-                abstract+=joinlineif("**Titel:** ",titleValue)
+                supplemental+=joinlineif("**Titel:** ",titleValue)
 
                 print("titleValue",titleValue)
                 print("partOf",partOf)
@@ -253,7 +253,7 @@ def createxml(ctx):
                 partNumber=joinline(a089_p,a089_n,' / ')
                 partNumber=joinline(a455_a)
                 partNumber=joinline(a596_a)
-                abstract+=joinlineif("**Zählung:** ",partNumber)
+                supplemental+=joinlineif("**Zählung:** ",partNumber)
 
                 a341_a=aseq.get_key(records,ac,"341"," "," ","a")
                 a343_a=aseq.get_key(records,ac,"343"," "," ","a")
@@ -263,7 +263,7 @@ def createxml(ctx):
                 titleVariant=joinline(a341_a,a343_a,j=' : ')
                 titleVariant+=joinline(a345_a,a347_a,j=' : ')
                 titleVariant+=joinline(a370aa)
-                abstract+=joinlineif("**Weitere Titel:** ",titleVariant)
+                supplemental+=joinlineif("**Weitere Titel:** ",titleVariant)
 
                 a100_p=aseq.get_key(records,ac,"100"," "," ","p")
                 a100_d=aseq.get_key(records,ac,"100"," "," ","d")
