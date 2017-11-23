@@ -235,14 +235,17 @@ def createxml(ctx):
                     partOf+=parent_a453ra +'\n'
                 if parent_a599_a:
                     partOf+=parent_a599_a +'\n'
-                print("partOf",partOf)
+
                 abstract+=joinlineif("**Gesamttitel:** ",partOf)
+                print("partOf",partOf)
 
                 a331_a=aseq.get_key(records,ac,"331"," "," ","a")
                 a335_a=aseq.get_key(records,ac,"335"," "," ","a")
                 title=a331_a.replace('[','').replace(']','')
                 titleValue=join(a331_a,a335_a,' : ').replace('[','').replace(']','')
                 abstract+=joinlineif("**Titel:** ",titleValue)
+
+                print("titleValue",titleValue)
 
                 a089_p=aseq.get_key(records,ac,"089"," "," ","p")
                 a089_n=aseq.get_key(records,ac,"089"," "," ","n")
@@ -334,36 +337,36 @@ def createxml(ctx):
 
                 a403_a=aseq.get_key(records,ac,"403"," "," ","a")
                 edition=joinline(a403_a).replace('_',' ').replace('[','').replace(']','')
-                supplemental+=joinlineif("**Ausgabe:** ",edition)
+                supplemental+=joinlineif("**Ausgabe:**  \n",edition)
 
                 a419_a=aseq.get_key(records,ac,"419"," "," ","a")
                 providerPlace=joinline(a419_a)
-                supplemental+=joinlineif("**Ort:** ",providerPlace).replace('[','').replace(']','')
+                supplemental+=joinlineif("**Ort:**  \n",providerPlace).replace('[','').replace(']','')
 
                 a419_b=aseq.get_key(records,ac,"419"," "," ","b")
                 providerName=joinline(a419_b).replace('_',' ').replace('[','').replace(']','')
-                supplemental+=joinlineif("**Verlag/Druck:** ",providerName)
+                supplemental+=joinlineif("**Verlag/Druck:**  \n",providerName)
 
                 a419_c=aseq.get_key(records,ac,"419"," "," ","c")
                 providerDate=joinline(a419_c).replace('_',' ').replace('[','').replace(']','')
-                supplemental+=joinlineif("**Datierung:** ",providerDate)
+                supplemental+=joinlineif("**Datierung:**  \n",providerDate)
 
                 a407_a=aseq.get_key(records,ac,"407"," "," ","a")
                 cartographicScale=joinline(a407_a)
-                supplemental+=joinlineif("**Maßstab:** ",cartographicScale)
+                supplemental+=joinlineif("**Maßstab:**  \n",cartographicScale)
 
                 a433_a=aseq.get_key(records,ac,"433"," "," ","a")
                 a437_a=aseq.get_key(records,ac,"437"," "," ","a")
                 extend=join(a433_a,a437_a,' + ')
-                supplemental+=joinlineif("**Umfang:** ",extend)
+                supplemental+=joinlineif("**Umfang:**  \n",extend)
 
                 a435_a=aseq.get_key(records,ac,"435"," "," ","a")
                 dimension=join(a435_a)
-                supplemental+=joinlineif("**Format:** ",dimension)
+                supplemental+=joinlineif("**Format:**  \n",dimension)
 
                 a439_a=aseq.get_key(records,ac,"439"," "," ","d")
                 baseMaterial=join(a439_a)
-                supplemental+=joinlineif("**Reproduktionsverfahren:** ",baseMaterial)
+                supplemental+=joinlineif("**Reproduktionsverfahren:**  \n",baseMaterial)
 
                 #
                 # Bis Doppelpunkt fett und doppelter Zeilenumbruch
