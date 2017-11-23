@@ -237,8 +237,6 @@ def createxml(ctx):
                     partOf+=parent_a599_a +'\n'
 
                 abstract+=joinlineif("**Gesamttitel:** ",partOf)
-                print("partOf",partOf)
-
                 a331_a=aseq.get_key(records,ac,"331"," "," ","a")
                 a335_a=aseq.get_key(records,ac,"335"," "," ","a")
                 title=a331_a.replace('[','').replace(']','')
@@ -246,6 +244,7 @@ def createxml(ctx):
                 abstract+=joinlineif("**Titel:** ",titleValue)
 
                 print("titleValue",titleValue)
+                print("partOf",partOf)
 
                 a089_p=aseq.get_key(records,ac,"089"," "," ","p")
                 a089_n=aseq.get_key(records,ac,"089"," "," ","n")
