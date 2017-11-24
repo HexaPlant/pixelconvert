@@ -241,7 +241,7 @@ def createxml(ctx):
                 a335_a=aseq.get_key(records,ac,"335"," "," ","a")
                 title=a331_a.replace('[','').replace(']','')
                 titleValue=join(a331_a,a335_a,' : ').replace('[','').replace(']','')
-                supplemental+=joinlineif("**Titel:** ",titleValue)
+                supplemental+=joinlineif("**Titel:**  \n",titleValue)
 
                 print("titleValue",titleValue)
                 print("partOf",partOf)
@@ -253,7 +253,7 @@ def createxml(ctx):
                 partNumber=joinline(a089_p,a089_n,' / ')
                 partNumber=joinline(a455_a)
                 partNumber=joinline(a596_a)
-                supplemental+=joinlineif("**Zählung:** ",partNumber)
+                supplemental+=joinlineif("**Zählung:**  \n",partNumber)
 
                 a341_a=aseq.get_key(records,ac,"341"," "," ","a")
                 a343_a=aseq.get_key(records,ac,"343"," "," ","a")
@@ -263,7 +263,7 @@ def createxml(ctx):
                 titleVariant=joinline(a341_a,a343_a,j=' : ')
                 titleVariant+=joinline(a345_a,a347_a,j=' : ')
                 titleVariant+=joinline(a370aa)
-                supplemental+=joinlineif("**Weitere Titel:** ",titleVariant)
+                supplemental+=joinlineif("**Weitere Titel:**  \n",titleVariant)
 
                 a100_p=aseq.get_key(records,ac,"100"," "," ","p")
                 a100_d=aseq.get_key(records,ac,"100"," "," ","d")
@@ -377,7 +377,7 @@ def createxml(ctx):
                 for line in note.split('\n'):
                     ls= line.split(':')
                     if len(ls)==2:
-                            note_mk+='\n**'+ls[0].strip()+':** '+ls[1].strip()+'\n'
+                            note_mk+='\n**'+ls[0].strip()+':**  \n'+ls[1].strip()+'\n'
                 #supplemental+=joinlineif("**Anmerkungen:**  \n",note_mk)
                 supplemental+=joinlineif("",note_mk)
 
