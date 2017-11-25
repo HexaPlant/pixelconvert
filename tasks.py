@@ -236,7 +236,7 @@ def createxml(ctx):
                 if parent_a599_a:
                     partOf+=parent_a599_a +'\n'
 
-                supplemental+=joinlineif("**Gesamttitel:** ",partOf)
+                supplemental+=joinlineif("**Gesamttitel:**  \n",partOf)
                 a331_a=aseq.get_key(records,ac,"331"," "," ","a")
                 a335_a=aseq.get_key(records,ac,"335"," "," ","a")
                 title=a331_a.replace('[','').replace(']','')
@@ -410,13 +410,16 @@ def createxml(ctx):
                     print (biblio_in,'uses',encoding)
 
                     try:
-                        biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8')).replace('Quellen und weiterführende Literatur:','\n\n**Quellen und weiterführende Literatur:**')
+                        biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8'))
                     except LookupError:
                         biblio=open(biblio_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'').replace(chr(int('0x96',16)),'')
-                        biblio=escape(biblio.decode('iso-8859-1').encode('utf8')).replace('Quellen und weiterführende Literatur:','\n\n**Quellen und weiterführende Literatur:**')
+                        #biblio=escape(biblio.decode('iso-8859-1').encode('utf8')).replace('Quellen und weiterführende Literatur:','\n\n**Quellen und weiterführende Literatur:**')
+                        biblio=escape(biblio.decode('iso-8859-1').encode('utf8'))
                 else:
                     print ('Biblio',abstract_in,'missing')
                     biblio=""
+
+                biblio=biblio.replace('***','').replace('####Quellen und weiterführende Literatur:','Quellen und weiterführende Literatur:').replace('Quellen und weiterführende Literatur:','\n\n####Quellen und weiterführende Literatur:  \n')
 
                 abstract+=biblio
                 abstract.replace('\n','  \n')
