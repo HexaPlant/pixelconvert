@@ -150,7 +150,7 @@ def createxml(ctx):
             xml_out = os.path.join(ctx.output_dir,clean(filename).lower()+'.xml')
 
 
-            denominator=0
+            denominator=100000000
 
             if exists(tiff_final):
                 try:
@@ -165,7 +165,7 @@ def createxml(ctx):
                 lrx = ulx + (dataset.RasterXSize * xres)
                 lry = uly + (dataset.RasterYSize * yres)
 
-                denominator=int(round(xres*dataset.RasterXSize))
+                denominator=abs(int(round(xres*dataset.RasterXSize)))
 
             else:
                 ulx=0
