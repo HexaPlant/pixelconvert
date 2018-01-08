@@ -90,7 +90,7 @@ def pos2region(countries,north,south,west,east):
         print "Country",g_ul.country,g_ur.country,g_ll.country,g_lr.country
         print "Region",g_continent,g_ul_continent,g_ur_continent,g_ll_continent,g_lr_continent
 
-        if g_continent <> 'Antarktis':
+        if g_continent:
             region.append(g_continent)
 
     #Enable

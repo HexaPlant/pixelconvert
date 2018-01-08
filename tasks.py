@@ -442,11 +442,13 @@ def createxml(ctx):
                 # print(category)
 
                 region=""
-                region_list=regions.pos2region(countries,north,south,west,east)
-                for r in region_list:
-                    if r:
-                        #print (r)
-                        region+=csw.REGION.format(region=r)
+
+                if denominator < 10000000:
+                    region_list=regions.pos2region(countries,north,south,west,east)
+                    for r in region_list:
+                        if r:
+                            #print (r)
+                            region+=csw.REGION.format(region=r)
                 try:
                     year=int(providerDate.replace('[','').replace(']','').replace('?',''))
                 except:
