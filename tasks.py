@@ -414,7 +414,7 @@ def createxml(ctx):
                     print ('Biblio',biblio_in,'missing')
                     biblio=""
 
-                biblio=biblio.replace('***','').replace('####Quellen und weiterführende Literatur:','Quellen und weiterführende Literatur:').replace('Quellen und weiterführende Literatur:','\n\n####Quellen und weiterführende Literatur:  \n')
+                biblio=biblio.replace('***','').replace('###','').replace('Quellen und weiterführende Literatur:','\n\n####Quellen und weiterführende Literatur:  \n')
 
                 abstract+=biblio
                 abstract.replace('\n','  \n')
