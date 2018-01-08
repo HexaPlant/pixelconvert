@@ -22,6 +22,8 @@ import aseq
 import geocoder
 import regions
 
+import xml.sax.saxutils
+
 @task()
 def convert(ctx):
     ctx.run('mkdir -p {path}'.format(path=ctx.gcp_dir))
@@ -68,7 +70,7 @@ def convert(ctx):
                             gcp=""
                             for row in reader:
                                 gcp+="-gcp {pixelX} {pixelY} {mapX} {mapY} ".format(pixelX=row['pixelX'],pixelY=abs(float(row['pixelY'])),mapX=row['mapX'],mapY=row['mapY'])
-                            ctx.run('gdal_edit.py -unsetgt -a_srs EPSG:3857 -a_nodata 255  -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_gcp))
+                            ctx.run('gdal_edit.py -unsetgt -a_srs EPSG:3857 -mo NODATA_VALUES="255 255 255" {gcp} {tiff}'.format(gcp=gcp,tiff=tiff_gcp))
                         except:
                             print("Failed to read point file")
                             continue
@@ -86,6 +88,8 @@ def convert(ctx):
                             proj4326 = Proj(init='epsg:4326')
                             west,north = transform(proj3857,proj4326,ulx,uly)
                             east,south = transform(proj3857,proj4326,lrx,lry)
+
+
                         except:
                             print("Failed to read gcp points")
                             continue
@@ -100,7 +104,7 @@ def convert(ctx):
             if not exists(tiff_final):
                 ctx.run("vips --vips-progress  --vips-concurrency=16 im_vips2tiff {tiff_in} {tiff_out}:deflate,tile:256x256,pyramid".format(tiff_in=escape_path(tiff_gcp),tiff_out=escape_path(tiff_final)))
                 ctx.run("applygeo {gtxt_in} {tiff_out}".format(gtxt_in=escape_path(gtxt_out),tiff_out=escape_path(tiff_final)))
-                ctx.run('gdal_edit.py -a_nodata 255 -mo NODATA_VALUES="255 255 255" {tiff_out}'.format(tiff_out=tiff_final))
+                ctx.run('gdal_edit.py -mo NODATA_VALUES="255 255 255" {tiff_out}'.format(tiff_out=tiff_final))
 
 
 
@@ -165,7 +169,7 @@ def createxml(ctx):
                 lrx = ulx + (dataset.RasterXSize * xres)
                 lry = uly + (dataset.RasterYSize * yres)
 
-                denominator=abs(int(round(xres*dataset.RasterXSize)))
+                denominator=int(round(xres*dataset.RasterXSize))
 
             else:
                 ulx=0
@@ -372,6 +376,7 @@ def createxml(ctx):
                 supplemental+=joinlineif("",note_mk)
 
                 if os.path.exists(abstract_in):
+                    print ("Reading",abstract_in)
 
                     blob = open(abstract_in).read()
                     m = magic.Magic(mime_encoding=True)
@@ -382,13 +387,14 @@ def createxml(ctx):
                         abstract=escape(open(abstract_in).read().decode(encoding).encode('utf8')).replace('Abstract:','')
                     except LookupError:
                         abstract=open(abstract_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'').replace(chr(int('0x96',16)),'')
-                        abstract=escape(abstract.decode('iso-8859-1').encode('utf8')).replace('Abstract:','')
-
+                        abstract=xml.sax.saxutils.escape(abstract.decode('iso-8859-1').encode('utf8')).replace('Abstract:','')
                 else:
                     print ('Abstract',abstract_in,'missing')
 
 
                 if os.path.exists(biblio_in):
+
+                    print ("Reading",biblio_in)
 
                     blob = open(biblio_in).read()
                     m = magic.Magic(mime_encoding=True)
@@ -397,17 +403,18 @@ def createxml(ctx):
                         print (biblio_in,'uses',encoding)
                     except magic.MagicException:
                         encoding='iso-8859-1'
-                    print (biblio_in,'uses',encoding)
+                        print (biblio_in,'setting encoding to',encoding)
 
                     try:
-                        biblio=escape(open(biblio_in).read().decode(encoding).encode('utf8'))
+                        biblio=xml.sax.saxutils.escape(open(biblio_in).read().decode(encoding).encode('utf8'))
                     except LookupError:
                         biblio=open(biblio_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'').replace(chr(int('0x96',16)),'')
-                        #biblio=escape(biblio.decode('iso-8859-1').encode('utf8')).replace('Quellen und weiterführende Literatur:','\n\n**Quellen und weiterführende Literatur:**')
-                        biblio=escape(biblio.decode('iso-8859-1').encode('utf8'))
+                        biblio=xml.sax.saxutils.escape(biblio.decode('iso-8859-1').encode('utf8'))
                 else:
-                    print ('Biblio',abstract_in,'missing')
+                    print ('Biblio',biblio_in,'missing')
                     biblio=""
+
+                print (biblio)
 
                 biblio=biblio.replace('***','').replace('####Quellen und weiterführende Literatur:','Quellen und weiterführende Literatur:').replace('Quellen und weiterführende Literatur:','\n\n####Quellen und weiterführende Literatur:  \n')
 
@@ -466,18 +473,9 @@ def createxml(ctx):
 
                 print (denominator,title_short,partOf,titleValue)
 
-
                 purpose=titleValue
-                #purpose='<![CDATA[<p>'+relator+'</p>\n'+'<p>'+str(year)+'</p>\n'+'<p>'+titleValue+'</p>]]>'
-                #purpose=''
-                #if relator:
-                #    purpose+=person+' '
-                #    if year:
-                #        purpose+='['+str(year)+'] '
-                #if title:
-                #    purpose+=title
 
-                xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',supplemental=supplemental,abstract=abstract,purpose=purpose,keywords=keywords,category=category,region=region,year=year,denominator=denominator).replace('\n\n\n\n','\n\n'))
+                xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',supplemental=supplemental,abstract=abstract,purpose=purpose,keywords=keywords,category=category,region=region,year=year,denominator=abs(denominator)).replace('\n\n\n\n','\n\n'))
                 xml_file.close()
 
                 if abstract:
