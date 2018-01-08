@@ -384,10 +384,10 @@ def createxml(ctx):
                     print (abstract_in,'uses',encoding)
 
                     try:
-                        abstract=escape(open(abstract_in).read().decode(encoding).encode('utf8')).replace('Abstract:','')
+                        abstract=escape(open(abstract_in).read().decode(encoding).encode('utf8')).replace('Abstract:','').replace('\n','\n\n')
                     except LookupError:
                         abstract=open(abstract_in).read().replace(chr(int('0x84',16)),'').replace(chr(int('0x93',16)),'').replace(chr(int('0x96',16)),'')
-                        abstract=xml.sax.saxutils.escape(abstract.decode('iso-8859-1').encode('utf8')).replace('Abstract:','')
+                        abstract=xml.sax.saxutils.escape(abstract.decode('iso-8859-1').encode('utf8')).replace('Abstract:','').replace('\n','\n\n')
                 else:
                     print ('Abstract',abstract_in,'missing')
 
@@ -413,8 +413,6 @@ def createxml(ctx):
                 else:
                     print ('Biblio',biblio_in,'missing')
                     biblio=""
-
-                print (biblio)
 
                 biblio=biblio.replace('***','').replace('####Quellen und weiterführende Literatur:','Quellen und weiterführende Literatur:').replace('Quellen und weiterführende Literatur:','\n\n####Quellen und weiterführende Literatur:  \n')
 
