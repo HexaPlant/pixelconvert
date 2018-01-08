@@ -130,7 +130,7 @@ def createxml(ctx):
     #csv_abstract=open("out/woldan_abstract.csv","w")
     #csv_abstract.write("title,abstract\n")
     csv_import=open("out/woldan_import.csv","w")
-    csv_import.write("filename,geo,abstract,biblio,category1,category2,category3,category4,category5\n")
+    csv_import.write("filename,denominator,geo,abstract,biblio,category1,category2,category3,category4,category5\n")
 
     countries=regions.country2kontinent()
 
@@ -153,9 +153,6 @@ def createxml(ctx):
             gtxt_out = os.path.join(ctx.output_dir,clean(filename).lower()+'.geo')
             xml_out = os.path.join(ctx.output_dir,clean(filename).lower()+'.xml')
 
-
-            denominator=100000000
-
             if exists(tiff_final):
                 try:
                     dataset = gdal.Open(tiff_final)
@@ -170,6 +167,9 @@ def createxml(ctx):
                 lry = uly + (dataset.RasterYSize * yres)
 
                 denominator=int(round(xres*dataset.RasterXSize))
+
+                if denominator > 20000000:
+                    denominator = 50000000
 
             else:
                 ulx=0
@@ -487,7 +487,7 @@ def createxml(ctx):
                     geo='no'
 
                 #csv_abstract.write(filename+","+abst+"\n")
-                csv_import.write(filename+','+geo+','+abst+','+bib+','+category1+','+category2+','+category3+','+category4+','+category5+'\n')
+                csv_import.write(filename+','+str(denominator)+','+geo+','+abst+','+bib+','+category1+','+category2+','+category3+','+category4+','+category5+'\n')
 
 @task()
 def importlayers(ctx):
