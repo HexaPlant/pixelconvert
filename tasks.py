@@ -181,13 +181,6 @@ def createxml(ctx):
             outProj = Proj(init='epsg:4326')
             west,north = transform(inProj,outProj,ulx,uly)
             east,south = transform(inProj,outProj,lrx,lry)
-
-
-
-
-
-
-
             fs=filename.split('_')
             try:
                 ac,author,imgname,year = fs[0],fs[1],' '.join(fs[2:-1]).strip(),fs[-1]
