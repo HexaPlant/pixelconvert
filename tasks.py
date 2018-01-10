@@ -114,11 +114,11 @@ def createxml(ctx):
 
     print ("Importing Categories")
     category_dict={}
-    with open(ctx.category, 'r') as category_file:
+    with open(ctx.category, 'r')as category_file:
         category_csv = csv.DictReader(category_file)
         for row in category_csv:
             #print (row)
-            category_dict[row['filename']]={
+            category_dict[row['\xef\xbb\xbffilename']]={
                 'category1':row['category1'],
                 'category2':row['category2'],
                 'category3':row['category3'],
@@ -213,10 +213,12 @@ def createxml(ctx):
                 a590_a=aseq.get_key(records,ac,"590"," "," ","a")
                 a599_a=aseq.get_key(records,ac,"599"," "," ","a")
                 parent_a599_a=aseq.get_key(records,a599_a,"331"," "," ","a")
+                a034_b=aseq.get_key(records,ac,"034"," "," ","b")
                 print ("a331_a",a010_a,parent_a331_a)
                 print ("a453ma",a453ma,parent_a453ma)
                 print ("a453ra",a453ra,parent_a453ra)
                 print ("a599_a",a599_a,parent_a599_a)
+                print ("a034_b",a034_b)
                 partOf=""
                 if parent_a331_a:
                     partOf+=parent_a331_a +'\n'
@@ -300,6 +302,20 @@ def createxml(ctx):
                 a677_p=aseq.get_key(records,ac,"677"," "," ","p")
                 a677_d=aseq.get_key(records,ac,"677"," "," ","d")
                 a677_4=code2name(aseq.get_key(records,ac,"677"," "," ","4"))
+
+
+                a064aa=aseq.get_key(records,ac,"064","a"," ","a")
+                a439_d=aseq.get_key(records,ac,"439"," "," ","d")
+                a204bk=aseq.get_key(records,ac,"204","b"," ","k")
+                a204bh=aseq.get_key(records,ac,"204","b"," ","h")
+                a425a_=aseq.get_key(records,ac,"425","a"," ","")
+                a001_a=aseq.get_key(records,ac,"001"," "," ","a")
+                a034_d=aseq.get_key(records,ac,"034"," "," ","d")
+                a034_g=aseq.get_key(records,ac,"034"," "," ","g")
+                a034_e=aseq.get_key(records,ac,"034"," "," ","e")
+                a034_f=aseq.get_key(records,ac,"034"," "," ","f")
+                a037ba=aseq.get_key(records,ac,"037","b"," ","a")
+
 
                 relator=joinline(a100_p,a100_d,a100_4,'; ')
                 relator+=joinline(a104ap,a104ad,a104a4,'; ')
@@ -447,6 +463,10 @@ def createxml(ctx):
 
                 region=""
 
+                if a034_b:
+                    denominator = int(a034_b.strip().replace(' ',''))
+                    # print ("Set denominator to",denominator)
+
                 if denominator < 10000000:
                     region_list=regions.pos2region(countries,north,south,west,east)
                     for r in region_list:
@@ -469,19 +489,6 @@ def createxml(ctx):
                     year=a425ab
                 if a425ac:
                     date=a425ac
-
-                a064aa=aseq.get_key(records,ac,"064","a"," ","a")
-                a439_d=aseq.get_key(records,ac,"439",""," ","d")
-                a034_f=aseq.get_key(records,ac,"034",""," ","f")
-                a204bk=aseq.get_key(records,ac,"204","b"," ","k")
-                a204bh=aseq.get_key(records,ac,"204","b"," ","h")
-                a425a_=aseq.get_key(records,ac,"425","a"," ","")
-                a001_a=aseq.get_key(records,ac,"001",""," ","a")
-                a034_d=aseq.get_key(records,ac,"034",""," ","d")
-                a034_g=aseq.get_key(records,ac,"034",""," ","g")
-                a034_e=aseq.get_key(records,ac,"034",""," ","e")
-                a034_f=aseq.get_key(records,ac,"034",""," ","f")
-                a037ba=aseq.get_key(records,ac,"037","b"," ","a")
 
                 print (denominator,title_short,partOf,titleValue)
 
