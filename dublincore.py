@@ -43,7 +43,7 @@ xmlns:dcterms="http://purl.org/dc/terms/">
 <dc:type xsi:type="dcterms:DCMIType">Image</dc:type>
 <dc:format xsi:type="dcterms:IMT">TIFF</dc:format>
 <dc:identifier>{a001_a}</dc:identifier>
-<dc:source>http://sammlung.woldan.oeaw.ac.at/</dc:source>
+<dc:source>http://sammlung.woldan.oeaw.ac.at/layers/geonode:{filename}</dc:source>
 <dc:language xsi:type="dcterms:ISO639-3">{a037ba}</dc:language>
 <dcterms:isPartOf>{a010_a}</dcterms:isPartOf>
 <dcterms:isPartOf>{a453ma}</dcterms:isPartOf>

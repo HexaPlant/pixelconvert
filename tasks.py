@@ -134,6 +134,7 @@ def createxml(ctx):
     csv_import.write("filename,denominator,geo,abstract,biblio,category1,category2,category3,category4,category5\n")
     dc_import=open("out/woldan_import_dc.xml","w")
     dc_import.write(dublincore.HEADER)
+    dc=""
 
 
     countries=regions.country2kontinent()
@@ -515,7 +516,7 @@ def createxml(ctx):
                 #csv_abstract.write(filename+","+abst+"\n")
                 csv_import.write(filename+','+str(denominator)+','+geo+','+abst+','+bib+','+category1+','+category2+','+category3+','+category4+','+category5+'\n')
 
-                dc_import.write(dublincore.METADATA.format(a331_a=a331_a,a335_a=a335_a,a341_a=a341_a,a343_a=a343_a,
+                dc = dublincore.METADATA.format(a331_a=a331_a,a335_a=a335_a,a341_a=a341_a,a343_a=a343_a,
                                                            a345_a=a345_a,a347_a=a347_a,a370aa=a370aa,a359_a=a359_a,
                                                            a100_p=a100_p,a100_d=a100_d,a100_4=a100_4,
                                                            a104ap=a104ap,a104ad=a104ad,a104a4=a104a4,
@@ -526,7 +527,8 @@ def createxml(ctx):
                                                            a208ak=a208ak,a208ah=a208ah,a208a4=a208a4,
                                                            a064aa=a064aa,a407_a=a407_a,
                                                            a433_a=a433_a,a437_a=a437_a,a435_a=a435_a,
-                                                           a439_d=a439_d,a501_a=a501_a,abstract=abstract,
+                                                           a439_d=a439_d,a501_a=a501_a,abstract=xml.sax.saxutils.escape(abstract),
+                                                           filename=xml.sax.saxutils.escape(filename.lower()),
                                                            a419_b=a419_b,a419_a=a419_a,a419_c=a419_c,
                                                            a100bp=a100bp,a100bd=a100bd,a100b4=a100b4,
                                                            a104bp=a104bp,a104bd=a104bd,a104b4=a104b4,
@@ -539,7 +541,15 @@ def createxml(ctx):
                                                            a425a_=a425a_,a001_a=a001_a,a037ba=a037ba,
                                                            a010_a=a010_a,a453ma=a453ma,a453ra=a453ra,a599_a=a599_a,
                                                            a034_d=a034_d,a034_g=a034_g,a034_e=a034_e,a034_f=a034_f
-                                                           ))
+                                                           )
+                dc=dc.replace('<dcterms:alternative> :  </dcterms:alternative>\n','')
+                dc=dc.replace('<dc:creator>;  </dc:creator>\n','')
+                dc=dc.replace('<dc:contributor>;  </dc:contributor>\n','')
+                dc=dc.replace('<dc:date></dc:date>\n','')
+                dc=dc.replace('<dcterms:isPartOf></dcterms:isPartOf>\n','')
+                dc_import.write(dc)
+
+
 
 @task()
 def importlayers(ctx):
