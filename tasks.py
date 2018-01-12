@@ -117,14 +117,17 @@ def createxml(ctx):
     with open(ctx.category, 'r')as category_file:
         category_csv = csv.DictReader(category_file)
         for row in category_csv:
-            #print (row)
             category_dict[row['\xef\xbb\xbffilename']]={
                 'category1':row['category1'],
                 'category2':row['category2'],
                 'category3':row['category3'],
                 'category4':row['category4'],
                 'category5':row['category5'],
+                'blatt_titel':row['blatt_titel'],
             }
+
+            for i in range(1,22):
+                category_dict[row['\xef\xbb\xbffilename']].update({'titel_blatt%02i'%i:row['titel_blatt%02i'%i]})
 
     print ("Importing Metadata")
     records=aseq.load(ctx)
@@ -215,11 +218,6 @@ def createxml(ctx):
                 a599_a=aseq.get_key(records,ac,"599"," "," ","a")
                 parent_a599_a=aseq.get_key(records,a599_a,"331"," "," ","a")
                 a034_b=aseq.get_key(records,ac,"034"," "," ","b")
-                print ("a331_a",a010_a,parent_a331_a)
-                print ("a453ma",a453ma,parent_a453ma)
-                print ("a453ra",a453ra,parent_a453ra)
-                print ("a599_a",a599_a,parent_a599_a)
-                print ("a034_b",a034_b)
                 partOf=""
                 if parent_a331_a:
                     partOf+=parent_a331_a +'\n'
@@ -229,6 +227,9 @@ def createxml(ctx):
                     partOf+=parent_a453ra +'\n'
                 if parent_a599_a:
                     partOf+=parent_a599_a +'\n'
+
+                if (category_dict[filename]['blatt_titel']):
+                    partOf=category_dict[filename]['blatt_titel']
 
                 supplemental+=joinlineif("**Gesamttitel:**  \n",partOf)
                 a331_a=aseq.get_key(records,ac,"331"," "," ","a")
@@ -375,6 +376,7 @@ def createxml(ctx):
                 baseMaterial=join(a439_a)
                 supplemental+=joinlineif("**Reproduktionsverfahren:**  \n",baseMaterial)
 
+
                 #
                 # Bis Doppelpunkt fett und doppelter Zeilenumbruch
                 #
@@ -388,6 +390,22 @@ def createxml(ctx):
                             note_mk+='\n**'+ls[0].strip()+':**  \n'+ls[1].strip()+'\n'
                 #supplemental+=joinlineif("**Anmerkungen:**  \n",note_mk)
                 supplemental+=joinlineif("",note_mk)
+
+                blatt_exist=False
+
+                for i in range(1,22):
+                    blatt=(category_dict[filename]['titel_blatt%02i'%i])
+                    if blatt:
+                        blatt_exist=True
+
+                if blatt_exist:
+                    supplemental+="**Blätter**\n"
+
+                    for i in range(1,22):
+                        blatt=(category_dict[filename]['titel_blatt%02i'%i])
+                        if blatt:
+                            print (blatt)
+                            supplemental+=blatt+'\n'
 
                 if os.path.exists(abstract_in):
                     print ("Reading",abstract_in)
@@ -428,7 +446,7 @@ def createxml(ctx):
                     print ('Biblio',biblio_in,'missing')
                     biblio=""
 
-                biblio=biblio.replace('***','').replace('###','').replace('Quellen und weiterführende Literatur:','\n\n####Quellen und weiterführende Literatur:  \n')
+                biblio=biblio.replace('***','').replace('#','').replace('Quellen und weiterführende Literatur:','\n\n####Quellen und weiterführende Literatur:  \n')
 
                 abstract+=biblio
                 abstract.replace('\n','  \n')
