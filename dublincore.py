@@ -7,7 +7,7 @@ HEADER="""
 """
 
 METADATA="""
-<metadata
+<record>
 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:dc="http://purl.org/dc/elements/1.1/"
 xmlns:dcterms="http://purl.org/dc/terms/">
@@ -24,12 +24,10 @@ xmlns:dcterms="http://purl.org/dc/terms/">
 <dc:creator>{a200_k}; {a200_h} {a200_4}</dc:creator>
 <dc:creator>{a204ak}; {a204ah} {a204a4}</dc:creator>
 <dc:creator>{a208ak}; {a208ah} {a208a4}</dc:creator>
-<dc:subject>{a064aa}W</dc:subject>
+<dc:subject>{a064aa}</dc:subject>
 <dc:description>{a407_a}</dc:description>
 <dc:description>{a433_a} + {a437_a}; {a435_a}</dc:description>
 <dc:description>{a439_d}</dc:description>
-<dc:description>{a501_a}W</dc:description>
-<dcterms:abstract>{abstract}</dcterms:abstract>
 <dc:publisher>{a419_b}; {a419_a};{a419_c}</dc:publisher>
 <dc:contributor>{a100bp}; {a100bd} {a100b4}</dc:contributor>
 <dc:contributor>{a104bp}; {a104bd} {a104b4}</dc:contributor>
@@ -53,5 +51,5 @@ xmlns:dcterms="http://purl.org/dc/terms/">
 <dcterms:license xsi:type="dcterms:URI">https://creativecommons.org/licenses/by/4.0/</dcterms:license>
 <dcterms:provenance>http://sammlung.woldan.oeaw.ac.at/</dcterms:provenance>
 <dcterms:rightsholder>OAW Sammlung Woldan</dcterms:rightsholder>
-</metadata>
+</record>
 """
