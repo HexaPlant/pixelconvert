@@ -399,13 +399,13 @@ def createxml(ctx):
                         blatt_exist=True
 
                 if blatt_exist:
-                    supplemental+="**Blätter**\n"
+                    supplemental+="**Blätter**\n\n"
 
                     for i in range(1,22):
                         blatt=(category_dict[filename]['titel_blatt%02i'%i])
                         if blatt:
                             print (blatt)
-                            supplemental+=blatt+'\n'
+                            supplemental+='  * '+blatt+'\n'
 
                 if os.path.exists(abstract_in):
                     print ("Reading",abstract_in)
