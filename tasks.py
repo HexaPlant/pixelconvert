@@ -449,7 +449,7 @@ def createxml(ctx):
                 biblio=biblio.replace('***','').replace('#','').replace('Quellen und weiterführende Literatur:','\n\n####Quellen und weiterführende Literatur:  \n')
 
                 abstract+=biblio
-                abstract.replace('\n','  \n')
+                abstract=abstract.replace('\n','  \n')
 
                 xml_file=codecs.open(xml_out, "w", "utf-8")
                 xml_file=open(xml_out,'w')
@@ -512,6 +512,8 @@ def createxml(ctx):
                 print (denominator,title_short,partOf,titleValue)
 
                 purpose=titleValue
+                supplemental=supplemental.decode('utf-8','ignore').encode("utf-8")
+                abstract=abstract.decode('utf-8','ignore').encode("utf-8")
 
                 xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',supplemental=supplemental,abstract=abstract,purpose=purpose,keywords=keywords,category=category,region=region,year=year,denominator=abs(denominator)).replace('\n\n\n\n','\n\n'))
                 xml_file.close()
@@ -571,7 +573,7 @@ def createxml(ctx):
 
 @task()
 def importlayers(ctx):
-    importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user, tiff=ctx.output_dir)
+    importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
     rebuild_index='cd {geonode_dir};python ./manage.py rebuild_index --noinput'.format(geonode_dir=ctx.geonode_dir)
     ctx.run(importlayer)
     ctx.run(rebuild_index)
