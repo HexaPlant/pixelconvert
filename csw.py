@@ -183,13 +183,13 @@ CSW="""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
         </gmd:descriptiveKeywords>
        <gmd:resourceConstraints>
          <gmd:MD_LegalConstraints>
-           <gmd:useConstraints>
-              <gmd:MD_RestrictionCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue=""/>
-           </gmd:useConstraints>
-           <gmd:otherConstraints>
-             <gco:CharacterString>None</gco:CharacterString>
-           </gmd:otherConstraints>
-         </gmd:MD_LegalConstraints>
+            <gmd:useConstraints>
+                <gmd:MD_RestrictionCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="license">license</gmd:MD_RestrictionCode>
+            </gmd:useConstraints>
+            <gmd:otherConstraints>
+                <gco:CharacterString>Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</gco:CharacterString>
+            </gmd:otherConstraints>
+        </gmd:MD_LegalConstraints>
        </gmd:resourceConstraints>
        <gmd:spatialRepresentationType>
          <gmd:MD_SpatialRepresentationTypeCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_SpatialRepresentationTypeCode" codeListValue=""/>

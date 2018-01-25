@@ -9,6 +9,7 @@ geonode_dir: /data/code/woldan
 aseq_file: /data/woldan_datascan/Metadata_export/WD_Export_2018_01_10.xml
 category: /data/woldan_datascan/Metadata_export/WD_Category_2018_01_10.csv
 dc: /data/woldan_datascan/Metadata_export/woldan_import_dc.xml
+user: SammlungWoldan
 
 #input_dir: /data/gdrive/data/woldan/test/in/
 #gcp_dir: /data/gdrive/data/woldan/test/tmp/gcp/
