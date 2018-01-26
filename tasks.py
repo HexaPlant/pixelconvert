@@ -228,8 +228,11 @@ def createxml(ctx):
                 if parent_a599_a:
                     partOf+=parent_a599_a +'\n'
 
-                if (category_dict[filename]['blatt_titel']):
-                    partOf=category_dict[filename]['blatt_titel']
+                try:
+                    if (category_dict[filename]['blatt_titel']):
+                        partOf=category_dict[filename]['blatt_titel']
+                except KeyError:
+                    continue
 
                 supplemental+=joinlineif("**Gesamttitel:**  \n",partOf)
                 a331_a=aseq.get_key(records,ac,"331"," "," ","a")
