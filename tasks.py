@@ -117,7 +117,7 @@ def createxml(ctx):
     with open(ctx.category, 'r')as category_file:
         category_csv = csv.DictReader(category_file)
         for row in category_csv:
-            category_dict[row['\xef\xbb\xbffilename']]={
+            category_dict[row['filename']]={
                 'category1':row['category1'],
                 'category2':row['category2'],
                 'category3':row['category3'],
@@ -127,7 +127,7 @@ def createxml(ctx):
             }
 
             for i in range(1,22):
-                category_dict[row['\xef\xbb\xbffilename']].update({'titel_blatt%02i'%i:row['titel_blatt%02i'%i]})
+                category_dict[row['filename']].update({'titel_blatt%02i'%i:row['titel_blatt%02i'%i]})
 
     print ("Importing Metadata")
     records=aseq.load(ctx)
