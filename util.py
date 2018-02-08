@@ -95,6 +95,7 @@ def code2name(code):
     code=code.replace('isb','herausgebendes Organ')
     code=code.replace('oth','Sonstige')
     code=code.replace('dte','WidmungsempfängerIn')
+    code=code.replace('pat','AuftraggeberIn')
     return code
 
 #def name2options(ctx,image):

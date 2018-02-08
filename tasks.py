@@ -116,8 +116,10 @@ def createxml(ctx):
     category_dict={}
     with open(ctx.category, 'r')as category_file:
         category_csv = csv.DictReader(category_file)
+
         for row in category_csv:
-            category_dict[row['filename']]={
+            #print(row)
+            category_dict[row['\xef\xbb\xbffilename']]={
                 'category1':row['category1'],
                 'category2':row['category2'],
                 'category3':row['category3'],
@@ -126,8 +128,14 @@ def createxml(ctx):
                 'blatt_titel':row['blatt_titel'],
             }
 
-            for i in range(1,22):
-                category_dict[row['filename']].update({'titel_blatt%02i'%i:row['titel_blatt%02i'%i]})
+            for i in range(1,250):
+                try:
+                    blatt=row['titel_blatt%02i'%i]
+                    if blatt:
+                        print(row['\xef\xbb\xbffilename'],blatt)
+                        category_dict[row['\xef\xbb\xbffilename']].update({'titel_blatt%02i'%i:blatt})
+                except KeyError:
+                    pass
 
     print ("Importing Metadata")
     records=aseq.load(ctx)
@@ -335,7 +343,36 @@ def createxml(ctx):
                 relator+=joinline(a208ak,a208ah,a208b4,'; ')
                 relator+=joinline(a200bk,a200bh,a200b4,'; ')
                 relator+=joinline(a208bk,a208bh,a208b4,'; ')
-                relator+=joinline(a677_p,a677_d,a677_4,'; ')
+
+
+                a677_ps=a677_p.split('\n')
+                a677_ds=a677_d.split('\n')
+                a677_4s=a677_4.split('\n')
+
+                #print(len(a677_ps),a677_ps)
+                #print(len(a677_ds),a677_ds)
+                #print(len(a677_4s),a677_4s)
+
+                for i in range(0,len(a677_ps)):
+                    try:
+                        ap= a677_ps[i]
+                    except IndexError:
+                        ap=''
+                    try:
+                        a4= a677_4s[i]
+                    except IndexError:
+                        a4=''
+                    try:
+                        ad= a677_ds[i]
+                    except IndexError:
+                        ad=''
+
+                    if ap:
+                        pers=ap+'; '+ad+' ['+a4+']\n\n'
+                        relator+=pers
+
+
+                #relator+=joinline(a677_p,a677_d,a677_4,'; ')
 
                 person=joinline(a100_p,a100_d,a100_4,'; ')
                 person+=joinline(a200_k,a200_h,a200_4,'; ')
@@ -396,19 +433,28 @@ def createxml(ctx):
 
                 blatt_exist=False
 
-                for i in range(1,22):
-                    blatt=(category_dict[filename]['titel_blatt%02i'%i])
-                    if blatt:
-                        blatt_exist=True
+                print (category_dict[filename])
+
+                for i in range(1,250):
+                    try:
+                        blatt=(category_dict[filename]['titel_blatt%02i'%i])
+                        if blatt:
+                            blatt_exist=True
+                    except KeyError:
+                        pass
 
                 if blatt_exist:
                     supplemental+="**Blätter**\n\n"
 
-                    for i in range(1,22):
-                        blatt=(category_dict[filename]['titel_blatt%02i'%i])
-                        if blatt:
-                            print (blatt)
-                            supplemental+='  * '+blatt+'\n'
+                    for i in range(1,250):
+                        try:
+                            blatt=(category_dict[filename]['titel_blatt%02i'%i])
+
+                            if blatt:
+                                print (blatt)
+                                supplemental+='  * '+blatt+'\n'
+                        except KeyError:
+                            pass
 
                 if os.path.exists(abstract_in):
                     print ("Reading",abstract_in)
