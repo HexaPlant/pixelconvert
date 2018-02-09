@@ -132,7 +132,7 @@ def createxml(ctx):
                 try:
                     blatt=row['titel_blatt%02i'%i]
                     if blatt:
-                        print(row['\xef\xbb\xbffilename'],blatt)
+                        # print(row['\xef\xbb\xbffilename'],blatt)
                         category_dict[row['\xef\xbb\xbffilename']].update({'titel_blatt%02i'%i:blatt})
                 except KeyError:
                     pass
@@ -433,7 +433,7 @@ def createxml(ctx):
 
                 blatt_exist=False
 
-                print (category_dict[filename])
+                # print (category_dict[filename])
 
                 for i in range(1,250):
                     try:
@@ -451,7 +451,7 @@ def createxml(ctx):
                             blatt=(category_dict[filename]['titel_blatt%02i'%i])
 
                             if blatt:
-                                print (blatt)
+                                # print (blatt)
                                 supplemental+='  * '+blatt+'\n'
                         except KeyError:
                             pass
