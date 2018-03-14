@@ -139,6 +139,8 @@ def createxml(ctx):
 
     print ("Importing Metadata")
     records=aseq.load(ctx)
+    print(records)
+    #print (records['AC04408812']['677'])
     #csv_abstract=open("out/woldan_abstract.csv","w")
     #csv_abstract.write("title,abstract\n")
     csv_import=open("out/woldan_import.csv","w")
@@ -345,10 +347,11 @@ def createxml(ctx):
                 relator+=joinline(a208bk,a208bh,a208b4,'; ')
 
 
-                a677_ps=a677_p.split('\n')
-                a677_ds=a677_d.split('\n')
-                a677_4s=a677_4.split('\n')
+                a677_ps=a677_p.split('\n\n')
+                a677_ds=a677_d.split('\n\n')
+                a677_4s=a677_4.split('\n\n')
 
+                #print (a677_d)
                 #print(len(a677_ps),a677_ps)
                 #print(len(a677_ds),a677_ds)
                 #print(len(a677_4s),a677_4s)
@@ -363,13 +366,13 @@ def createxml(ctx):
                     except IndexError:
                         a4=''
                     try:
-                        ad= a677_ds[i]
+                        ad= a677_ds[i].replace('""','')
                     except IndexError:
                         ad=''
 
                     if ap:
                         pers=ap+'; '+ad+' ['+a4+']\n\n'
-                        relator+=pers
+                        relator+=pers.replace('  ',' ')
 
 
                 #relator+=joinline(a677_p,a677_d,a677_4,'; ')
