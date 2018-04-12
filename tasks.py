@@ -115,25 +115,25 @@ def createxml(ctx):
     print ("Importing Categories")
     category_dict={}
     with open(ctx.category, 'r')as category_file:
-        category_csv = csv.DictReader(category_file)
+        category_csv = csv.DictReader(category_file,dialect='excel',delimiter=';')
 
         for row in category_csv:
             #print(row)
-            category_dict[row['\xef\xbb\xbffilename']]={
-                'category1':row['category1'],
-                'category2':row['category2'],
-                'category3':row['category3'],
-                'category4':row['category4'],
-                'category5':row['category5'],
-                'blatt_titel':row['blatt_titel'],
+            category_dict[row['filename']]={
+                'category1':row['category1'].decode('iso-8859-1').encode('utf8'),
+                'category2':row['category2'].decode('iso-8859-1').encode('utf8'),
+                'category3':row['category3'].decode('iso-8859-1').encode('utf8'),
+                'category4':row['category4'].decode('iso-8859-1').encode('utf8'),
+                'category5':row['category5'].decode('iso-8859-1').encode('utf8'),
+                'blatt_titel':row['blatt_titel'].decode('iso-8859-1').encode('utf8'),
             }
 
             for i in range(1,250):
                 try:
-                    blatt=row['titel_blatt%02i'%i]
+                    blatt=row['titel_blatt%02i'%i].decode('iso-8859-1').encode('utf8')
                     if blatt:
                         # print(row['\xef\xbb\xbffilename'],blatt)
-                        category_dict[row['\xef\xbb\xbffilename']].update({'titel_blatt%02i'%i:blatt})
+                        category_dict[row['filename']].update({'titel_blatt%02i'%i:blatt})
                 except KeyError:
                     pass
 

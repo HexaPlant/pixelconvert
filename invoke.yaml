@@ -6,9 +6,9 @@ warp_dir: /data/woldan/tmp/warp/
 wld_dir: /data/woldan/tmp/wld
 output_dir: /data/woldan/image/
 geonode_dir: /data/code/woldan
-aseq_file: /data/woldan_datascan/Metadata_export/WD_Export_2018_01_29
+aseq_file: /data/woldan_datascan/Metadata_export/WD_Export_2018_04_09.xml
 #aseq_file: /data/woldan_datascan/Metadata_export/WD_Export_huber
-category: /data/woldan_datascan/Metadata_export/WD_Category_2018_01_29.csv
+category: /data/woldan_datascan/Metadata_export/WD_Category_2018_04_09.csv
 dc: /data/woldan_datascan/Metadata_export/woldan_import_dc.xml
 user: SammlungWoldan
 
