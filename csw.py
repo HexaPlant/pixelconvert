@@ -187,7 +187,7 @@ CSW="""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
                 <gmd:MD_RestrictionCode codeSpace="ISOTC211/19115" codeList="http://www.isotc211.org/2005/resources/Codelist/gmxCodelists.xml#MD_RestrictionCode" codeListValue="license">license</gmd:MD_RestrictionCode>
             </gmd:useConstraints>
             <gmd:otherConstraints>
-                <gco:CharacterString>Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)</gco:CharacterString>
+                <gco:CharacterString>Creative Commons Attribution 4.0 International (CC BY 4.0)</gco:CharacterString>
             </gmd:otherConstraints>
         </gmd:MD_LegalConstraints>
        </gmd:resourceConstraints>
