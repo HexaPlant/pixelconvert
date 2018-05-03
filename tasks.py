@@ -26,12 +26,12 @@ import regions
 import xml.sax.saxutils
 
 @task()
-def rebuildindex(ctx):
+def rebuild_index(ctx):
     ctx.run('python /data/code/woldan/manage.py rebuild_index -v 3 --noinput')
 
 
 @task()
-def convert(ctx):
+def create_maps(ctx):
     ctx.run('mkdir -p {path}'.format(path=ctx.gcp_dir))
     ctx.run('mkdir -p {path}'.format(path=ctx.vips_dir))
     #ctx.run('mkdir -p {path}'.format(path=ctx.warp_dir))
@@ -115,7 +115,7 @@ def convert(ctx):
 
 
 @task()
-def createxml(ctx):
+def create_metadata(ctx):
 
     print ("Importing Categories")
     category_dict={}
@@ -629,7 +629,7 @@ def createxml(ctx):
 
 
 @task()
-def importlayers(ctx):
+def import_maps(ctx):
     importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
     rebuild_index='cd {geonode_dir};python ./manage.py rebuild_index --noinput'.format(geonode_dir=ctx.geonode_dir)
     ctx.run(importlayer)
