@@ -26,6 +26,11 @@ import regions
 import xml.sax.saxutils
 
 @task()
+def rebuildindex(ctx):
+    ctx.run('python /data/code/woldan/manage.py rebuild_index -v 3 --noinput')
+
+
+@task()
 def convert(ctx):
     ctx.run('mkdir -p {path}'.format(path=ctx.gcp_dir))
     ctx.run('mkdir -p {path}'.format(path=ctx.vips_dir))
