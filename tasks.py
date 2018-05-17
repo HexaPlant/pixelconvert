@@ -631,9 +631,28 @@ def create_metadata(ctx):
 @task()
 def import_maps(ctx):
     importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
-    rebuild_index='cd {geonode_dir};python ./manage.py rebuild_index --noinput'.format(geonode_dir=ctx.geonode_dir)
     ctx.run(importlayer)
-    ctx.run(rebuild_index)
+    rebuild_index(ctx)
+
+@task()
+def update_maps(ctx):
+    importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
+    ctx.run(importlayer)
+    rebuild_index(ctx)
+
+
+@task()
+def cleanup_maps(ctx):
+    cleanup_maps='rm -rf {geonode_dir}/geonode/uploaded/layers/*'.format(geonode_dir=ctx.geonode_dir)
+    ctx.run(cleanup_maps)
+
+
+@task()
+def cleanup_tmp(ctx):
+    ctx.run('rm -rf {dir}'.format(dir=ctx.gcp_dir))
+    ctx.run('rm -rf {dir}'.format(dir=ctx.vips_dir))
+    ctx.run('rm -rf {dir}'.format(dir=ctx.warp_dir))
+    ctx.run('rm -rf {dir}'.format(dir=ctx.wld_dir))
 
 @task()
 def test_geocoder(ctx):
