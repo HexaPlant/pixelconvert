@@ -112,7 +112,7 @@ def create_maps(ctx):
                 ctx.run("applygeo {gtxt_in} {tiff_out}".format(gtxt_in=escape_path(gtxt_out),tiff_out=escape_path(tiff_final)))
                 ctx.run('gdal_edit.py -mo NODATA_VALUES="255 255 255" {tiff_out}'.format(tiff_out=tiff_final))
 
-
+            cleanup_tmp(ctx)
 
 @task()
 def create_metadata(ctx):
@@ -632,12 +632,14 @@ def create_metadata(ctx):
 def import_maps(ctx):
     importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
     ctx.run(importlayer)
+    cleanup_maps(ctx)
     rebuild_index(ctx)
 
 @task()
 def update_maps(ctx):
     importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
     ctx.run(importlayer)
+    cleanup_maps(ctx)
     rebuild_index(ctx)
 
 
