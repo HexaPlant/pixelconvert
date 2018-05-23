@@ -154,7 +154,7 @@ Sitemap: {url}/sitemap.xml
 """.format(url=ctx.iiif_url+'/?IIIF='+clean(filename).lower()+'.tif/full/,1500/0/default.jpg'))
 
                     sitemap_file.write('</url>\n')
-                    sitemap_file.write(
+            sitemap_file.write(
 """
 </urlset>
 """)
