@@ -122,7 +122,7 @@ def create_sitemap(ctx):
 """
 User-agent: *
 Allow: /
-Sitemap:{url}/sitemap.xml
+Sitemap: {url}/sitemap.xml
 """.format(url=ctx.site_url)
             )
 
@@ -130,8 +130,7 @@ Sitemap:{url}/sitemap.xml
 
     with open(ctx.geonode_dir+'/geonode/static/sitemap.xml', 'w')as sitemap_file:
             sitemap_file.write(
-"""
-<?xml version="1.0" encoding="UTF-8"?>
+"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset
       xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
       xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
