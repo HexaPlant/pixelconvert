@@ -11,3 +11,5 @@ gcp_dir: /data/woldan/tmp/gcp/
 vips_dir: /data/woldan/tmp/iiif/
 warp_dir: /data/woldan/tmp/warp/
 wld_dir: /data/woldan/tmp/wld
+site_url: http://sammlung.woldan.oeaw.ac.at
+iiif_url: http://iiif.woldan.oeaw.ac.at

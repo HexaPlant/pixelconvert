@@ -112,7 +112,53 @@ def create_maps(ctx):
                 ctx.run("applygeo {gtxt_in} {tiff_out}".format(gtxt_in=escape_path(gtxt_out),tiff_out=escape_path(tiff_final)))
                 ctx.run('gdal_edit.py -mo NODATA_VALUES="255 255 255" {tiff_out}'.format(tiff_out=tiff_final))
 
+
             cleanup_tmp(ctx)
+
+@task()
+def create_sitemap(ctx):
+    with open(ctx.geonode_dir+'/geonode/static/robots.txt', 'w')as robots_file:
+            robots_file.write(
+"""
+User-agent: *
+Allow: /
+Sitemap:{url}/sitemap.xml
+""".format(url=ctx.site_url)
+            )
+
+
+
+    with open(ctx.geonode_dir+'/geonode/static/sitemap.xml', 'w')as sitemap_file:
+            sitemap_file.write(
+"""
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+""")
+
+            for root, dir, files in os.walk(ctx.input_dir):
+                for tif in fnmatch.filter(files, "*.tif"):
+                    img = os.path.join(root,tif).replace(' ','\ ').replace('&','\&').replace("'","\'")
+                    filename, ext = os.path.splitext(tif)
+                    print (ctx.site_url+'/layers/geonode:'+clean(filename.lower()))
+                    sitemap_file.write('<url>\n')
+                    sitemap_file.write('<loc>'+ctx.site_url+'/layers/geonode:'+clean(filename.lower())+'</loc>\n')
+                    sitemap_file.write(
+"""
+<image:image>
+      <image:loc>{url}</image:loc>
+    </image:image>
+""".format(url=ctx.iiif_url+'/?IIIF='+clean(filename.lower())+'.tif/full/,1500/0/default.jpg'))
+
+                    sitemap_file.write('</url>\n')
+                    sitemap_file.write(
+"""
+</urlset>
+""")
 
 @task()
 def create_metadata(ctx):
