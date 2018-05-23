@@ -144,7 +144,7 @@ Sitemap:{url}/sitemap.xml
                 for tif in fnmatch.filter(files, "*.tif"):
                     img = os.path.join(root,tif).replace(' ','\ ').replace('&','\&').replace("'","\'")
                     filename, ext = os.path.splitext(tif)
-                    print (ctx.site_url+'/layers/geonode:'+clean(filename).lower()
+                    print (ctx.site_url+'/layers/geonode:'+clean(filename).lower())
                     sitemap_file.write('<url>\n')
                     sitemap_file.write('<loc>'+ctx.site_url+'/layers/geonode:'+clean(filename).lower()+'</loc>\n')
                     sitemap_file.write(
