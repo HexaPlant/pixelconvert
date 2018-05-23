@@ -121,12 +121,11 @@ def create_sitemap(ctx):
             robots_file.write(
 """
 User-agent: *
+Disallow: /catalogue/
 Allow: /
 Sitemap: {url}/sitemap.xml
 """.format(url=ctx.site_url)
             )
-
-
 
     with open(ctx.geonode_dir+'/geonode/static/sitemap.xml', 'w')as sitemap_file:
             sitemap_file.write(
