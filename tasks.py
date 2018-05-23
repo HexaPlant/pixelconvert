@@ -122,6 +122,7 @@ def create_sitemap(ctx):
 """
 User-agent: *
 Disallow: /catalogue/
+Disallow: /search/
 Allow: /
 Sitemap: {url}/sitemap.xml
 """.format(url=ctx.site_url)
