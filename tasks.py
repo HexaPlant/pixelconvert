@@ -20,10 +20,14 @@ import xml.sax.saxutils
 
 import csw
 import aseq
+import sitemap
 import geocoder
 import regions
 
 import xml.sax.saxutils
+
+import time
+from datetime import date
 
 @task()
 def rebuild_index(ctx):
@@ -117,47 +121,45 @@ def create_maps(ctx):
 
 @task()
 def create_sitemap(ctx):
+
+    w3c_date=date.today().strftime("%Y-%m-%d")
     with open(ctx.geonode_dir+'/geonode/static/robots.txt', 'w')as robots_file:
-            robots_file.write(
-"""
-User-agent: *
-Disallow: /catalogue/
-Disallow: /search/
-Allow: /
-Sitemap: {url}/sitemap.xml
-""".format(url=ctx.site_url)
-            )
+            robots_file.write(sitemap.ROBOTS.format(url=ctx.url_site))
 
     with open(ctx.geonode_dir+'/geonode/static/sitemap.xml', 'w')as sitemap_file:
-            sitemap_file.write(
-"""<?xml version="1.0" encoding="UTF-8"?>
-<urlset
-      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-      xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
-""")
+            sitemap_file.write(sitemap.HEADER.format(url_site=ctx.url_site,date=w3c_date))
+
+            print ("Importing Metadata")
+            records=aseq.load(ctx)
 
             for root, dir, files in os.walk(ctx.input_dir):
                 for tif in fnmatch.filter(files, "*.tif"):
                     img = os.path.join(root,tif).replace(' ','\ ').replace('&','\&').replace("'","\'")
                     filename, ext = os.path.splitext(tif)
-                    print (ctx.site_url+'/layers/geonode:'+clean(filename).lower())
-                    sitemap_file.write('<url>\n')
-                    sitemap_file.write('<loc>'+ctx.site_url+'/layers/geonode:'+clean(filename).lower()+'</loc>\n')
-                    sitemap_file.write(
-"""
-<image:image>
-      <image:loc>{url}</image:loc>
-    </image:image>
-""".format(url=ctx.iiif_url+'/?IIIF='+clean(filename).lower()+'.tif/full/,1500/0/default.jpg'))
+                    layer=clean(filename).lower()
+                    title=filename.replace('_',' ').replace('[','').replace(']','')
+                    title_short=' '.join(title.split(' ')[1:])
 
-                    sitemap_file.write('</url>\n')
-            sitemap_file.write(
-"""
-</urlset>
-""")
+                    print ("Adding",layer)
+
+                    fs=filename.split('_')
+                    try:
+                        ac,author,imgname,year = fs[0],fs[1],' '.join(fs[2:-1]).strip(),fs[-1]
+                        name=' '.join(fs[1:])
+                        ac = ac.strip()
+                        #name = ' '.join([year,imgname,author]).strip()
+                        name_url = clean(escape(name))
+                    except IndexError:
+                        print("Can't parse", filename)
+                        continue
+
+                    a331_a=aseq.get_key(records,ac,"331"," "," ","a")
+                    a335_a=aseq.get_key(records,ac,"335"," "," ","a")
+                    title=a331_a.replace('[','').replace(']','')
+                    titleValue=join(a331_a,a335_a,' : ').replace('[','').replace(']','')
+                    print("titleValue",titleValue)
+                    sitemap_file.write(sitemap.MAP.format(url_site=ctx.url_site,url_iiif=ctx.url_iiif,layer=layer,title=escape(title_short),caption=escape(titleValue),date=w3c_date,id=ac))
+            sitemap_file.write(sitemap.FOOTER)
 
 @task()
 def create_metadata(ctx):
@@ -189,7 +191,7 @@ def create_metadata(ctx):
 
     print ("Importing Metadata")
     records=aseq.load(ctx)
-    print(records)
+    #print(records)
     #print (records['AC04408812']['677'])
     #csv_abstract=open("out/woldan_abstract.csv","w")
     #csv_abstract.write("title,abstract\n")
