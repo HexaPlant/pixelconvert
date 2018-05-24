@@ -4,6 +4,8 @@ Disallow: /catalogue/
 Disallow: /search/
 Disallow: /geoserver/
 Disallow: /uploaded/
+Disallow: /groups/
+Disallow: /h_keywords_api
 Allow: /
 Sitemap: {url}/sitemap.xml
 """
