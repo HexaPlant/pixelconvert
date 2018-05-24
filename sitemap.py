@@ -6,6 +6,7 @@ Disallow: /geoserver/
 Disallow: /uploaded/
 Disallow: /groups/
 Disallow: /h_keywords_api
+Disallow: /api/
 Allow: /
 Sitemap: {url}/sitemap.xml
 """

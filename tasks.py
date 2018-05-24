@@ -28,6 +28,7 @@ import xml.sax.saxutils
 
 import time
 from datetime import date
+import requests
 
 @task()
 def rebuild_index(ctx):
@@ -159,6 +160,25 @@ def create_sitemap(ctx):
                     titleValue=join(a331_a,a335_a,' : ').replace('[','').replace(']','')
                     sitemap_file.write(sitemap.MAP.format(url_site=ctx.url_site,url_iiif=ctx.url_iiif,layer=layer,title=escape(title_short),caption=escape(titleValue),date=w3c_date,id=ac))
             sitemap_file.write(sitemap.FOOTER)
+@task()
+def update_cache(ctx):
+    for root, dir, files in os.walk(ctx.input_dir):
+        for tif in fnmatch.filter(files, "*.tif"):
+            img = os.path.join(root,tif).replace(' ','\ ').replace('&','\&').replace("'","\'")
+            filename, ext = os.path.splitext(tif)
+            layer=clean(filename).lower()
+            url_jpeg_standard = "{url_iiif}/?IIIF={layer}.tif/full/,1500/0/default.jpg".format(url_iiif=ctx.url_iiif,layer=layer)
+            url_jpeg_large = "{url_iiif}/?IIIF={layer}.tif/full/,5000/0/default.jpg".format(url_iiif=ctx.url_iiif,layer=layer)
+            url_geotiff_normal = "{url_iiif}/image/{layer}.tif".format(url_iiif=ctx.url_iiif,layer=layer)
+            url_geotiff_transformed="{url_site}/geoserver/wcs?format=image%2Ftiff&request=GetCoverage&version=2.0.1&service=WCS&coverageid=geonode%3A{layer}".format(url_site=ctx.url_site,layer=layer)
+            url_googleearth="{url_site}/geoserver/wms/kml?layers=geonode%3A{layer}".format(url_site=ctx.url_site,layer=layer)
+
+            for url in (url_jpeg_standard,url_jpeg_large,url_geotiff_normal,url_geotiff_transformed,url_googleearth):
+                r = requests.get(url)
+                if r.status_code==200:
+                    print ("SUCCESS",url)
+                else:
+                    print ("ERROR",url)
 
 @task()
 def create_metadata(ctx):
