@@ -37,6 +37,7 @@ def rebuild_index(ctx):
 
 @task()
 def create_maps(ctx):
+    cleanup_tmp(ctx)
     ctx.run('mkdir -p {path}'.format(path=ctx.gcp_dir))
     ctx.run('mkdir -p {path}'.format(path=ctx.vips_dir))
     #ctx.run('mkdir -p {path}'.format(path=ctx.warp_dir))
