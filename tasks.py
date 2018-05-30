@@ -696,7 +696,7 @@ def create_metadata(ctx):
 
 @task()
 def import_maps(ctx):
-    create_image(ctx)
+    create_maps(ctx)
     create_metadata(ctx)
     importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
     ctx.run(importlayer)
@@ -705,7 +705,7 @@ def import_maps(ctx):
 
 @task()
 def update_maps(ctx):
-    create_image(ctx)
+    create_maps(ctx)
     create_metadata(ctx)
     importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
     ctx.run(importlayer)
