@@ -215,9 +215,10 @@ def create_metadata(ctx):
     #print (records['AC04408812']['677'])
     #csv_abstract=open("out/woldan_abstract.csv","w")
     #csv_abstract.write("title,abstract\n")
-    csv_import=open("out/woldan_import.csv","w")
+    ctx.run("mkdir -p %s"%ctx.log_dir)
+    csv_import=open("%s/woldan_import.csv"%ctx.log_dir,"w")
     csv_import.write("filename,denominator,geo,abstract,biblio,category1,category2,category3,category4,category5\n")
-    dc_import=open("out/woldan_import_dc.xml","w")
+    dc_import=open("%s/woldan_import_dc.xml"%ctx.log_dir,"w")
     dc_import.write(dublincore.HEADER)
     dc=""
 
@@ -694,6 +695,27 @@ def create_metadata(ctx):
                 dc_import.write(dc)
 
 
+@task()
+def update_layer(ctx,layer):
+
+    if layer[-4:]==".tif":
+        layer=layer[:-4]
+    layer_tif=ctx.output_dir+layer+'.tif'
+    layer_xml=ctx.output_dir+layer+'.xml'
+    layer_geo=ctx.output_dir+layer+'.geo'
+    if exists(layer_tif):
+        for f in (layer_tif,layer_xml,layer_geo):
+            ctx.run("rm -vf %s"%f)
+
+        create_maps(ctx)
+        create_metadata(ctx)
+        importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=layer_tif)
+        ctx.run(importlayer)
+        cleanup_maps(ctx)
+        rebuild_index(ctx)
+    else:
+        print ("Can't find tiff",layer_tif)
+
 
 @task()
 def import_maps(ctx):
@@ -703,6 +725,8 @@ def import_maps(ctx):
     ctx.run(importlayer)
     cleanup_maps(ctx)
     rebuild_index(ctx)
+
+
 
 @task()
 def update_maps(ctx):

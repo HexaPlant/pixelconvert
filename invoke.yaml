@@ -3,6 +3,7 @@ aseq_file: /data/woldan_datascan/Metadata_export/WD_Export.xml # Metadaten im AS
 category: /data/woldan_datascan/Metadata_export/WD_Category.csv # Kategorien als Excel CSV
 user: SammlungWoldan # User für den Daten import
 output_dir: /data/woldan/image/ # Verzeichnis für die Georeferenzierten Karten
+log_dir: /data/woldan/log # Verzeichnis für den import log
 dc: /data/woldan_datascan/Metadata_export/woldan_import_dc.xml # Dublin core export Datei
 geonode_dir: /data/code/woldan # Verzeichnis in dem sich geonode befindet
 
