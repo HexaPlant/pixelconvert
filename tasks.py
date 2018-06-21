@@ -121,6 +121,7 @@ def create_maps(ctx):
 
     cleanup_tmp(ctx)
 
+
 @task()
 def create_sitemap(ctx):
 
@@ -315,7 +316,8 @@ def create_metadata(ctx):
                     if (category_dict[filename]['blatt_titel']):
                         partOf=category_dict[filename]['blatt_titel']
                 except KeyError:
-                    continue
+                    pass
+                    #print ("No partOf")
 
                 supplemental+=joinlineif("**Gesamttitel:**  \n",partOf)
                 a331_a=aseq.get_key(records,ac,"331"," "," ","a")
@@ -750,6 +752,15 @@ def cleanup_tmp(ctx):
     ctx.run('rm -rf {dir}'.format(dir=ctx.vips_dir))
     ctx.run('rm -rf {dir}'.format(dir=ctx.warp_dir))
     ctx.run('rm -rf {dir}'.format(dir=ctx.wld_dir))
+
+
+@task()
+def delete_maps(ctx):
+    ctx.run('rm -rf {dir}/*'.format(dir=ctx.output_dir))
+
+@task()
+def delete_metadata(ctx):
+    ctx.run('rm -rf {dir}/*.xml'.format(dir=ctx.output_dir))
 
 @task()
 def test_geocoder(ctx):
