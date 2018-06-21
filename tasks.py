@@ -114,12 +114,12 @@ def create_maps(ctx):
                 ctx.run("listgeo {tiff_in} > {gtxt_out}".format(tiff_in=escape_path(tiff_wld),gtxt_out=escape_path(gtxt_out)))
 
             if not exists(tiff_final):
-                ctx.run("vips --vips-progress  --vips-concurrency=16 im_vips2tiff {tiff_in} {tiff_out}:deflate,tile:256x256,pyramid".format(tiff_in=escape_path(tiff_gcp),tiff_out=escape_path(tiff_final)))
+                ctx.run("vips --vips-concurrency=16 im_vips2tiff {tiff_in} {tiff_out}:deflate,tile:256x256,pyramid".format(tiff_in=escape_path(tiff_gcp),tiff_out=escape_path(tiff_final)))
                 ctx.run("applygeo {gtxt_in} {tiff_out}".format(gtxt_in=escape_path(gtxt_out),tiff_out=escape_path(tiff_final)))
                 ctx.run('gdal_edit.py -mo NODATA_VALUES="255 255 255" {tiff_out}'.format(tiff_out=tiff_final))
 
 
-            cleanup_tmp(ctx)
+    cleanup_tmp(ctx)
 
 @task()
 def create_sitemap(ctx):
