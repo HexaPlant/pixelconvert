@@ -217,12 +217,12 @@ def create_metadata(ctx):
     #print (records['AC04408812']['677'])
     #csv_abstract=open("out/woldan_abstract.csv","w")
     #csv_abstract.write("title,abstract\n")
-    ctx.run("mkdir -p %s"%ctx.log_dir)
-    csv_import=open("%s/woldan_import.csv"%ctx.log_dir,"w")
-    csv_import.write("filename,denominator,geo,abstract,biblio,category1,category2,category3,category4,category5\n")
-    dc_import=open("%s/woldan_import_dc.xml"%ctx.log_dir,"w")
-    dc_import.write(dublincore.HEADER)
-    dc=""
+    #ctx.run("mkdir -p %s"%ctx.log_dir)
+    #csv_import=open("%s/woldan_import.csv"%ctx.log_dir,"w")
+    #csv_import.write("filename,denominator,geo,abstract,biblio,category1,category2,category3,category4,category5\n")
+    #dc_import=open("%s/woldan_import_dc.xml"%ctx.log_dir,"w")
+    #dc_import.write(dublincore.HEADER)
+    #dc=""
 
 
     countries=regions.country2kontinent()
@@ -662,40 +662,40 @@ def create_metadata(ctx):
                     geo='no'
 
                 #csv_abstract.write(filename+","+abst+"\n")
-                csv_import.write(filename+','+str(denominator)+','+geo+','+abst+','+bib+','+category1+','+category2+','+category3+','+category4+','+category5+'\n')
+                #csv_import.write(filename+','+str(denominator)+','+geo+','+abst+','+bib+','+category1+','+category2+','+category3+','+category4+','+category5+'\n')
 
-                dc = dublincore.METADATA.format(a331_a=a331_a,a335_a=a335_a,a341_a=a341_a,a343_a=a343_a,
-                                                           a345_a=a345_a,a347_a=a347_a,a370aa=a370aa,a359_a=a359_a,
-                                                           a100_p=a100_p,a100_d=a100_d,a100_4=a100_4,
-                                                           a104ap=a104ap,a104ad=a104ad,a104a4=a104a4,
-                                                           a108ap=a108ap,a108ad=a108ad,a108a4=a108a4,
-                                                           a112ap=a112ap,a112ad=a112ad,a112a4=a112a4,
-                                                           a200_k=a200_k,a200_h=a200_h,a200_4=a200_4,
-                                                           a204ak=a204ak,a204ah=a204ah,a204a4=a204a4,
-                                                           a208ak=a208ak,a208ah=a208ah,a208a4=a208a4,
-                                                           a064aa=a064aa,a407_a=a407_a,
-                                                           a433_a=a433_a,a437_a=a437_a,a435_a=a435_a,
-                                                           a439_d=a439_d,a501_a=a501_a,abstract=xml.sax.saxutils.escape(abstract),
-                                                           filename=xml.sax.saxutils.escape(filename.lower()),
-                                                           a419_b=a419_b,a419_a=a419_a,a419_c=a419_c,
-                                                           a100bp=a100bp,a100bd=a100bd,a100b4=a100b4,
-                                                           a104bp=a104bp,a104bd=a104bd,a104b4=a104b4,
-                                                           a108bp=a108bp,a108bd=a108bd,a108b4=a108b4,
-                                                           a112bp=a112bp,a112bd=a112bd,a112b4=a112b4,
-                                                           a200bk=a200bk,a200bh=a200bh,a200b4=a200b4,
-                                                           a204bk=a204bk,a204bh=a204bh,a204b4=a204b4,
-                                                           a208bk=a208bk,a208bh=a208bh,a208b4=a208b4,
-                                                           a677_p=a677_p,a677_d=a677_d,a677_4=a677_4,
-                                                           a425a_=a425a_,a001_a=a001_a,a037ba=a037ba,
-                                                           a010_a=a010_a,a453ma=a453ma,a453ra=a453ra,a599_a=a599_a,
-                                                           a034_d=a034_d,a034_g=a034_g,a034_e=a034_e,a034_f=a034_f
-                                                           )
-                dc=dc.replace('<dcterms:alternative> :  </dcterms:alternative>\n','')
-                dc=dc.replace('<dc:creator>;  </dc:creator>\n','')
-                dc=dc.replace('<dc:contributor>;  </dc:contributor>\n','')
-                dc=dc.replace('<dc:date></dc:date>\n','')
-                dc=dc.replace('<dcterms:isPartOf></dcterms:isPartOf>\n','')
-                dc_import.write(dc)
+                # dc = dublincore.METADATA.format(a331_a=a331_a,a335_a=a335_a,a341_a=a341_a,a343_a=a343_a,
+                #                                            a345_a=a345_a,a347_a=a347_a,a370aa=a370aa,a359_a=a359_a,
+                #                                            a100_p=a100_p,a100_d=a100_d,a100_4=a100_4,
+                #                                            a104ap=a104ap,a104ad=a104ad,a104a4=a104a4,
+                #                                            a108ap=a108ap,a108ad=a108ad,a108a4=a108a4,
+                #                                            a112ap=a112ap,a112ad=a112ad,a112a4=a112a4,
+                #                                            a200_k=a200_k,a200_h=a200_h,a200_4=a200_4,
+                #                                            a204ak=a204ak,a204ah=a204ah,a204a4=a204a4,
+                #                                            a208ak=a208ak,a208ah=a208ah,a208a4=a208a4,
+                #                                            a064aa=a064aa,a407_a=a407_a,
+                #                                            a433_a=a433_a,a437_a=a437_a,a435_a=a435_a,
+                #                                            a439_d=a439_d,a501_a=a501_a,abstract=xml.sax.saxutils.escape(abstract),
+                #                                            filename=xml.sax.saxutils.escape(filename.lower()),
+                #                                            a419_b=a419_b,a419_a=a419_a,a419_c=a419_c,
+                #                                            a100bp=a100bp,a100bd=a100bd,a100b4=a100b4,
+                #                                            a104bp=a104bp,a104bd=a104bd,a104b4=a104b4,
+                #                                            a108bp=a108bp,a108bd=a108bd,a108b4=a108b4,
+                #                                            a112bp=a112bp,a112bd=a112bd,a112b4=a112b4,
+                #                                            a200bk=a200bk,a200bh=a200bh,a200b4=a200b4,
+                #                                            a204bk=a204bk,a204bh=a204bh,a204b4=a204b4,
+                #                                            a208bk=a208bk,a208bh=a208bh,a208b4=a208b4,
+                #                                            a677_p=a677_p,a677_d=a677_d,a677_4=a677_4,
+                #                                            a425a_=a425a_,a001_a=a001_a,a037ba=a037ba,
+                #                                            a010_a=a010_a,a453ma=a453ma,a453ra=a453ra,a599_a=a599_a,
+                #                                            a034_d=a034_d,a034_g=a034_g,a034_e=a034_e,a034_f=a034_f
+                #                                            )
+                #dc=dc.replace('<dcterms:alternative> :  </dcterms:alternative>\n','')
+                #dc=dc.replace('<dc:creator>;  </dc:creator>\n','')
+                #dc=dc.replace('<dc:contributor>;  </dc:contributor>\n','')
+                #dc=dc.replace('<dc:date></dc:date>\n','')
+                #dc=dc.replace('<dcterms:isPartOf></dcterms:isPartOf>\n','')
+                #dc_import.write(dc)
 
 
 @task()
