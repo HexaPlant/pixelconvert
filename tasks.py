@@ -734,7 +734,7 @@ def import_maps(ctx):
 @task()
 def update_maps(ctx):
     create_maps(ctx)
-    create_metadata(ctx)
+    update_metadata(ctx)
     importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
     ctx.run(importlayer)
     cleanup_maps(ctx)
@@ -762,6 +762,13 @@ def delete_maps(ctx):
 @task()
 def delete_metadata(ctx):
     ctx.run('rm -rf {dir}/*.xml'.format(dir=ctx.output_dir))
+
+
+@task()
+def update_metadata(ctx):
+    delete_metadata(ctx)
+    create_metadata(ctx)
+
 
 @task()
 def statistics(ctx):
