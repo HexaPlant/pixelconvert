@@ -6,6 +6,7 @@ from util import join,joinline,joinlineif,clean,escape,escape_path,code2name
 import csv
 import codecs
 import magic
+import glob
 
 import MARC21relaxed
 import pyxb
@@ -761,6 +762,14 @@ def delete_maps(ctx):
 @task()
 def delete_metadata(ctx):
     ctx.run('rm -rf {dir}/*.xml'.format(dir=ctx.output_dir))
+
+@task()
+def statistics(ctx):
+    tifCounter = len(glob.glob1(ctx.output_dir,"*.tif"))
+    xmlCounter = len(glob.glob1(ctx.output_dir,"*.xml"))
+    print ("Maps %i"%tifCounter)
+    print ("Metadata %i"%xmlCounter)
+
 
 @task()
 def test_geocoder(ctx):
