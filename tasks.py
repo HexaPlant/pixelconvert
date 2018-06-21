@@ -640,8 +640,8 @@ def create_metadata(ctx):
                 print (denominator,title_short,partOf,titleValue)
 
                 purpose=titleValue
-                supplemental=supplemental.decode('utf-8','ignore').encode("utf-8").replace(chr(int('0x0b',16)),'')
-                abstract=abstract.decode('utf-8','ignore').encode("utf-8").replace(chr(int('0x0b',16)),'')
+                supplemental=escape(supplemental.decode('utf-8','ignore').encode("utf-8").replace(chr(int('0x0b',16)),''))
+                abstract=escape(abstract.decode('utf-8','ignore').encode("utf-8").replace(chr(int('0x0b',16)),''))
 
                 xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',supplemental=supplemental,abstract=abstract,purpose=purpose,keywords=keywords,category=category,region=region,year=year,denominator=abs(denominator)).replace('\n\n\n\n','\n\n'))
                 xml_file.close()
