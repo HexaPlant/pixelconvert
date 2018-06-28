@@ -10,6 +10,7 @@ Disallow: /account/
 Disallow: /h_keywords_api
 Disallow: /api/
 Disallow: /?DeepZoom
+Disallow: /maps/
 Allow: /
 Sitemap: {url}/sitemap.xml
 """
