@@ -5,6 +5,8 @@ Disallow: /search/
 Disallow: /geoserver/
 Disallow: /uploaded/
 Disallow: /groups/
+Disallow: /security/
+Disallow: /account/
 Disallow: /h_keywords_api
 Disallow: /api/
 Allow: /
