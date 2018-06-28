@@ -41,7 +41,7 @@ MAP="""<url>
          </DataObject>
     </PageMap>
     <image:image>
-        <image:loc>{url_iiif}/?IIIF={layer}.tif/full/,1500/0/default.jpg'</image:loc>
+        <image:loc>{url_iiif}/?IIIF={layer}.tif/full/,1500/0/default.jpg</image:loc>
         <image:title>{title}</image:title>
         <image:caption>{caption}</image:caption>
         <image:license>https://creativecommons.org/licenses/by/4.0/</image:license>
