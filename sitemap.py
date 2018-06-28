@@ -35,7 +35,7 @@ MAP="""<url>
     <loc>{url_site}/layers/geonode:{layer}</loc>
     <lastmod>{date}</lastmod>
     <changefreq>always</changefreq>
-    <priority>0.8</priority>
+    <priority>0.9</priority>
     <PageMap xmlns="http://www.google.com/schemas/sitemap-pagemap/1.0">
          <DataObject type="document" id="{id}">
            <Attribute name="title">{title}</Attribute>
@@ -53,7 +53,7 @@ MAP="""<url>
     <loc>{url_site}/layers/geonode:{layer}/metadata_detail</loc>
     <lastmod>{date}</lastmod>
     <changefreq>always</changefreq>
-<priority>0.2</priority>
+<priority>0.1</priority>
 </url>
 """
 
