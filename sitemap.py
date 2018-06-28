@@ -9,6 +9,7 @@ Disallow: /security/
 Disallow: /account/
 Disallow: /h_keywords_api
 Disallow: /api/
+Disallow: /?DeepZoom
 Allow: /
 Sitemap: {url}/sitemap.xml
 """
