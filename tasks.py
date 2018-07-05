@@ -697,19 +697,12 @@ def create_metadata(ctx):
                 #dc=dc.replace('<dcterms:isPartOf></dcterms:isPartOf>\n','')
                 #dc_import.write(dc)
 
-@task(help={'name': "Name of the person to say hi to."})
-def hi(c, name):
-    """
-    Say hi to someone.
-    """
-    print("Hi {}!".format(name))
-
 @task(iterable=['layer'],
       help={'layer': "Name of layer or tiff to update.",
             'overwrite':"Overwrite existing layer"})
 def update_layer(ctx,layer,overwrite=False):
     """
-    Update layer in Geonode
+    update layer in geonode
     """
 
     if layer[-4:]==".tif":
@@ -773,9 +766,14 @@ def delete_metadata(ctx):
     ctx.run('rm -rf {dir}/*.xml'.format(dir=ctx.output_dir))
 
 
-@task()
-def update_metadata(ctx):
-    delete_metadata(ctx)
+
+@task(help={'overwrite':"Overwrite existing metadata"})
+def update_metadata(ctx,overwrite=False):
+    """
+    update metadata xml files
+    """
+    if overwrite:
+        delete_metadata(ctx)
     create_metadata(ctx)
 
 
