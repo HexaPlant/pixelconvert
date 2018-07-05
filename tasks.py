@@ -697,9 +697,20 @@ def create_metadata(ctx):
                 #dc=dc.replace('<dcterms:isPartOf></dcterms:isPartOf>\n','')
                 #dc_import.write(dc)
 
+@task(help={'name': "Name of the person to say hi to."})
+def hi(c, name):
+    """
+    Say hi to someone.
+    """
+    print("Hi {}!".format(name))
 
-@task()
-def update_layer(ctx,layer):
+@task(iterable=['layer'],
+      help={'layer': "Name of layer or tiff to update.",
+            'overwrite':"Overwrite existing layer"})
+def update_layer(ctx,layer,overwrite=False):
+    """
+    Update layer in Geonode
+    """
 
     if layer[-4:]==".tif":
         layer=layer[:-4]
@@ -707,12 +718,10 @@ def update_layer(ctx,layer):
     layer_xml=ctx.output_dir+layer+'.xml'
     layer_geo=ctx.output_dir+layer+'.geo'
     if exists(layer_tif):
-        for f in (layer_tif,layer_xml,layer_geo):
-            ctx.run("rm -vf %s"%f)
-
-        create_maps(ctx)
-        create_metadata(ctx)
-        importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=layer_tif)
+        if overwrite:
+            importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=layer_tif)
+        else:
+            importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=layer_tif)
         ctx.run(importlayer)
         cleanup_maps(ctx)
         rebuild_index(ctx)
