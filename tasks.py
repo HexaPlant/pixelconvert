@@ -183,9 +183,12 @@ def update_cache(ctx):
                 else:
                     print ("ERROR",url)
 
-@task()
-def create_metadata(ctx):
 
+@task(help={'overwrite':"Overwrite existing metadata"})
+def update_metadata(ctx,overwrite=False):
+    """
+    update all metadata xml files
+    """
     print ("Importing Categories")
     category_dict={}
     with open(ctx.category, 'r')as category_file:
@@ -285,7 +288,7 @@ def create_metadata(ctx):
                 print("Can't parse", filename)
                 continue
 
-            if exists(xml_out):
+            if exists(xml_out) and not overwrite:
                 print ("Passing",xml_out)
             else:
                 print ("Writing",xml_out)
@@ -643,7 +646,10 @@ def create_metadata(ctx):
                 supplemental=escape(supplemental.decode('utf-8','ignore').encode("utf-8").replace(chr(int('0x0b',16)),''))
                 abstract=escape(abstract.decode('utf-8','ignore').encode("utf-8").replace(chr(int('0x0b',16)),''))
 
-                xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',supplemental=supplemental,abstract=abstract,purpose=purpose,keywords=keywords,category=category,region=region,year=year,denominator=abs(denominator)).replace('\n\n\n\n','\n\n'))
+                xml_file.write(csw.CSW.format(id=ac,name=escape(title_short),name_url=escape(name),geonode='http://localhost:8000',geoserver='http://localhost:8080/geoserver',
+                                              west=west,east=east,north=north,south=south,z='{z}',x='{x}',y='{y}',
+                                              supplemental=supplemental,abstract=abstract,purpose=purpose,keywords=keywords,category=category,region=region,year=year,
+                                              denominator=abs(denominator)).replace('\n\n\n\n','\n\n'))
                 xml_file.close()
 
                 if abstract:
@@ -705,21 +711,24 @@ def update_layer(ctx,layer,overwrite=False):
     update layer in geonode
     """
 
-    if layer[-4:]==".tif":
-        layer=layer[:-4]
-    layer_tif=ctx.output_dir+layer+'.tif'
-    layer_xml=ctx.output_dir+layer+'.xml'
-    layer_geo=ctx.output_dir+layer+'.geo'
-    if exists(layer_tif):
-        if overwrite:
-            importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=layer_tif)
+    for l in layer:
+
+        l=clean(l).lower()
+
+        if l[-4:]==".tif":
+            l=layer[:-4]
+        layer_tif=ctx.output_dir+l+'.tif'
+        layer_xml=ctx.output_dir+l+'.xml'
+        layer_geo=ctx.output_dir+l+'.geo'
+        if exists(layer_tif):
+            if overwrite:
+                importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=layer_tif)
+            else:
+                importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=layer_tif)
+            ctx.run(importlayer)
+            cleanup_maps(ctx)
         else:
-            importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=layer_tif)
-        ctx.run(importlayer)
-        cleanup_maps(ctx)
-        rebuild_index(ctx)
-    else:
-        print ("Can't find tiff",layer_tif)
+            print ("Can't find tiff",layer_tif)
 
 
 @task()
@@ -767,14 +776,7 @@ def delete_metadata(ctx):
 
 
 
-@task(help={'overwrite':"Overwrite existing metadata"})
-def update_metadata(ctx,overwrite=False):
-    """
-    update metadata xml files
-    """
-    if overwrite:
-        delete_metadata(ctx)
-    create_metadata(ctx)
+
 
 
 @task()
