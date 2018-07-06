@@ -4,7 +4,7 @@ category: /data/woldan_datascan/Metadata_export/WD_Category.csv # Kategorien als
 user: SammlungWoldan # User für den Daten import
 group: woldan
 permission_directory: 774
-permission_files: 664
+permission_file: 664
 output_dir: /data/woldan/image/ # Verzeichnis für die Georeferenzierten Karten
 log_dir: /data/woldan/log # Verzeichnis für den import log
 dc: /data/woldan_datascan/Metadata_export/woldan_import_dc.xml # Dublin core export Datei

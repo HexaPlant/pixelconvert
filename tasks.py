@@ -113,11 +113,15 @@ def create_maps(ctx):
                 ctx.run('gcps2wld.py {tiff} > {wld_out}'.format(tiff=tiff_gcp,wld_out=wld_gcp))
                 ctx.run('gdal_translate -a_srs EPSG:3857 -mo NODATA_VALUES="255 255 255" {tiff_in} {tiff_out}'.format(tiff_in=tiff_gcp,tiff_out=tiff_wld))
                 ctx.run("listgeo {tiff_in} > {gtxt_out}".format(tiff_in=escape_path(tiff_wld),gtxt_out=escape_path(gtxt_out)))
+                os.chmod(gtxt_out,ctx.permission_file)
+                ctx.run('chmod {permission} {file}'.format(permission=ctx.permission_file,file=ctx.gtxt_out))
 
             if not exists(tiff_final):
                 ctx.run("vips --vips-concurrency=16 im_vips2tiff {tiff_in} {tiff_out}:deflate,tile:256x256,pyramid".format(tiff_in=escape_path(tiff_gcp),tiff_out=escape_path(tiff_final)))
                 ctx.run("applygeo {gtxt_in} {tiff_out}".format(gtxt_in=escape_path(gtxt_out),tiff_out=escape_path(tiff_final)))
                 ctx.run('gdal_edit.py -mo NODATA_VALUES="255 255 255" {tiff_out}'.format(tiff_out=tiff_final))
+                ctx.run('chmod {permission} {file}'.format(permission=ctx.permission_file,file=tiff_final))
+
 
 
     cleanup_tmp(ctx)
@@ -584,6 +588,7 @@ def update_metadata(ctx,overwrite=False):
 
                 xml_file=codecs.open(xml_out, "w", "utf-8")
                 xml_file=open(xml_out,'w')
+                ctx.run('chmod {permission} {file}'.format(permission=ctx.permission_file,file=xml_out))
 
                 title=filename.replace('_',' ').replace('[','').replace(']','')
                 title_short=' '.join(title.split(' ')[1:])
@@ -702,7 +707,6 @@ def update_metadata(ctx,overwrite=False):
                 #dc=dc.replace('<dc:date></dc:date>\n','')
                 #dc=dc.replace('<dcterms:isPartOf></dcterms:isPartOf>\n','')
                 #dc_import.write(dc)
-    fix_permissions(ctx)
 
 @task(iterable=['layer'],
       help={'layer': "Name of layer or tiff to update.",
@@ -731,9 +735,6 @@ def update_layer(ctx,layer,overwrite=False):
         else:
             print ("Can't find tiff",layer_tif)
 
-    fix_permissions(ctx)
-
-
 @task()
 def import_maps(ctx):
     create_maps(ctx)
@@ -742,7 +743,6 @@ def import_maps(ctx):
     ctx.run(importlayer)
     cleanup_maps(ctx)
     rebuild_index(ctx)
-    fix_permissions(ctx)
 
 
 
@@ -754,7 +754,6 @@ def update_maps(ctx):
     ctx.run(importlayer)
     cleanup_maps(ctx)
     rebuild_index(ctx)
-    fix_permissions(ctx)
 
 
 @task()
@@ -786,7 +785,7 @@ def fix_permissions(ctx):
 
     ctx.run('chgrp -R {group} {dir}'.format(group=ctx.group,dir=ctx.output_dir))
     ctx.run('chmod {permission} {dir}'.format(permission=ctx.permission_directory,dir=ctx.output_dir))
-    ctx.run('chmod {permission} {dir}/*'.format(permission=ctx.permission_files,dir=ctx.output_dir))
+    ctx.run('chmod {permission} {dir}/*'.format(permission=ctx.permission_file,dir=ctx.output_dir))
 
 
 
