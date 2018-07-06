@@ -702,6 +702,7 @@ def update_metadata(ctx,overwrite=False):
                 #dc=dc.replace('<dc:date></dc:date>\n','')
                 #dc=dc.replace('<dcterms:isPartOf></dcterms:isPartOf>\n','')
                 #dc_import.write(dc)
+    fix_permissions(ctx)
 
 @task(iterable=['layer'],
       help={'layer': "Name of layer or tiff to update.",
@@ -730,6 +731,8 @@ def update_layer(ctx,layer,overwrite=False):
         else:
             print ("Can't find tiff",layer_tif)
 
+    fix_permissions(ctx)
+
 
 @task()
 def import_maps(ctx):
@@ -739,6 +742,7 @@ def import_maps(ctx):
     ctx.run(importlayer)
     cleanup_maps(ctx)
     rebuild_index(ctx)
+    fix_permissions(ctx)
 
 
 
@@ -750,6 +754,7 @@ def update_maps(ctx):
     ctx.run(importlayer)
     cleanup_maps(ctx)
     rebuild_index(ctx)
+    fix_permissions(ctx)
 
 
 @task()
@@ -775,7 +780,13 @@ def delete_metadata(ctx):
     ctx.run('rm -rf {dir}/*.xml'.format(dir=ctx.output_dir))
 
 
+@task()
+def fix_permissions(ctx):
+    "set file permissions"
 
+    ctx.run('chgrp -R {group} {dir}'.format(group=ctx.group,dir=ctx.output_dir))
+    ctx.run('chmod {permission} {dir}'.format(permission=ctx.permission_directory,dir=ctx.output_dir))
+    ctx.run('chmod {permission} {dir}/*'.format(permission=ctx.permission_files,dir=ctx.output_dir))
 
 
 
