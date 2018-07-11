@@ -305,7 +305,7 @@ def metadata(ctx,_overwrite=False):
                 print("Can't parse", filename)
                 continue
 
-            if exists(xml_out)
+            if exists(xml_out):
                 if _overwrite:
                     ctx.run('rm -rf {file}'.format(file=xml_out))
 
@@ -728,10 +728,14 @@ def metadata(ctx,_overwrite=False):
 @task(iterable=['layer'],
       help={'layer': "Name of layer or tiff to update.",
             'overwrite':"Overwrite existing layer"})
-def update_layer(ctx,_layer=None,_overwrite=False):
+def update_layer(ctx,_layer=None,_overwrite=False,_all=False):
     """
     update layer in geonode
     """
+
+    if not _layer and not _all:
+        print("Use either --layer or --all option")
+
 
     for l in _layer:
 
