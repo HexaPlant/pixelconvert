@@ -767,6 +767,9 @@ def layer(ctx,_layer=None,_overwrite=False,_all=False):
 
 @task()
 def cleanup(ctx):
+    """
+    cleanup temp files
+    """
     ctx.run('rm -rf {dir}'.format(dir=ctx.gcp_dir))
     ctx.run('rm -rf {dir}'.format(dir=ctx.vips_dir))
     ctx.run('rm -rf {dir}'.format(dir=ctx.warp_dir))
