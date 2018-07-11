@@ -69,7 +69,7 @@ def geotiff(ctx,_overwrite=False):
 
             if exists(tiff_final):
                 if _overwrite:
-                    ctx.run('rm -rf {tiff}'.format(tiff=tiff_final))
+                    ctx.run('rm -rf {file}'.format(file=tiff_final))
 
                 else:
                     print ("Skipping",img)
@@ -178,7 +178,10 @@ def sitemap(ctx):
                     sitemap_file.write(sitemap.MAP.format(url_site=ctx.url_site,url_iiif=ctx.url_iiif,layer=layer,title=escape(title_short),caption=escape(titleValue),date=w3c_date,id=ac))
             sitemap_file.write(sitemap.FOOTER)
 @task()
-def update_cache(ctx):
+def cache(ctx):
+    """
+    update geoserver cache
+    """
     for root, dir, files in os.walk(ctx.input_dir):
         for tif in fnmatch.filter(files, "*.tif"):
             img = os.path.join(root,tif).replace(' ','\ ').replace('&','\&').replace("'","\'")
@@ -199,7 +202,7 @@ def update_cache(ctx):
 
 
 @task(help={'overwrite':"Overwrite existing metadata"})
-def update_metadata(ctx,overwrite=False):
+def metadata(ctx,_overwrite=False):
     """
     update all metadata xml files
     """
@@ -302,8 +305,12 @@ def update_metadata(ctx,overwrite=False):
                 print("Can't parse", filename)
                 continue
 
-            if exists(xml_out) and not overwrite:
-                print ("Passing",xml_out)
+            if exists(xml_out)
+                if _overwrite:
+                    ctx.run('rm -rf {file}'.format(file=xml_out))
+
+                else:
+                    print ("Passing",xml_out)
             else:
                 print ("Writing",xml_out)
                 abstract=""
