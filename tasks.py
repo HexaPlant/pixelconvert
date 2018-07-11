@@ -31,14 +31,20 @@ import time
 from datetime import date
 import requests
 
-@task()
-def rebuild_index(ctx):
+
+def index(ctx):
+    """
+    Update index
+    """
     ctx.run('python /data/code/woldan/manage.py rebuild_index -v 3 --noinput')
 
 
-@task()
-def create_maps(ctx):
-    cleanup_tmp(ctx)
+@task(help={'overwrite':"Overwrite existing GeoTiff"})
+def geotiff(ctx,_overwrite=False):
+    """
+    Update GeoTiff
+    """
+    cleanup(ctx)
     ctx.run('mkdir -p {path}'.format(path=ctx.gcp_dir))
     ctx.run('mkdir -p {path}'.format(path=ctx.vips_dir))
     #ctx.run('mkdir -p {path}'.format(path=ctx.warp_dir))
@@ -62,8 +68,12 @@ def create_maps(ctx):
             #print ("Processing",img)
 
             if exists(tiff_final):
-                print ("Skipping",img)
-                continue
+                if _overwrite:
+                    ctx.run('rm -rf {tiff}'.format(tiff=tiff_final))
+
+                else:
+                    print ("Skipping",img)
+                    continue
 
             if not exists(points_in):
                 print("Missing",points_in," for",tiff_in)
@@ -124,7 +134,7 @@ def create_maps(ctx):
 
 
 
-    cleanup_tmp(ctx)
+    cleanup(ctx)
 
 
 @task()
@@ -711,12 +721,12 @@ def update_metadata(ctx,overwrite=False):
 @task(iterable=['layer'],
       help={'layer': "Name of layer or tiff to update.",
             'overwrite':"Overwrite existing layer"})
-def update_layer(ctx,layer,overwrite=False):
+def update_layer(ctx,_layer=None,_overwrite=False):
     """
     update layer in geonode
     """
 
-    for l in layer:
+    for l in _layer:
 
         l=clean(l).lower()
 
@@ -737,23 +747,23 @@ def update_layer(ctx,layer,overwrite=False):
 
 @task()
 def import_maps(ctx):
-    create_maps(ctx)
+    geotiff(ctx)
     create_metadata(ctx)
     importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
     ctx.run(importlayer)
     cleanup_maps(ctx)
-    rebuild_index(ctx)
+    index(ctx)
 
 
 
 @task()
 def update_maps(ctx):
-    create_maps(ctx)
+    geotiff(ctx)
     update_metadata(ctx)
     importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
     ctx.run(importlayer)
     cleanup_maps(ctx)
-    rebuild_index(ctx)
+    index(ctx)
 
 
 @task()
@@ -763,7 +773,7 @@ def cleanup_maps(ctx):
 
 
 @task()
-def cleanup_tmp(ctx):
+def cleanup(ctx):
     ctx.run('rm -rf {dir}'.format(dir=ctx.gcp_dir))
     ctx.run('rm -rf {dir}'.format(dir=ctx.vips_dir))
     ctx.run('rm -rf {dir}'.format(dir=ctx.warp_dir))
