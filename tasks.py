@@ -792,8 +792,8 @@ def statistics(ctx):
     """
     tifCounter = len(glob.glob1(ctx.output_dir,"*.tif"))
     xmlCounter = len(glob.glob1(ctx.output_dir,"*.xml"))
-    print ("%i Maps %i"%tifCounter)
-    print ("%i Metadata %i"%xmlCounter)
+    print ("%i GeoTiff"%tifCounter)
+    print ("%i XML-Metadata"%xmlCounter)
 
 
 #@task()
