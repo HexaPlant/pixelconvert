@@ -31,18 +31,18 @@ import time
 from datetime import date
 import requests
 
-
+@task()
 def index(ctx):
     """
-    Update index
+    update index
     """
     ctx.run('python /data/code/woldan/manage.py rebuild_index -v 3 --noinput')
 
 
-@task(help={'overwrite':"Overwrite existing GeoTiff"})
+@task(help={'overwrite':"overwrite existing geotiff"})
 def geotiff(ctx,_overwrite=False):
     """
-    Update GeoTiff
+    update geotiff
     """
     cleanup(ctx)
     ctx.run('mkdir -p {path}'.format(path=ctx.gcp_dir))
@@ -124,21 +124,21 @@ def geotiff(ctx,_overwrite=False):
                 ctx.run('gdal_translate -a_srs EPSG:3857 -mo NODATA_VALUES="255 255 255" {tiff_in} {tiff_out}'.format(tiff_in=tiff_gcp,tiff_out=tiff_wld))
                 ctx.run("listgeo {tiff_in} > {gtxt_out}".format(tiff_in=escape_path(tiff_wld),gtxt_out=escape_path(gtxt_out)))
                 os.chmod(gtxt_out,ctx.permission_file)
-                ctx.run('chmod {permission} {file}'.format(permission=ctx.permission_file,file=ctx.gtxt_out))
+                ctx.run('chmod {permission} {file}'.format(permission=ctx.permission_file,file=gtxt_out))
 
             if not exists(tiff_final):
                 ctx.run("vips --vips-concurrency=16 im_vips2tiff {tiff_in} {tiff_out}:deflate,tile:256x256,pyramid".format(tiff_in=escape_path(tiff_gcp),tiff_out=escape_path(tiff_final)))
                 ctx.run("applygeo {gtxt_in} {tiff_out}".format(gtxt_in=escape_path(gtxt_out),tiff_out=escape_path(tiff_final)))
                 ctx.run('gdal_edit.py -mo NODATA_VALUES="255 255 255" {tiff_out}'.format(tiff_out=tiff_final))
                 ctx.run('chmod {permission} {file}'.format(permission=ctx.permission_file,file=tiff_final))
-
-
-
     cleanup(ctx)
 
 
 @task()
-def create_sitemap(ctx):
+def sitemap(ctx):
+    """
+    update sitemap
+    """
 
     w3c_date=date.today().strftime("%Y-%m-%d")
     with open(ctx.geonode_dir+'/geonode/static/robots.txt', 'w')as robots_file:
@@ -767,17 +767,12 @@ def update_maps(ctx):
 
 
 @task()
-def cleanup_maps(ctx):
-    cleanup_maps='rm -rf {geonode_dir}/geonode/uploaded/layers/*'.format(geonode_dir=ctx.geonode_dir)
-    ctx.run(cleanup_maps)
-
-
-@task()
 def cleanup(ctx):
     ctx.run('rm -rf {dir}'.format(dir=ctx.gcp_dir))
     ctx.run('rm -rf {dir}'.format(dir=ctx.vips_dir))
     ctx.run('rm -rf {dir}'.format(dir=ctx.warp_dir))
     ctx.run('rm -rf {dir}'.format(dir=ctx.wld_dir))
+    ctx.run('rm -rf {geonode_dir}/geonode/uploaded/layers/*'.format(geonode_dir=ctx.geonode_dir))
 
 
 @task()
