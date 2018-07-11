@@ -728,13 +728,22 @@ def metadata(ctx,_overwrite=False):
 @task(iterable=['layer'],
       help={'layer': "Name of layer or tiff to update.",
             'overwrite':"Overwrite existing layer"})
-def update_layer(ctx,_layer=None,_overwrite=False,_all=False):
+def layer(ctx,_layer=None,_overwrite=False,_all=False):
     """
-    update layer in geonode
+    update layer(s) in geonode
     """
 
     if not _layer and not _all:
         print("Use either --layer or --all option")
+        return
+
+    if _all:
+        if _overwrite:
+            importlayer='cd {geonode_dir};python ./manage.py importlayers -o -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
+        else:
+            importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
+        ctx.run(importlayer)
+        return
 
 
     for l in _layer:
@@ -757,27 +766,6 @@ def update_layer(ctx,_layer=None,_overwrite=False,_all=False):
             print ("Can't find tiff",layer_tif)
 
 @task()
-def import_maps(ctx):
-    geotiff(ctx)
-    create_metadata(ctx)
-    importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
-    ctx.run(importlayer)
-    cleanup_maps(ctx)
-    index(ctx)
-
-
-
-@task()
-def update_maps(ctx):
-    geotiff(ctx)
-    update_metadata(ctx)
-    importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=ctx.output_dir)
-    ctx.run(importlayer)
-    cleanup_maps(ctx)
-    index(ctx)
-
-
-@task()
 def cleanup(ctx):
     ctx.run('rm -rf {dir}'.format(dir=ctx.gcp_dir))
     ctx.run('rm -rf {dir}'.format(dir=ctx.vips_dir))
@@ -785,39 +773,31 @@ def cleanup(ctx):
     ctx.run('rm -rf {dir}'.format(dir=ctx.wld_dir))
     ctx.run('rm -rf {geonode_dir}/geonode/uploaded/layers/*'.format(geonode_dir=ctx.geonode_dir))
 
-
 @task()
-def delete_maps(ctx):
-    ctx.run('rm -rf {dir}/*'.format(dir=ctx.output_dir))
-
-@task()
-def delete_metadata(ctx):
-    ctx.run('rm -rf {dir}/*.xml'.format(dir=ctx.output_dir))
-
-
-@task()
-def fix_permissions(ctx):
-    "set file permissions"
-
+def permissions(ctx):
+    """
+    set file permissions
+    """
     ctx.run('chgrp -R {group} {dir}'.format(group=ctx.group,dir=ctx.output_dir))
     ctx.run('chmod {permission} {dir}'.format(permission=ctx.permission_directory,dir=ctx.output_dir))
     ctx.run('chmod {permission} {dir}/*'.format(permission=ctx.permission_file,dir=ctx.output_dir))
 
-
-
 @task()
 def statistics(ctx):
+    """
+    show statistics
+    """
     tifCounter = len(glob.glob1(ctx.output_dir,"*.tif"))
     xmlCounter = len(glob.glob1(ctx.output_dir,"*.xml"))
-    print ("Maps %i"%tifCounter)
-    print ("Metadata %i"%xmlCounter)
+    print ("%i Maps %i"%tifCounter)
+    print ("%i Metadata %i"%xmlCounter)
 
 
-@task()
-def test_geocoder(ctx):
-
-    countries=regions.country2kontinent()
-
-    #regions.pos2region(countries,36.0654206327,2.27685164945,25.5277830434,71.2462763724)
-    regions.pos2region(countries,47.1319451633,46.9127043394,12.8330743987,13.1941276942)
-    #regions.pos2region(countries,5.56634191981,74.035496039,32.775356264,70.8293161903)
+#@task()
+#def test_geocoder(ctx):
+#
+#    countries=regions.country2kontinent()
+#
+#    #regions.pos2region(countries,36.0654206327,2.27685164945,25.5277830434,71.2462763724)
+#    regions.pos2region(countries,47.1319451633,46.9127043394,12.8330743987,13.1941276942)
+#    #regions.pos2region(countries,5.56634191981,74.035496039,32.775356264,70.8293161903)
