@@ -747,7 +747,7 @@ def layer(ctx,_layer=None,_overwrite=False,_all=False):
         return
 
 
-    for l in _layer:
+    for l in list(_layer):
 
         l=clean(l).lower()
 
