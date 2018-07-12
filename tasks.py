@@ -760,7 +760,7 @@ def layer(ctx,_layer=None,_overwrite=False,_all=False):
         layer_xml=ctx.output_dir+l+'.xml'
         layer_geo=ctx.output_dir+l+'.geo'
         if exists(layer_tif):
-            if overwrite:
+            if _overwrite:
                 importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} -o {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=layer_tif)
             else:
                 importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=layer_tif)
