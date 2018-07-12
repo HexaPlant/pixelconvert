@@ -73,7 +73,7 @@ def geotiff(ctx,_overwrite=False):
 
                 else:
                     print ("Skipping",img)
-                    break
+                    continue
 
             if not exists(points_in):
                 print("Missing",points_in," for",tiff_in)
