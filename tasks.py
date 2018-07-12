@@ -21,7 +21,7 @@ import xml.sax.saxutils
 
 import csw
 import aseq
-import sitemap
+import template
 import geocoder
 import regions
 
@@ -142,10 +142,10 @@ def sitemap(ctx):
 
     w3c_date=date.today().strftime("%Y-%m-%d")
     with open(ctx.geonode_dir+'/geonode/static/robots.txt', 'w')as robots_file:
-            robots_file.write(sitemap.ROBOTS.format(url=ctx.url_site))
+            robots_file.write(template.ROBOTS.format(url=ctx.url_site))
 
     with open(ctx.geonode_dir+'/geonode/static/sitemap.xml', 'w')as sitemap_file:
-            sitemap_file.write(sitemap.HEADER.format(url_site=ctx.url_site,date=w3c_date))
+            sitemap_file.write(template.HEADER.format(url_site=ctx.url_site,date=w3c_date))
 
             print ("Importing Metadata")
             records=aseq.load(ctx)
