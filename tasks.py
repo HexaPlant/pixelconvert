@@ -746,9 +746,10 @@ def layer(ctx,_layer=None,_overwrite=False,_all=False):
         ctx.run(importlayer)
         return
 
-    _layer=list(_layer)
+    if isinstance(_layer, basestring):
+        _layer=(_layer,)
     print (_layer)
-    
+
     for l in _layer:
 
         l=clean(l).lower()
