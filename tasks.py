@@ -748,7 +748,6 @@ def layer(ctx,_layer=None,_overwrite=False,_all=False):
 
     if isinstance(_layer, basestring):
         _layer=(_layer,)
-    print (_layer)
 
     for l in _layer:
 
