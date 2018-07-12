@@ -765,9 +765,12 @@ def layer(ctx,_layer=None,_overwrite=False,_all=False):
             else:
                 importlayer='cd {geonode_dir};python ./manage.py importlayers -v3 -u {user} {tiff} '.format(geonode_dir=ctx.geonode_dir, user=ctx.user ,tiff=layer_tif)
             ctx.run(importlayer)
-            cleanup_maps(ctx)
+
         else:
             print ("Can't find tiff",layer_tif)
+
+    cleanup(ctx)
+    index(ctx)
 
 @task()
 def cleanup(ctx):
