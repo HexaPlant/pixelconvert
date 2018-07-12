@@ -175,8 +175,8 @@ def sitemap(ctx):
                     a335_a=aseq.get_key(records,ac,"335"," "," ","a")
                     title=a331_a.replace('[','').replace(']','')
                     titleValue=join(a331_a,a335_a,' : ').replace('[','').replace(']','')
-                    sitemap_file.write(sitemap.MAP.format(url_site=ctx.url_site,url_iiif=ctx.url_iiif,layer=layer,title=escape(title_short),caption=escape(titleValue),date=w3c_date,id=ac))
-            sitemap_file.write(sitemap.FOOTER)
+                    sitemap_file.write(template.MAP.format(url_site=ctx.url_site,url_iiif=ctx.url_iiif,layer=layer,title=escape(title_short),caption=escape(titleValue),date=w3c_date,id=ac))
+            sitemap_file.write(template.FOOTER)
 @task()
 def cache(ctx):
     """
