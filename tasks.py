@@ -305,13 +305,11 @@ def metadata(ctx,_overwrite=False):
                 print("Can't parse", filename)
                 continue
 
-            if exists(xml_out):
-                if _overwrite:
-                    ctx.run('rm -rf {file}'.format(file=xml_out))
-
-                else:
-                    print ("Passing",xml_out)
+            if exists(xml_out) and not _overwrite:
+                print ("Passing",xml_out)
             else:
+                if exists(xml_out) and _overwrite:
+                    ctx.run('rm -rf {file}'.format(file=xml_out))
                 print ("Writing",xml_out)
                 abstract=""
                 supplemental=""
