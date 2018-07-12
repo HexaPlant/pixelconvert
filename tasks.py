@@ -122,6 +122,9 @@ def geotiff(ctx,_overwrite=False):
 
                 ctx.run('gcps2wld.py {tiff} > {wld_out}'.format(tiff=tiff_gcp,wld_out=wld_gcp))
                 ctx.run('gdal_translate -a_srs EPSG:3857 -mo NODATA_VALUES="255 255 255" {tiff_in} {tiff_out}'.format(tiff_in=tiff_gcp,tiff_out=tiff_wld))
+                if exists(gtxt_out):
+                    ctx.run('rm -rf {file}'.format(file=gtxt_out))
+
                 ctx.run("listgeo {tiff_in} > {gtxt_out}".format(tiff_in=escape_path(tiff_wld),gtxt_out=escape_path(gtxt_out)))
                 os.chmod(gtxt_out,ctx.permission_file)
                 ctx.run('chmod {permission} {file}'.format(permission=ctx.permission_file,file=gtxt_out))
